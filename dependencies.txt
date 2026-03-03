@@ -1,0 +1,13 @@
+**gpt**
+
+frontend:
+npm install react-router-dom @tanstack/react-query axios zod
+
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+npm install react-router-dom
+
+backend:
+npm install @supabase/supabase-js prisma @prisma/client
+npm install class-validator class-transformer
