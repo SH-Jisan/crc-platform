@@ -6,8 +6,123 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id    String  @id @default(uuid())
-  email String  @unique
-  name  String?
+model Profile {
+  id         String   @id @db.Uuid
+  full_name  String?
+  avatar_url String?
+  phone      String?
+  bio        String?
+  created_at DateTime @default(now())
+
+  // Relations
+  user_roles     UserRole[]
+  posts          Post[]
+  events         Event[]            @relation("EventCreator")
+  donations      Donation[]
+  participations EventParticipant[]
+  announcements  Announcement[]
+  gallery        Gallery[]
+}
+
+model Role {
+  id   String @id @default(uuid()) @db.Uuid
+  name String @unique
+
+  user_roles UserRole[]
+}
+
+model UserRole {
+  user_id     String   @db.Uuid
+  role_id     String   @db.Uuid
+  assigned_at DateTime @default(now())
+
+  // Relations
+  user Profile @relation(fields: [user_id], references: [id])
+  role Role    @relation(fields: [role_id], references: [id])
+
+  @@id([user_id, role_id])
+}
+
+model Event {
+  id          String   @id @default(uuid()) @db.Uuid
+  title       String
+  description String?
+  location    String?
+  event_date  DateTime
+  status      String   @default("UPCOMING")
+  created_at  DateTime @default(now())
+
+  created_by String  @db.Uuid
+  creator    Profile @relation("EventCreator", fields: [created_by], references: [id])
+
+  participants EventParticipant[]
+}
+
+model EventParticipant {
+  user_id    String   @db.Uuid
+  event_id   String   @db.Uuid
+  status     String   @default("JOINED")
+  created_at DateTime @default(now())
+
+  user  Profile @relation(fields: [user_id], references: [id])
+  event Event   @relation(fields: [event_id], references: [id])
+
+  @@id([user_id, event_id])
+}
+
+model Campaign {
+  id            String    @id @default(uuid()) @db.Uuid
+  title         String
+  description   String?
+  goal_amount   Float
+  raised_amount Float     @default(0)
+  start_date    DateTime?
+  end_date      DateTime?
+  status        String
+
+  donations Donation[]
+}
+
+model Donation {
+  id             String   @id @default(uuid()) @db.Uuid
+  user_id        String?  @db.Uuid
+  campaign_id    String   @db.Uuid
+  amount         Float
+  method         String
+  transaction_id String?
+  created_at     DateTime @default(now())
+
+  user     Profile? @relation(fields: [user_id], references: [id])
+  campaign Campaign @relation(fields: [campaign_id], references: [id])
+}
+
+model Post {
+  id         String   @id @default(uuid()) @db.Uuid
+  title      String
+  content    String
+  status     String
+  created_at DateTime @default(now())
+
+  author_id String  @db.Uuid
+  author    Profile @relation(fields: [author_id], references: [id])
+}
+
+model Announcement {
+  id         String   @id @default(uuid()) @db.Uuid
+  title      String
+  message    String
+  created_at DateTime @default(now())
+
+  created_by String  @db.Uuid
+  creator    Profile @relation(fields: [created_by], references: [id])
+}
+
+model Gallery {
+  id         String   @id @default(uuid()) @db.Uuid
+  image_url  String
+  caption    String?
+  created_at DateTime @default(now())
+
+  uploaded_by String  @db.Uuid
+  uploader    Profile @relation(fields: [uploaded_by], references: [id])
 }

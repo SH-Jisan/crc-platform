@@ -1,11 +1,20 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.user.findMany();
+  async getProfileWithRole(userId: string) {
+    return this.prisma.profile.findUnique({
+      where: { id: userId },
+      include: {
+        user_roles: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
   }
 }
