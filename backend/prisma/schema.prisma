@@ -22,6 +22,9 @@ model Profile {
   participations EventParticipant[]
   announcements  Announcement[]
   gallery        Gallery[]
+
+  success_stories SuccessStory[]
+  audit_logs      AuditLog[]
 }
 
 model Role {
@@ -50,7 +53,11 @@ model Event {
   location    String?
   event_date  DateTime
   status      String   @default("UPCOMING")
-  created_at  DateTime @default(now())
+
+  meta_title       String?
+  meta_description String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 
   created_by String  @db.Uuid
   creator    Profile @relation("EventCreator", fields: [created_by], references: [id])
@@ -80,6 +87,11 @@ model Campaign {
   end_date      DateTime?
   status        String
 
+  meta_title       String?
+  meta_description String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
   donations Donation[]
 }
 
@@ -97,11 +109,15 @@ model Donation {
 }
 
 model Post {
-  id         String   @id @default(uuid()) @db.Uuid
-  title      String
-  content    String
-  status     String
-  created_at DateTime @default(now())
+  id      String @id @default(uuid()) @db.Uuid
+  title   String
+  content String
+  status  String
+
+  meta_title       String?
+  meta_description String?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
 
   author_id String  @db.Uuid
   author    Profile @relation(fields: [author_id], references: [id])
@@ -125,4 +141,34 @@ model Gallery {
 
   uploaded_by String  @db.Uuid
   uploader    Profile @relation(fields: [uploaded_by], references: [id])
+}
+
+model SuccessStory {
+  id        String  @id @default(uuid()) @db.Uuid
+  title     String
+  content   String
+  image_url String?
+  status    String  @default("PUBLISHED")
+
+  meta_title       String?
+  meta_description String?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  author_id String  @db.Uuid
+  author    Profile @relation(fields: [author_id], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid()) @db.Uuid
+  action     String
+  entity     String
+  entity_id  String   @db.Uuid
+  details    Json?
+  ip_address String?
+  created_at DateTime @default(now())
+
+  user_id String?  @db.Uuid
+  user    Profile? @relation(fields: [user_id], references: [id])
 }
