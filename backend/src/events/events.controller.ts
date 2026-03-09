@@ -10,6 +10,7 @@ import {
 import { EventsService } from "./events.service";
 import { AuthGuard } from "src/auth/auth.guard";
 import { RolesGuard } from "src/auth/roles.guard";
+import { CreateEventDto } from "./dto/create-event.dto";
 
 @Controller("api/v1/events")
 export class EventsController {
@@ -17,7 +18,7 @@ export class EventsController {
 
   @UseGuards(AuthGuard, RolesGuard)
   @Post()
-  create(@Body() body, @Req() req) {
+  create(@Body() body: CreateEventDto, @Req() req) {
     return this.eventsService.createEvent(body, req.user.id);
   }
 
