@@ -8,12 +8,17 @@ import Campaigns from "./pages/Campaigns";
 import { useAuth } from "./hooks/useAuth";
 import Gallery from "./pages/Gallery"
 import Posts from "./pages/Posts"
+import Layout from "./layouts/Layout.tsx";
+import AdminDashboard from "./pages/AdminDashboard.tsx";
+
 function App() {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const { user } = useAuth();
 
     return (
         <BrowserRouter>
+            <Layout>
             <Routes>
                 {/* Public Routes */}
                 <Route path="/login" element={<Login />} />
@@ -32,6 +37,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <Events />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/admin"
+                    element={
+                        <ProtectedRoute>
+                            <AdminDashboard/>
                         </ProtectedRoute>
                     }
                 />
@@ -58,6 +71,7 @@ function App() {
                     }
                 />
             </Routes>
+            </Layout>
         </BrowserRouter>
     );
 }

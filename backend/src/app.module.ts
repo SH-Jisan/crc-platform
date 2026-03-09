@@ -11,6 +11,7 @@ import { GalleryService } from "./gallery/gallery.service";
 import { PostsModule } from "./posts/posts.module";
 import { GalleryModule } from "./gallery/gallery.module";
 import { ConfigModule } from "@nestjs/config";
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ConfigModule } from "@nestjs/config";
     DonationsModule,
     PostsModule,
     GalleryModule,
+    AdminModule,
   ],
   controllers: [AppController, GalleryController],
   providers: [AppService, GalleryService],
