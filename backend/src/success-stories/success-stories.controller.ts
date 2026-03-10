@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { SuccessStoriesService } from './success-stories.service';
 import { CreateSuccessStoryDto } from './dto/create-success-story.dto';
+import { UpdateSuccessStoryDto } from "./dto/update-success-story.dto";
 
 @Controller('success-stories')
 export class SuccessStoriesController {
@@ -23,7 +24,7 @@ export class SuccessStoriesController {
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateSuccessStoryDto: any) {
+    update(@Param('id') id: string, @Body() updateSuccessStoryDto: UpdateSuccessStoryDto) {
         return this.successStoriesService.update(id, updateSuccessStoryDto);
     }
 

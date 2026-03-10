@@ -16,3 +16,5 @@ npm install @nestjs/config
 npm install json2csv
 npm install -D @types/json2csv
 npm install class-validator class-transformer
+npm install helmet express-rate-limit
+npm i @nestjs/mapped-types

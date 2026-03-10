@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
-
+import { UpdateAnnouncementDto } from './dto/update-announcement.dto'; // 🔥 Notun import
 @Controller('announcements')
 export class AnnouncementsController {
     constructor(private readonly announcementsService: AnnouncementsService) {}
@@ -22,7 +22,7 @@ export class AnnouncementsController {
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateAnnouncementDto: { title?: string; message?: string }) {
+    update(@Param('id') id: string, @Body() updateAnnouncementDto: UpdateAnnouncementDto) {
         return this.announcementsService.update(id, updateAnnouncementDto);
     }
 
