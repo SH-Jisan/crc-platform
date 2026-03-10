@@ -18,9 +18,9 @@ export class AuditLogsService {
             data: {
                 action: data.action,
                 entity: data.entity,
-                entity_id: data.entity_id,
-                details: data.details,
-                ip_address: data.ip_address,
+                entity_id: data.entity_id || 'N/A',
+                details: data.details || {},
+                ip_address: data.ip_address || '',
                 user_id: data.user_id,
             },
         });

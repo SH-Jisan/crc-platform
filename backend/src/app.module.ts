@@ -15,6 +15,7 @@ import { AdminModule } from './admin/admin.module';
 import { SuccessStoriesModule } from './success-stories/success-stories.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { DataExportModule } from './data-export/data-export.module';
+import { AnnouncementsModule } from './announcements/announcements.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { DataExportModule } from './data-export/data-export.module';
     SuccessStoriesModule,
     AuditLogsModule,
     DataExportModule,
+    AnnouncementsModule,
   ],
   controllers: [AppController, GalleryController],
   providers: [AppService, GalleryService],

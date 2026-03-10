@@ -1,5 +1,5 @@
 import { Controller, Get, Res, Query } from '@nestjs/common';
-import { Response } from 'express';
+import type  { Response } from 'express';
 import { DataExportService } from './data-export.service';
 
 @Controller('export')
