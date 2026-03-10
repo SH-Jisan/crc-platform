@@ -14,6 +14,7 @@ import { ConfigModule } from "@nestjs/config";
 import { AdminModule } from './admin/admin.module';
 import { SuccessStoriesModule } from './success-stories/success-stories.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { DataExportModule } from './data-export/data-export.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     AdminModule,
     SuccessStoriesModule,
     AuditLogsModule,
+    DataExportModule,
   ],
   controllers: [AppController, GalleryController],
   providers: [AppService, GalleryService],
