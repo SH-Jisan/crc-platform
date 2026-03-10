@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { AnnouncementsService } from './announcements.service';
+import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 
 @Controller('announcements')
 export class AnnouncementsController {
     constructor(private readonly announcementsService: AnnouncementsService) {}
 
     @Post()
-    create(@Body() createAnnouncementDto: { title: string; message: string; created_by: string }) {
+    create(@Body() createAnnouncementDto: CreateAnnouncementDto) {
         return this.announcementsService.create(createAnnouncementDto);
     }
 

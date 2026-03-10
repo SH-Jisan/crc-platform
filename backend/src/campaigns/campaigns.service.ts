@@ -10,10 +10,12 @@ export class CampaignsService {
             data: {
                 title: data.title,
                 description: data.description,
-                goal_amount: parseFloat(data.goal_amount), // 🔥 string কে Float এ কনভার্ট করা হলো
+                goal_amount: parseFloat(data.goal_amount),
                 status: data.status || "ACTIVE",
                 start_date: data.start_date ? new Date(data.start_date) : null,
                 end_date: data.end_date ? new Date(data.end_date) : null,
+                meta_title: data.meta_title,         // 🔥 SEO Field
+                meta_description: data.meta_description, // 🔥 SEO Field
             }
         });
     }
@@ -23,7 +25,7 @@ export class CampaignsService {
             include: {
                 donations: true
             },
-            orderBy: { start_date: 'desc' } // নতুনগুলো আগে দেখাবে
+            orderBy: { start_date: 'desc' }
         });
     }
 }

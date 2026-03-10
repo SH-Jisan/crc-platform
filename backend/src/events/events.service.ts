@@ -14,7 +14,9 @@ export class EventsService {
         location: data.location,
         event_date: new Date(data.event_date),
         created_by: userId,
-        status: data.status || "UPCOMING", // 🔥 স্ট্যাটাস যুক্ত করা হলো
+        status: data.status || "UPCOMING",
+        meta_title: data.meta_title,         // 🔥 SEO Field
+        meta_description: data.meta_description, // 🔥 SEO Field
       },
     });
   }
@@ -32,7 +34,7 @@ export class EventsService {
       data: {
         event_id: eventId,
         user_id: userId,
-        status: "JOINED", // 🔥 স্ট্যাটাস যুক্ত করা হলো
+        status: "JOINED",
       },
     });
   }

@@ -11,7 +11,9 @@ export class PostsService {
         title: data.title,
         content: data.content,
         author_id: userId,
-        status: data.status || "PUBLISHED", // 🔥 status ফিল্ড যুক্ত করা হলো এবং ডিফল্ট PUBLISHED দেওয়া হলো
+        status: data.status || "PUBLISHED",
+        meta_title: data.meta_title,         // 🔥 SEO Field
+        meta_description: data.meta_description, // 🔥 SEO Field
       },
     });
   }

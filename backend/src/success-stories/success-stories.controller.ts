@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { SuccessStoriesService } from './success-stories.service';
+import { CreateSuccessStoryDto } from './dto/create-success-story.dto';
 
 @Controller('success-stories')
 export class SuccessStoriesController {
     constructor(private readonly successStoriesService: SuccessStoriesService) {}
 
     @Post()
-    create(@Body() createSuccessStoryDto: any) {
+    create(@Body() createSuccessStoryDto: CreateSuccessStoryDto) {
         // Note: Industry standard e ekhane DTO validation add korte hoy, amra pore add korbo
         return this.successStoriesService.create(createSuccessStoryDto);
     }
