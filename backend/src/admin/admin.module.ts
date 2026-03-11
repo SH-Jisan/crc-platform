@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
 import { AdminController } from "./admin.controller";
 import { AdminService } from "./admin.service";
-import { PrismaModule } from "../prisma/prisma.module"; // 🔥 PrismaModule ইমপোর্ট করুন
+import { PrismaModule } from "../prisma/prisma.module";
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
-  imports: [PrismaModule], // 🔥 এই লাইনটি অ্যাড করতে হবে
+  imports: [PrismaModule, AuthModule],
   controllers: [AdminController],
   providers: [AdminService],
 })

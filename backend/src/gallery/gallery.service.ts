@@ -22,7 +22,7 @@ export class GalleryService {
 
     async findAll(limit: number = 10, cursor?: string) {
         const data = await this.prisma.gallery.findMany({
-            take: limit + 1, // Amra ekta extra data anbo check korar jonno je aaro data ache kina
+            take: limit + 1, // Fetch an extra item to determine if a next cursor exists
             cursor: cursor ? { id: cursor } : undefined,
             orderBy: { created_at: 'desc' },
             include: {
@@ -32,11 +32,11 @@ export class GalleryService {
 
         let nextCursor: string | null = null;
 
-        // Jodi limit er theke beshi data ashe (mane aaro data baki ache)
+        // If the array length exceeds the limit, there are more records available
         if (data.length > limit) {
-            const nextItem = data.pop(); // Extra data ta ber kore nilam
+            const nextItem = data.pop(); // Remove the extra inspection element
 
-            // TypeScript ke shanto korar jonno ei check ta kora holo
+            // Safely assign the next cursor ID
             if (nextItem) {
                 nextCursor = nextItem.id;
             }
@@ -45,7 +45,7 @@ export class GalleryService {
         return {
             data,
             meta: {
-                nextCursor, // Frontend ei cursor ta pathabe next data anar jonno
+                nextCursor, // Frontend uses this token for subsequent paginated requests
                 limit,
             },
         };

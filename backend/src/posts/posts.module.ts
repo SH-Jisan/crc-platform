@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
 import { PostsController } from "./posts.controller";
 import { PostsService } from "./posts.service";
-import { PrismaModule } from "../prisma/prisma.module"; // 🔥 PrismaModule যুক্ত করা হলো
+import { PrismaModule } from "../prisma/prisma.module"; 
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
-  imports: [PrismaModule], // 🔥 ডাটাবেসের জন্য
+  imports: [PrismaModule, AuthModule],
   controllers: [PostsController],
   providers: [PostsService],
 })

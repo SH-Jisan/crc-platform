@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { CreateSuccessStoryDto } from './dto/create-success-story.dto';
+import { UpdateSuccessStoryDto } from './dto/update-success-story.dto';
 
 @Injectable()
 export class SuccessStoriesService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async create(data: { title: string; content: string; image_url?: string; meta_title?: string; meta_description?: string; author_id: string }) {
+    async create(data: CreateSuccessStoryDto & { author_id: string }) {
         return this.prisma.successStory.create({
             data,
         });
@@ -50,7 +52,7 @@ export class SuccessStoriesService {
         });
     }
 
-    async update(id: string, data: any) {
+    async update(id: string, data: UpdateSuccessStoryDto) {
         return this.prisma.successStory.update({
             where: { id },
             data,

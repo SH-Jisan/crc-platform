@@ -11,26 +11,28 @@ export class SearchService {
         }
 
         const searchQuery = query.trim();
+        // Format query for Postgres Full Text Search (e.g. "foo bar" -> "foo | bar")
+        const formattedQuery = searchQuery.split(/\s+/).join(' | ');
 
         // 1. Search in Events
         const events = await this.prisma.event.findMany({
             where: {
                 OR: [
-                    { title: { contains: searchQuery, mode: 'insensitive' } },
-                    { description: { contains: searchQuery, mode: 'insensitive' } },
-                    { location: { contains: searchQuery, mode: 'insensitive' } },
+                    { title: { search: formattedQuery } },
+                    { description: { search: formattedQuery } },
+                    { location: { search: formattedQuery } },
                 ],
             },
             orderBy: { event_date: 'desc' },
-            take: 5, // Shudhu top 5 result dekhabo
+            take: 5, // Return only the top 5 relevant matches
         });
 
         // 2. Search in Campaigns
         const campaigns = await this.prisma.campaign.findMany({
             where: {
                 OR: [
-                    { title: { contains: searchQuery, mode: 'insensitive' } },
-                    { description: { contains: searchQuery, mode: 'insensitive' } },
+                    { title: { search: formattedQuery } },
+                    { description: { search: formattedQuery } },
                 ],
             },
             orderBy: { start_date: 'desc' },
@@ -41,8 +43,8 @@ export class SearchService {
         const posts = await this.prisma.post.findMany({
             where: {
                 OR: [
-                    { title: { contains: searchQuery, mode: 'insensitive' } },
-                    { content: { contains: searchQuery, mode: 'insensitive' } },
+                    { title: { search: formattedQuery } },
+                    { content: { search: formattedQuery } },
                 ],
             },
             orderBy: { created_at: 'desc' },

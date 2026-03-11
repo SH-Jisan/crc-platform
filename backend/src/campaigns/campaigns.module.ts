@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CampaignsController } from './campaigns.controller';
 import { CampaignsService } from './campaigns.service';
-import { PrismaModule } from '../prisma/prisma.module'; // 🔥 PrismaModule ইমপোর্ট করুন (পাথ আপনার ফোল্ডার অনুযায়ী ঠিক করে নিবেন)
+import { PrismaModule } from '../prisma/prisma.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [PrismaModule], // 🔥 এই লাইনটি অ্যাড করতে হবে
+  imports: [PrismaModule, AuthModule],
   controllers: [CampaignsController],
   providers: [CampaignsService]
 })

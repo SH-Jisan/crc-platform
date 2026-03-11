@@ -1,15 +1,18 @@
 import { Controller, Get, Req, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
-import { AuthGuard } from "src/auth/auth.guard";
+import { AuthGuard } from "../auth/auth.guard";
+import { plainToInstance } from "class-transformer";
+import { UserResponseDto } from "./dto/user-response.dto";
 
-@Controller("api/v1/users")
+@Controller("users") // Rely on main.ts versioning for /api/v1 prefix
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @UseGuards(AuthGuard)
   @Get("me")
-  getMe(@Req() req) {
+  async getMe(@Req() req) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    return this.usersService.getProfileWithRole(req.user.id);
+    const profile = await this.usersService.getProfileWithRole(req.user.id || req.user.sub);
+    return plainToInstance(UserResponseDto, profile);
   }
 }

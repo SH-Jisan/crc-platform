@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
 import { EventsController } from "./events.controller";
 import { EventsService } from "./events.service";
-import { PrismaModule } from "../prisma/prisma.module"; // 🔥 PrismaModule ইম্পোর্ট করা হলো (path আপনার প্রজেক্ট অনুযায়ী ঠিক করে নিবেন)
+import { PrismaModule } from "../prisma/prisma.module"; 
+import { AuthModule } from "../auth/auth.module";
 
 @Module({
-  imports: [PrismaModule], // 🔥 এই লাইনটি অ্যাড করতে হবে
+  imports: [PrismaModule, AuthModule],
   controllers: [EventsController],
   providers: [EventsService],
 })

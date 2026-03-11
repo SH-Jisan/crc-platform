@@ -46,7 +46,7 @@ export class EventsController {
   }
 
   @Post(':id/join')
-  // @Roles decorator nai mane jekono logged-in user (visitor holeo) join korte parbe
+  @Roles('MEMBER', 'ADMIN') // Properly restricted
   joinEvent(@Param('id') id: string, @GetUser('id') userId: string) {
     return this.eventsService.joinEvent(id, userId);
   }

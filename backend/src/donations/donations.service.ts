@@ -1,20 +1,21 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateDonationDto } from './dto/create-donation.dto';
 
 @Injectable()
 export class DonationsService {
     constructor(private prisma: PrismaService){}
 
-    async donate(data: any, userId: string){
-        const amount = parseFloat(data.amount);
+    async donate(data: CreateDonationDto, userId: string){
+        const amount = typeof data.amount === 'string' ? parseFloat(data.amount) : data.amount;
 
         if (isNaN(amount) || amount <= 0) {
             throw new BadRequestException("Invalid donation amount");
         }
 
-        // 🔥 Prisma $transaction: ডোনেশন সেভ হবে এবং ক্যাম্পেইনের ফান্ড বাড়বে (দুটি এক সাথে)
+        // Execute Prisma $transaction: Atomically save donation record and increment campaign funds
         return this.prisma.$transaction(async (prisma) => {
-            // ১. ডোনেশন রেকর্ড তৈরি করা
+            // 1. Create the donation ledger record
             const donation = await prisma.donation.create({
                 data: {
                     amount: amount,
@@ -25,12 +26,12 @@ export class DonationsService {
                 }
             });
 
-            // ২. ক্যাম্পেইনের raised_amount আপডেট (increment) করা
+            // 2. Increment the raised_amount on the corresponding campaign
             await prisma.campaign.update({
                 where: { id: data.campaign_id },
                 data: {
                     raised_amount: {
-                        increment: amount // 🔥 আগে যা ছিল তার সাথে নতুন এমাউন্ট যোগ হবে
+                        increment: amount // Add the new donation payload to previous total
                     }
                 }
             });

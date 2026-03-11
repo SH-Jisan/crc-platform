@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuditLogsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    // Ei method ta amra onno service theke call korbo (jemon EventsService, AdminService theke)
+    @OnEvent('audit.log')
     async createLog(data: {
         action: string;
         entity: string;
@@ -14,27 +15,26 @@ export class AuditLogsService {
         ip_address?: string;
         user_id?: string;
     }) {
-        return this.prisma.auditLog.create({
-            data: {
-                action: data.action,
-                entity: data.entity,
-                entity_id: data.entity_id || 'N/A',
-                details: data.details || {},
-                ip_address: data.ip_address || '',
-                user_id: data.user_id,
-            },
-        });
+        try {
+            await this.prisma.auditLog.create({
+                data: {
+                    action: data.action,
+                    entity: data.entity,
+                    entity_id: data.entity_id || 'N/A',
+                    details: data.details || {},
+                    ip_address: data.ip_address || '',
+                    user_id: data.user_id,
+                },
+            });
+        } catch (error) {
+            console.error('Failed to create audit log asynchronously', error);
+        }
     }
 
-    // Admin panel e shob log dekhabar jonno API endpoint er logic
     async findAll() {
         return this.prisma.auditLog.findMany({
             orderBy: { created_at: 'desc' },
-            include: {
-                user: {
-                    select: { full_name: true, avatar_url: true },
-                },
-            },
+            include: { user: { select: { full_name: true, avatar_url: true } } },
         });
     }
 }

@@ -18,6 +18,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { DataExportModule } from './data-export/data-export.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { SearchModule } from './search/search.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { SearchModule } from './search/search.module';
     DataExportModule,
     AnnouncementsModule,
     SearchModule,
+    HealthModule,
   ],
   controllers: [AppController, GalleryController],
   providers: [AppService, GalleryService],

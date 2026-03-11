@@ -1,0 +1,15 @@
+# CRC Platform Backend Audit (Phase 2)
+**Date:** March 2026
+**Scope:** Secondary modules (Admin, Announcements, Campaigns, Data Export, Donations, Gallery, Posts, Search, Success Stories)
+
+While the Core Architecture and Base Authentication (JWT, Roles caching, DB schema basics) have been modernized, examining the specific business logic modules revealed several **critical security vulnerabilities**, primarily caused by missing or incorrectly applied decorators, alongside performance and validation gaps.
+
+---
+
+
+
+
+
+
+
+

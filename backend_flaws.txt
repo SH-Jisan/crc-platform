@@ -1,0 +1,151 @@
+# Backend Architecture & Security Code Audit Report
+*Target Project:* CRC Platform Backend (NestJS, Prisma, Supabase)
+*Reviewer:* Senior Backend Architect & Security Engineer
+
+Below is a comprehensive and highly detailed analysis of the backend project. Every flaw, architectural problem, code quality issue, and security risk found in this codebase has been documented, grouped logically.
+
+---
+
+### 1. Architecture Problems
+
+*   **1.1. Direct Prisma Access in Services (Missing Repository/DAO Layer)**
+    *   **Problem:** Services like `EventsService` inject `PrismaService` directly and write raw Prisma queries (`this.prisma.event.create(...)`). Business logic and data access logic are tightly coupled.
+    *   **Why it is a problem:** If you ever need to change the database, add query-level caching (like Redis), or mock the database for unit tests, you have to modify every service. It violates the Single Responsibility Principle.
+    *   **How professionals solve it:** Use the Repository Pattern or Data Access Objects (DAOs). Create an `EventsRepository` that handles Prisma calls, and inject that into the `EventsService`.
+    *   **Suggested fix:** Abstract database interactions into repository classes per domain model.
+
+*   **1.2. Missing DTOs in Key Modules**
+    *   **Problem:** The `users` module completely lacks a `dto` folder and relies solely on raw `request.user.id`.
+    *   **Why it is a problem:** Data transfer objects are critical for enforcing input sanitation and defining clear API payload contracts. Missing them makes the API surface brittle and undocumented.
+    *   **How professionals solve it:** Every endpoint that accepts or returns data should have structured DTOs with `class-validator` decorators.
+    *   **Suggested fix:** Add properly validated DTOs across the board, including response serialization (e.g., `UserResponseDto`).
+
+---
+
+### 2. Code Quality Issues
+
+*   **2.1. Missing Explicit Return Types**
+    *   **Problem:** Service methods (e.g., `async getAllEvents(...)`) do not declare explicit return types (`Promise<EventResponse>`). They rely purely on TypeScript's inference.
+    *   **Why it is a problem:** Inferred types from ORMs can become massive, complex objects that accidentally leak sensitive schema details. It also makes refactoring dangerous since there is no hard contract.
+    *   **How professionals solve it:** Every controller method and service method must declare a strict return type.
+    *   **Suggested fix:** Export interfaces or use Response DTOs and strictly define method signatures (e.g., `async getAllEvents(): Promise<PaginatedEventDto>`).
+
+*   **2.2. Error Swallowing / Missing Try-Catch Blocks**
+    *   **Problem:** `events.service.ts` has zero try-catch blocks. It relies completely on the global `HttpExceptionFilter`.
+    *   **Why it is a problem:** Prisma database errors (like Unique Constraint violations) will be bubbled up as generic 500 errors. You cannot map specific DB failures to domain-specific HTTP responses (like 409 Conflict).
+    *   **How professionals solve it:** Catch specific ORM errors in the service/repository layer and throw mapped custom domain exceptions (e.g., `EventAlreadyExistsException`), allowing the filter to handle the HTTP mapping.
+    *   **Suggested fix:** Implement a `PrismaClientExceptionFilter` and wrap complex operations in try-catch to throw meaningful NestJS HttpExceptions.
+
+*   **2.3. Using `any` Type**
+    *   **Problem:** In `AuthGuard`, the method `extractTokenFromHeader(request: any)` uses `any`.
+    *   **Why it is a problem:** Defeats the purpose of TypeScript.
+    *   **How professionals solve it:** Use the `Request` type from `express`.
+
+*   **2.4. Localized Language Comments**
+    *   **Problem:** In `events.controller.ts`, there is a comment: `// Shudhu Admin delete korte parbe`.
+    *   **Why it is a problem:** This is unprofessional in collaborative, open, or scalable software teams where international engineers might work.
+    *   **How professionals solve it:** Strictly enforce English for all code documentation and comments.
+
+---
+
+### 3. Security Vulnerabilities
+
+*   **3.1. Supabase Token Fetching Bottleneck (AuthGuard)**
+    *   **Problem:** The `AuthGuard` makes a live HTTP call `this.supabase.auth.getUser(token)` on *every single authenticated request*.
+    *   **Why it is a problem:** Extremely severe performance flaw. If 1,000 users hit your API, your backend makes 1,000 HTTP requests to Supabase. This adds latency (100-300ms per request) and will quickly hit Supabase API rate limits, crashing your app.
+    *   **How professionals solve it:** JWTs are designed to be verified *statelessly*. Validate the token signature directly on your backend using Supabase's JWT secret without making an external HTTP call.
+    *   **Suggested fix:** Use the `@nestjs/passport` module with `passport-jwt` strategy. Only call Supabase when issuing tokens or during critical password resets.
+
+*   **3.2. Database Query on Every Role Check (RolesGuard)**
+    *   **Problem:** The `RolesGuard` fetches the user and their roles from Prisma on *every request* that has a `@Roles()` decorator.
+    *   **Why it is a problem:** Combined with the AuthGuard problem, a simple API request `GET /api/events` for members takes: 1 HTTP call to Supabase + 1 DB query for roles + 1 DB query for actual data. This guarantees a slow API.
+    *   **How professionals solve it:** Insert the user's roles directly into the Supabase JWT custom claims upon sign-in. Then, the `RolesGuard` only needs to read the decoded JWT from memory (0 ms latency). Alternatively, cache the roles in Redis.
+    *   **Suggested fix:** Inject roles into JWT claims or use a Redis cache with a generous TTL.
+
+*   **3.3. Broken Authorization / IDOR Risk**
+    *   **Problem:** The `@Post(':id/join')` endpoint in `EventsController` lacks a `@Roles` decorator or any strict status checks.
+    *   **Why it is a problem:** Any authenticated user can join any event, regardless of event capacity, current status (e.g., Cancelled/Past), or specific user bans. 
+    *   **How professionals solve it:** Apply strict business logic gates validating state before database insertion.
+
+*   **3.4. Over-exposure of Response Data (Information Disclosure)**
+    *   **Problem:** Prisma returns full objects. For example, `getMe` returns all fields of the profile, potentially exposing internal IDs or audit fields implicitly.
+    *   **Suggested fix:** Use ClassSerializerInterceptor to explicitly strip fields using `@Exclude()` in DTOs.
+
+---
+
+### 4. Missing Industry Features
+
+*   **4.1. Structured Logging System**
+    *   **Problem:** No logging library is installed (e.g., Winston, Pino). Errors caught by `HttpExceptionFilter` do not even `console.error` the stack trace.
+    *   **Solution:** Implement `nest-winston` or `nestjs-pino`. Create structured JSON logs to ship to Datadog/ELK. Add correlation IDs for request tracking.
+
+*   **4.2. Caching Strategy**
+    *   **Problem:** `getAllEvents` always hits the database.
+    *   **Solution:** Integrate `@nestjs/cache-manager` with Redis. Cache heavily read endpoints (like paginated events) and invalidate cache on updates.
+
+*   **4.3. API Versioning**
+    *   **Problem:** The version is hardcoded in the controller string: `@Controller("api/v1/users")`.
+    *   **Solution:** Use NestJS native versioning: `app.enableVersioning({ type: VersioningType.URI });` and set `@Controller({ version: '1', path: 'users' })`.
+
+*   **4.4. Production Health Checks & Metrics**
+    *   **Problem:** There is no `/health` or `/metrics` endpoint.
+    *   **Solution:** Implement `@nestjs/terminus` to verify DB connection status and CPU memory thresholds for Kubernetes/Docker container lifecycle management.
+
+*   **4.5. Complete Test Suite**
+    *   **Problem:** Though scaffolded `.spec` files exist, there handles no integration testing structure using TestContainers or an SQLite mock DB.
+    *   **Solution:** Create an `e2e` configuration for Prisma to spin up a test DB instance and test entire controller flows.
+
+---
+
+### 5. Performance Risks
+
+*   **5.1. The "N+1" Array Inclusion Timebomb**
+    *   **Problem:** In `getEventById`, the query includes: `participants: { include: { user: ... } }`.
+    *   **Why it is a problem:** If an event has 10,000 participants, Prisma will attempt to load 10,000 participant join-records AND 10,000 profile records in a single query response. This will crash the Node.js process (Out of Memory) or timeout.
+    *   **How professionals solve it:** Never eagerly load unbounded 1-to-many or many-to-many relationships in the same query.
+    *   **Suggested fix:** Create a separate, paginated endpoint for sub-resources: `/events/:id/participants?page=1&limit=20`. Eagerly load ONLY counts (`_count: { participants: true }`).
+
+*   **5.2. Missing Database Pagination Limits**
+    *   **Problem:** `getAllEvents` accepts `limit` from the query but doesn't cap it. `limit=999999` will lock the DB.
+    *   **Suggested fix:** Enforce a `@Max(100)` validator on the `PaginationQueryDto`.
+
+---
+
+### 6. Scalability Problems
+
+*   **6.1. Lack of Queue/Background Jobs**
+    *   **Problem:** If you need to send an email to all event participants or process images uploaded to the generic Gallery endpoint, doing it in the HTTP request thread blocks the Event Loop.
+    *   **Suggested fix:** Implement `@nestjs/bullmq` and Redis. Offload heavy processing (notifications, email, analytics inserts) to background workers.
+
+*   **6.2. Synchronous Audit Logging**
+    *   **Problem:** An `audit-logs` module exists, but if it inserts logs synchronously during the request lifecycle, it adds database write latency to standard requests.
+    *   **Suggested fix:** Emit internal events (using `@nestjs/event-emitter`) and let asynchronous listeners write audit logs.
+
+---
+
+### 7. Database Design Issues
+
+*   **7.1. Missing Indexes**
+    *   **Problem:** The `schema.prisma` is completely devoid of explicit `@@index` declarations.
+    *   **Why it is a problem:** Queries like `orderBy: { event_date: 'desc' }` or filtering `status = 'ACTIVE'` will result in full-table scans. 
+    *   **How professionals solve it:** Identify read-heavy columns and index them.
+    *   **Suggested fix:** 
+        Add `@@index([event_date])`, `@@index([status])`, and `@@index([created_at])` to the `Event`, `Campaign`, and `Donation` models.
+
+*   **7.2. Float Usage for Monetary Values**
+    *   **Problem:** `Campaign` uses `goal_amount Float` and `raised_amount Float`. `Donation` uses `amount Float`.
+    *   **Why it is a problem:** Floats have precision issues natively (e.g., `0.1 + 0.2 = 0.30000000000000004`). In financial transactions (like donations), this is unacceptable and leads to incorrect totals.
+    *   **How professionals solve it:** Use Integers (store as cents/paisa) or exact `Decimal` types.
+    *   **Suggested fix:** Change Prisma types to `Decimal` (`@db.Decimal(10,2)`) or convert logic to use lowest integer denomination (e.g., `Int` representing cents).
+
+---
+
+### 8. Recommended Improvements Summary
+
+1.  **Refactor Auth Strategy:** Stop making `supabase.auth.getUser` and Prisma role queries on every request. Rely entirely on a localized JWT verification strategy and inject custom claims for roles into the JWT.
+2.  **Mitigate N+1 Danger Areas:** Immediately remove deep `include: { participants }` from `getEventById`. Standardize paginated child-resources.
+3.  **Financial Safety:** Migrate all `Float` fields tracking money to `Decimal`.
+4.  **Implement Repositories:** Abstract Prisma away from the Controllers/Services.
+5.  **Robust Error Handling:** Add `PrismaExceptionFilter` and `nest-winston` logging. Return predictable error objects while keeping logs verbose on the server side.
+6.  **Fix Validation Surface Area:** Add strict DTOs to the User and Auth workflows and explicit response typing.
+7.  **Index the DB:** Map query access patterns and add B-Tree indexes to `schema.prisma`.

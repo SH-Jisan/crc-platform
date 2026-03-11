@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -63,6 +64,10 @@ model Event {
   creator    Profile @relation("EventCreator", fields: [created_by], references: [id])
 
   participants EventParticipant[]
+
+  @@index([event_date])
+  @@index([status])
+  @@index([created_at])
 }
 
 model EventParticipant {
@@ -81,8 +86,8 @@ model Campaign {
   id            String    @id @default(uuid()) @db.Uuid
   title         String
   description   String?
-  goal_amount   Float
-  raised_amount Float     @default(0)
+  goal_amount   Decimal   @db.Decimal(10,2) // Fixed precision
+  raised_amount Decimal   @default(0) @db.Decimal(10,2) // Fixed precision
   start_date    DateTime?
   end_date      DateTime?
   status        String
@@ -93,19 +98,26 @@ model Campaign {
   updated_at       DateTime @updatedAt
 
   donations Donation[]
+
+  @@index([status])
+  @@index([start_date])
+  @@index([end_date])
+  @@index([created_at])
 }
 
 model Donation {
   id             String   @id @default(uuid()) @db.Uuid
   user_id        String?  @db.Uuid
   campaign_id    String   @db.Uuid
-  amount         Float
+  amount         Decimal  @db.Decimal(10,2) // Fixed precision
   method         String
   transaction_id String?
   created_at     DateTime @default(now())
 
   user     Profile? @relation(fields: [user_id], references: [id])
   campaign Campaign @relation(fields: [campaign_id], references: [id])
+
+  @@index([created_at])
 }
 
 model Post {
