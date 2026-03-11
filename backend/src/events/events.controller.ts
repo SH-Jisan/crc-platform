@@ -10,20 +10,44 @@ import { Public } from '../common/decorators/public.decorator';
 import { GetUser } from '../common/decorators/get-user.decorator';
 
 @Controller('events')
-@UseGuards(AuthGuard, RolesGuard) // 🔥 Pura controller ta secure kora holo
+@UseGuards(AuthGuard, RolesGuard)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  @Roles('ADMIN', 'MEMBER') // 🔥 Shudhu Admin ar Member ra event toiri korte parbe
-  create(@Body() createEventDto: CreateEventDto, @GetUser('id') userId: string) { // 🔥 Notun GetUser decorator use korlam
+  @Roles('ADMIN', 'MEMBER')
+  create(@Body() createEventDto: CreateEventDto, @GetUser('id') userId: string) {
     return this.eventsService.createEvent(createEventDto, userId);
   }
 
-  @Public() // 🔥 Website visitor ra login charai shob event dekhte parbe
+  @Public()
   @Get()
   getAllEvents(@Query() paginationQuery: PaginationQueryDto) {
     const { page, limit } = paginationQuery;
     return this.eventsService.getAllEvents(page, limit);
+  }
+
+  @Public()
+  @Get(':id')
+  getEventById(@Param('id') id: string) {
+    return this.eventsService.getEventById(id);
+  }
+
+  @Patch(':id')
+  @Roles('ADMIN', 'MEMBER')
+  updateEvent(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
+    return this.eventsService.updateEvent(id, updateEventDto);
+  }
+
+  @Delete(':id')
+  @Roles('ADMIN') // Shudhu Admin delete korte parbe
+  deleteEvent(@Param('id') id: string) {
+    return this.eventsService.deleteEvent(id);
+  }
+
+  @Post(':id/join')
+  // @Roles decorator nai mane jekono logged-in user (visitor holeo) join korte parbe
+  joinEvent(@Param('id') id: string, @GetUser('id') userId: string) {
+    return this.eventsService.joinEvent(id, userId);
   }
 }
