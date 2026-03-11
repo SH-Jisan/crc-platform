@@ -1,8 +1,7 @@
 **gpt**
 
 frontend:
-npm install react-router-dom @tanstack/react-query axios zod
-
+npm install react-router-dom axios @tanstack/react-query zustand lucide-react date-fns
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
