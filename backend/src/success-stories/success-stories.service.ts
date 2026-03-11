@@ -11,15 +11,32 @@ export class SuccessStoriesService {
         });
     }
 
-    async findAll() {
-        return this.prisma.successStory.findMany({
+    async findAll(limit: number = 10, cursor?: string) {
+        const data = await this.prisma.successStory.findMany({
+            take: limit + 1,
+            cursor: cursor ? { id: cursor } : undefined,
             orderBy: { created_at: 'desc' },
             include: {
-                author: {
-                    select: { full_name: true, avatar_url: true }
-                }
+                author: { select: { full_name: true, avatar_url: true } }
             }
         });
+
+        let nextCursor: string | null = null;
+
+        if (data.length > limit) {
+            const nextItem = data.pop();
+            if (nextItem) {
+                nextCursor = nextItem.id;
+            }
+        }
+
+        return {
+            data,
+            meta: {
+                nextCursor,
+                limit,
+            },
+        };
     }
 
     async findOne(id: string) {

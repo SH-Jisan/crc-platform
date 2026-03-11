@@ -1,6 +1,7 @@
-import { Controller, Post, Body, Get, Req, UseGuards } from '@nestjs/common';
+import {Controller, Post, Body, Get, Req, UseGuards, Query} from '@nestjs/common';
 import { GalleryService } from './gallery.service';
-import { AuthGuard } from 'src/auth/auth.guard'; // পাথ চেক করে নিবেন
+import { AuthGuard } from 'src/auth/auth.guard';
+import {CursorPaginationDto} from "../common/dto/cursor-pagination.dto"; // পাথ চেক করে নিবেন
 
 @Controller('api/v1/gallery')
 export class GalleryController {
@@ -18,7 +19,7 @@ export class GalleryController {
     }
 
     @Get()
-    getAll(){
-        return this.galleryService.getAll();
+    findAll(@Query() query: CursorPaginationDto) {
+        return this.galleryService.findAll(query.limit, query.cursor);
     }
 }

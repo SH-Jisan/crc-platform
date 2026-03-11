@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import {Controller, Get, Post, Body, Param, Patch, Delete, Query} from '@nestjs/common';
 import { SuccessStoriesService } from './success-stories.service';
 import { CreateSuccessStoryDto } from './dto/create-success-story.dto';
 import { UpdateSuccessStoryDto } from "./dto/update-success-story.dto";
+import {CursorPaginationDto} from "../common/dto/cursor-pagination.dto";
 
 @Controller('success-stories')
 export class SuccessStoriesController {
@@ -14,8 +15,8 @@ export class SuccessStoriesController {
     }
 
     @Get()
-    findAll() {
-        return this.successStoriesService.findAll();
+    findAll(@Query() query: CursorPaginationDto) {
+        return this.successStoriesService.findAll(query.limit, query.cursor);
     }
 
     @Get(':id')

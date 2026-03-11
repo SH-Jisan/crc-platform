@@ -11,15 +11,32 @@ export class AnnouncementsService {
         });
     }
 
-    async findAll() {
-        return this.prisma.announcement.findMany({
+    async findAll(limit: number = 10, cursor?: string) {
+        const data = await this.prisma.announcement.findMany({
+            take: limit + 1,
+            cursor: cursor ? { id: cursor } : undefined,
             orderBy: { created_at: 'desc' },
             include: {
-                creator: {
-                    select: { full_name: true, avatar_url: true },
-                },
-            },
+                creator: { select: { full_name: true, avatar_url: true } }
+            }
         });
+
+        let nextCursor: string | null = null;
+
+        if (data.length > limit) {
+            const nextItem = data.pop();
+            if (nextItem) {
+                nextCursor = nextItem.id;
+            }
+        }
+
+        return {
+            data,
+            meta: {
+                nextCursor,
+                limit,
+            },
+        };
     }
 
     async findOne(id: string) {
