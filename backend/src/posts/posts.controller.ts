@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
+import {PaginationQueryDto} from "../common/dto/pagination-query.dto";
 
 @Controller('posts')
 export class PostsController {
@@ -12,7 +13,8 @@ export class PostsController {
     }
 
     @Get()
-    getAll() {
-        return this.postsService.getAll();
+    getAll(@Query() paginationQuery: PaginationQueryDto)  {
+        const { page, limit } = paginationQuery;
+        return this.postsService.getAll(page, limit);
     }
 }

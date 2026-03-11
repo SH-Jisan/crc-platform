@@ -21,12 +21,28 @@ export class EventsService {
     });
   }
 
-  async getAllEvents() {
-    return this.prisma.event.findMany({
-      include: {
-        participants: true,
-      },
-    });
+  async getAllEvents(page: number = 1, limit: number = 10) {
+    const skip =  (page-1) * limit;
+
+    const [data, total] = await Promise.all([
+        this.prisma.event.findMany({
+          skip,
+          take: limit,
+          include: { participants: true },
+          orderBy: { event_date: 'desc' },
+        }),
+        this.prisma.event.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      }
+    }
   }
 
   async joinEvent(eventId: string, userId: string) {

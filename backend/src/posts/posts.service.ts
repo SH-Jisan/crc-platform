@@ -18,9 +18,26 @@ export class PostsService {
     });
   }
 
-  getAll() {
-    return this.prisma.post.findMany({
-      include: { author: true },
-    });
+  async getAll(page: number = 1, limit: number = 10){
+    const skip = (page - 1) * limit;
+    const [data, total] = await Promise.all([
+        this.prisma.post.findMany({
+          skip,
+          take: limit,
+          include: { author: true },
+          orderBy: { created_at: 'desc' },
+        }),
+        this.prisma.post.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 }

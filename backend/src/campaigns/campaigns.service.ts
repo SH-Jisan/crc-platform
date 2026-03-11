@@ -20,12 +20,26 @@ export class CampaignsService {
         });
     }
 
-    getCampaigns(){
-        return this.prisma.campaign.findMany({
-            include: {
-                donations: true
+    async getCampaigns(page: number = 1, limit: number = 10){
+        const skip = (page - 1) * limit;
+
+        const [data, total] = await Promise.all([
+            this.prisma.campaign.findMany({
+                skip,
+                take: limit,
+                include: { donations: true },
+                orderBy: { start_date: 'desc' },
+            }),
+            this.prisma.campaign.count(),
+        ]);
+        return {
+            data,
+            meta: {
+                total,
+                page,
+                limit,
+                totalPages: Math.ceil(total/limit),
             },
-            orderBy: { start_date: 'desc' }
-        });
+        };
     }
 }

@@ -6,11 +6,13 @@ import {
   Param,
   Req,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 import { EventsService } from "./events.service";
 import { AuthGuard } from "src/auth/auth.guard";
 import { RolesGuard } from "src/auth/roles.guard";
 import { CreateEventDto } from "./dto/create-event.dto";
+import { PaginationQueryDto} from "../common/dto/pagination-query.dto";
 
 @Controller("api/v1/events")
 export class EventsController {
@@ -24,8 +26,9 @@ export class EventsController {
 
   @UseGuards(AuthGuard)
   @Get()
-  findAll() {
-    return this.eventsService.getAllEvents();
+  getAllEvents(@Query() paginationQuery: PaginationQueryDto) {
+    const { page, limit } = paginationQuery;
+    return this.eventsService.getAllEvents(page, limit);
   }
 
   @UseGuards(AuthGuard)
