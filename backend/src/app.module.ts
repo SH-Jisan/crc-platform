@@ -10,6 +10,7 @@ import { GalleryController } from "./gallery/gallery.controller";
 import { GalleryService } from "./gallery/gallery.service";
 import { PostsModule } from "./posts/posts.module";
 import { GalleryModule } from "./gallery/gallery.module";
+import { SupabaseModule } from './supabase/supabase.module';
 import { ConfigModule } from "@nestjs/config";
 import { AdminModule } from './admin/admin.module';
 import { SuccessStoriesModule } from './success-stories/success-stories.module';
@@ -23,6 +24,7 @@ import { SearchModule } from './search/search.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    SupabaseModule,
     PrismaModule,
     UsersModule,
     EventsModule,

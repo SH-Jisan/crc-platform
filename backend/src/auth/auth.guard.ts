@@ -1,27 +1,51 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!,
-);
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseService } from '../supabase/supabase.client';
+import { IS_PUBLIC_KEY } from '../common/decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  async canActivate(context: ExecutionContext) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const req = context.switchToHttp().getRequest();
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-    const token = req.headers.authorization?.split(" ")[1];
+  private supabase: SupabaseClient;
 
-    if (!token) return false;
+  constructor(
+      private reflector: Reflector,
+      private supabaseService: SupabaseService,
+  ) {
+    this.supabase = this.supabaseService.getClient();
+  }
 
-    const { data, error } = await supabase.auth.getUser(token);
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // Check if the route is marked as @Public()
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) {
+      return true;
+    }
 
-    if (error || !data.user) return false;
+    const request = context.switchToHttp().getRequest();
+    const token = this.extractTokenFromHeader(request);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    req.user = data.user;
+    if (!token) {
+      throw new UnauthorizedException('Authentication token is missing');
+    }
+
+    // Verify token with Supabase
+    const { data: { user }, error } = await this.supabase.auth.getUser(token);
+
+    if (error || !user) {
+      throw new UnauthorizedException('Invalid or expired authentication token');
+    }
+
+    // Attach user to request object
+    request.user = user;
     return true;
+  }
+
+  private extractTokenFromHeader(request: any): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

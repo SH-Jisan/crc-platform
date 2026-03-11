@@ -1,39 +1,29 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Req,
-  UseGuards,
-  Query,
-} from "@nestjs/common";
-import { EventsService } from "./events.service";
-import { AuthGuard } from "src/auth/auth.guard";
-import { RolesGuard } from "src/auth/roles.guard";
-import { CreateEventDto } from "./dto/create-event.dto";
-import { PaginationQueryDto} from "../common/dto/pagination-query.dto";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { EventsService } from './events.service';
+import { CreateEventDto } from './dto/create-event.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Public } from '../common/decorators/public.decorator';
+import { GetUser } from '../common/decorators/get-user.decorator';
 
-@Controller("api/v1/events")
+@Controller('events')
+@UseGuards(AuthGuard, RolesGuard) // 🔥 Pura controller ta secure kora holo
 export class EventsController {
-  constructor(private eventsService: EventsService) {}
+  constructor(private readonly eventsService: EventsService) {}
 
-  @UseGuards(AuthGuard, RolesGuard)
   @Post()
-  create(@Body() body: CreateEventDto, @Req() req) {
-    return this.eventsService.createEvent(body, req.user.id);
+  @Roles('ADMIN', 'MEMBER') // 🔥 Shudhu Admin ar Member ra event toiri korte parbe
+  create(@Body() createEventDto: CreateEventDto, @GetUser('id') userId: string) { // 🔥 Notun GetUser decorator use korlam
+    return this.eventsService.createEvent(createEventDto, userId);
   }
 
-  @UseGuards(AuthGuard)
+  @Public() // 🔥 Website visitor ra login charai shob event dekhte parbe
   @Get()
   getAllEvents(@Query() paginationQuery: PaginationQueryDto) {
     const { page, limit } = paginationQuery;
     return this.eventsService.getAllEvents(page, limit);
-  }
-
-  @UseGuards(AuthGuard)
-  @Post(":id/join")
-  join(@Param("id") id: string, @Req() req) {
-    return this.eventsService.joinEvent(id, req.user.id);
   }
 }
