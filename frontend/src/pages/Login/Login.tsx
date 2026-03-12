@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../api/supabase';
 import { useAuthStore } from '../../store/authStore';
+import  React from "react";
+import { getCurrentUser } from '../../api/auth';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -36,6 +38,26 @@ export default function Login() {
                     },
                     data.session.access_token
                 );
+
+                try {
+                    // ৩. ব্যাকএন্ড থেকে ইউজারের আসল প্রোফাইল এবং Role নিয়ে আসা
+                    const userProfile = await getCurrentUser();
+
+                    // ৪. আসল ডাটা দিয়ে Store আপডেট করা
+                    login(
+                        {
+                            id: userProfile.id,
+                            email: data.user.email!,
+                            full_name: userProfile.full_name,
+                            avatar_url: userProfile.avatar_url,
+                            roles: userProfile.roles, // ব্যাকএন্ড থেকে ['ADMIN', 'MEMBER'] আসবে
+                        },
+                        data.session.access_token
+                    );
+                } catch (dbError) {
+                    console.error("Database profile fetch error:", dbError);
+                    // প্রোফাইল না পেলেও লগিন কন্টিনিউ করবে
+                }
 
                 // ৩. ড্যাশবোর্ডে রিডাইরেক্ট করা
                 navigate('/dashboard');

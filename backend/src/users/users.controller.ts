@@ -1,18 +1,23 @@
-import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, UseGuards } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { AuthGuard } from "../auth/auth.guard";
 import { plainToInstance } from "class-transformer";
 import { UserResponseDto } from "./dto/user-response.dto";
+import { GetUser } from "../common/decorators/get-user.decorator"; // 🔥 আমাদের কাস্টম ডেকোরেটর
 
-@Controller("users") // Rely on main.ts versioning for /api/v1 prefix
+@Controller("users")
+@UseGuards(AuthGuard) // 🔥 পুরো কন্ট্রোলারকে প্রটেক্ট করে দিলাম, যাতে ভবিষ্যতে নতুন API বানালেও সিকিউর থাকে
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {} // 🔥 readonly অ্যাড করা হলো
 
-  @UseGuards(AuthGuard)
   @Get("me")
-  async getMe(@Req() req) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const profile = await this.usersService.getProfileWithRole(req.user.id || req.user.sub);
+  async getMe(@GetUser() user: any) {
+    // 🔥 @Req() বাদ দিয়ে সরাসরি ডেকোরেটর থেকে ইউজার ডাটা নিলাম।
+    // Supabase টোকেনে আইডি id বা sub হিসেবে থাকতে পারে।
+    const userId = user?.id || user?.sub;
+
+    const profile = await this.usersService.getProfileWithRole(userId);
+
     return plainToInstance(UserResponseDto, profile);
   }
 }

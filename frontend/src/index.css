@@ -1,7 +1,7 @@
-/* ১. Google ফন্ট ইমপোর্ট করা হলো */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @import "tailwindcss";
+
+/* ১. Google ফন্ট ইমপোর্ট করা হলো */
 
 @layer base {
   html {
