@@ -4,8 +4,7 @@ frontend:
 npm install react-router-dom axios @tanstack/react-query zustand lucide-react date-fns
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
-
-npm install react-router-dom
+npm install @supabase/supabase-js
 
 backend:
 npm install @supabase/supabase-js prisma @prisma/client
