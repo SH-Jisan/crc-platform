@@ -1,8 +1,13 @@
 import { apiClient } from './axios';
-
+// auth.ts
 export const getCurrentUser = async () => {
-    // ব্যাকএন্ডের /users/me API-তে রিকোয়েস্ট পাঠাবো।
-    // Interceptor অটোমেটিক্যালি Token অ্যাড করে দিবে।
     const response = await apiClient.get('/users/me');
-    return response.data.data; // TransformInterceptor এর কারণে data.data হবে
+    const data = response.data.data;
+
+    return {
+        ...data,
+        roles: Array.isArray(data?.user_roles)
+            ? data.user_roles.map((ur: any) => ur.role?.name).filter(Boolean)
+            : []
+    };
 };
