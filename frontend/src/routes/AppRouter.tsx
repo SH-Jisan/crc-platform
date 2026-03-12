@@ -1,8 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import Login from '../pages/Login/Login.tsx';
-import Dashboard from '../pages/Dashboard';
+import Dashboard from '../pages/dashboard/Dashboard.tsx';
 import ProtectedRoute from './ProtectedRoute';
+import Events from "../pages/events/Events.tsx";
 
 export default function AppRouter() {
     return (
@@ -10,6 +11,7 @@ export default function AppRouter() {
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/events" element={<Events/>}/>
 
             {/* Protected Routes (Shudhu login kora user ra pabe) */}
             <Route element={<ProtectedRoute />}>

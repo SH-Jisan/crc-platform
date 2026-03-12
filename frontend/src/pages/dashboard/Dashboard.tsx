@@ -1,4 +1,4 @@
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore.ts';
 
 export default function Dashboard() {
     const { user, logout } = useAuthStore();
