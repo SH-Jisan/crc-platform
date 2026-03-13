@@ -1,85 +1,154 @@
 import { useAuthStore } from '../../store/authStore.ts';
 
+// SVG Icons
+const CrownIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2.5 16.5 3 6l4.5 3.5L12 3l4.5 6.5L21 6l.5 10.5Z" />
+        <path d="M2.5 16.5h19" />
+    </svg>
+);
+
+const UsersIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+);
+
+const ActivityIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+);
+
+const SignOutIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+        <polyline points="16 17 21 12 16 7" />
+        <line x1="21" y1="12" x2="9" y2="12" />
+    </svg>
+);
+
 export default function Dashboard() {
     const { user, logout } = useAuthStore();
 
     // ইউজার ADMIN কিনা তা চেক করার লজিক
     const isAdmin = user?.roles?.includes('ADMIN');
 
+    // Get initials safely
+    const getInitials = () => {
+        if (user?.full_name) {
+            const names = user.full_name.split(' ');
+            if (names.length >= 2) return (names[0][0] + names[1][0]).toUpperCase();
+            return names[0][0].toUpperCase();
+        }
+        return user?.email?.charAt(0).toUpperCase() || '?';
+    };
+
     return (
-        <div className="min-h-screen p-8 bg-slate-50">
-            <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+        <div className="min-h-screen py-16 px-6 bg-[#FAFAFA] font-sans selection:bg-emerald-100 selection:text-emerald-900">
+            <div className="max-w-4xl mx-auto">
 
                 {/* Header Section */}
-                <div className="flex items-center justify-between mb-8">
-                    <div>
-                        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-                        <p className="text-slate-500 mt-1">Welcome back to CRC Platform</p>
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 relative">
+                    <div className="relative z-10 w-full sm:w-auto">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-sm font-semibold mb-6 border border-emerald-100/50 shadow-sm">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>Dashboard Overview</span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-800 tracking-tight leading-[1.15]">
+                            Welcome, <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-500 to-teal-500">{user?.full_name?.split(' ')[0] || 'Member'}</span>
+                        </h1>
+                        <p className="mt-4 text-lg text-stone-500 font-medium">
+                            Manage your community activities and contributions.
+                        </p>
                     </div>
+
                     <button
                         onClick={logout}
-                        className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 font-medium transition-colors cursor-pointer"
+                        className="shrink-0 px-6 py-3 bg-red-50/50 text-red-600 font-bold rounded-xl hover:bg-red-500 hover:text-white shadow-sm border border-red-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
                     >
+                        <SignOutIcon />
                         Sign Out
                     </button>
                 </div>
 
-                {/* User Profile & Role Card */}
-                <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 flex items-center gap-6">
-                    <div className="h-20 w-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl font-bold border-2 border-blue-200 shadow-sm">
-                        {user?.full_name?.charAt(0) || user?.email.charAt(0).toUpperCase()}
-                    </div>
+                {/* User Profile Card */}
+                <div className="bg-white rounded-[2rem] border border-stone-100/80 p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden group">
+                    {/* Decorative Background Elements */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60"></div>
+                    
+                    <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-8">
+                        <div className="w-28 h-28 shrink-0 bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] ring-1 ring-stone-100/50">
+                            {getInitials()}
+                        </div>
 
-                    <div className="flex-1">
-                        <h2 className="text-2xl font-semibold text-slate-800">
-                            {user?.full_name || 'No Name Set'}
-                        </h2>
-                        <p className="text-slate-500 mb-3">{user?.email}</p>
+                        <div className="flex-1 text-center sm:text-left flex flex-col justify-center h-full">
+                            <h2 className="text-3xl font-extrabold text-stone-800 mb-1">
+                                {user?.full_name || 'Anonymous User'}
+                            </h2>
+                            <p className="text-stone-500 text-lg font-medium mb-6">{user?.email}</p>
 
-                        {/* 🌟 Role UI Section 🌟 */}
-                        <div className="flex items-center gap-3">
-                            <span className="text-sm text-slate-500 font-medium">Your Roles:</span>
-
-                            {user?.roles && user.roles.length > 0 ? (
-                                user.roles.map((role) => (
-                                    <span
-                                        key={role}
-                                        className={`px-3 py-1 text-xs font-bold rounded-full tracking-wider ${
-                                            role === 'ADMIN'
-                                                ? 'bg-purple-100 text-purple-700 border border-purple-200' // এডমিনদের জন্য পার্পল কালার
-                                                : 'bg-blue-100 text-blue-700 border border-blue-200'       // মেম্বারদের জন্য ব্লু কালার
-                                        }`}
-                                    >
-                    {role}
-                  </span>
-                                ))
-                            ) : (
-                                <span className="px-3 py-1 bg-gray-100 text-gray-500 text-xs font-medium rounded-full border border-gray-200">
-                  USER (No Roles Assigned)
-                </span>
-                            )}
+                            {/* 🌟 Role UI Section 🌟 */}
+                            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
+                                <span className="text-sm uppercase tracking-wider font-bold text-stone-400 mt-1">Assigned Roles</span>
+                                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                                    {user?.roles && user.roles.length > 0 ? (
+                                        user.roles.map((role) => (
+                                            <span
+                                                key={role}
+                                                className={`px-4 py-1.5 text-xs font-bold rounded-full tracking-wide uppercase shadow-sm border ${
+                                                    role === 'ADMIN'
+                                                        ? 'bg-amber-50 text-amber-700 border-amber-200/50'
+                                                        : 'bg-emerald-50 text-emerald-700 border-emerald-200/50'
+                                                }`}
+                                            >
+                                                {role === 'ADMIN' ? '👑 ' : ''}{role}
+                                            </span>
+                                        ))
+                                    ) : (
+                                        <span className="px-4 py-1.5 bg-stone-50 text-stone-500 text-xs font-bold rounded-full border border-stone-200 shadow-sm uppercase">
+                                            Member
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* 👑 Conditional UI: শুধু ADMIN রাই এই সেকশন দেখতে পাবে */}
                 {isAdmin && (
-                    <div className="mt-8 p-6 bg-gradient-to-r from-purple-50 to-white rounded-xl border border-purple-100 shadow-sm">
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xl">👑</span>
-                            <h3 className="text-lg font-bold text-purple-900">Admin Controls</h3>
-                        </div>
-                        <p className="text-purple-700 mb-5 text-sm">
-                            Since you have ADMIN privileges, you can access the following management tools:
-                        </p>
+                    <div className="mt-8 bg-linear-to-br from-stone-900 to-stone-800 rounded-[2rem] border border-stone-800 p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group">
+                        {/* Decorative Admin Background Glow */}
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-amber-500/15 transition-colors duration-700"></div>
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+                        
+                        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+                            <div className="max-w-md">
+                                <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
+                                    <div className="p-2.5 bg-white/10 rounded-xl text-amber-400 shadow-[0_4px_15px_rgb(0,0,0,0.2)]">
+                                        <CrownIcon />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white tracking-tight">Admin Privileges</h3>
+                                </div>
+                                <p className="text-stone-400 text-[1.05rem] font-medium leading-relaxed">
+                                    Since you have ADMIN privileges, you have complete access to specialized management tools for users and platform logs.
+                                </p>
+                            </div>
 
-                        <div className="flex gap-4">
-                            <button className="px-5 py-2.5 bg-purple-600 text-white rounded-lg hover:bg-purple-700 font-medium shadow-sm transition-all cursor-pointer">
-                                Manage Users
-                            </button>
-                            <button className="px-5 py-2.5 bg-white text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-50 font-medium transition-all cursor-pointer">
-                                View Audit Logs
-                            </button>
+                            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto shrink-0">
+                                <button className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
+                                    <UsersIcon />
+                                    Manage Users
+                                </button>
+                                <button className="px-7 py-4 bg-stone-800 text-white font-bold rounded-xl border border-stone-700 hover:bg-stone-700 shadow-sm hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
+                                    <ActivityIcon />
+                                    View Audit Logs
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
