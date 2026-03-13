@@ -3,6 +3,7 @@ import { getEvents, joinEvent } from '../../api/events';
 import { useAuthStore } from '../../store/authStore';
 import { useState } from 'react';
 import CreateEventModal from './CreateEventModal';
+import DonationModal from '../donations/DonationModal.tsx'; // 🌟 Universal Donate Modal Import
 
 // SVG Icons
 const LocationIcon = () => (
@@ -20,6 +21,9 @@ const HeartIcon = () => (
 
 export default function Events() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    // 🌟 ডোনেশনের জন্য State
+    const [selectedEventForDonation, setSelectedEventForDonation] = useState<any>(null);
+
     const { user } = useAuthStore();
     const queryClient = useQueryClient();
     const isAdmin = user?.roles?.includes('ADMIN');
@@ -123,25 +127,25 @@ export default function Events() {
                             const day = eventDate.getDate();
                             const month = eventDate.toLocaleString('default', { month: 'short' });
 
+                            // 🌟 Donation Progress Calculation
+                            const goal = Number(event.goal_amount) || 1;
+                            const raised = Number(event.raised_amount) || 0;
+                            const progressPercentage = Math.min(Math.round((raised / goal) * 100), 100);
+
                             return (
                                 <div key={event.id} className="bg-white rounded-[2rem] border border-stone-100/80 overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-400 flex flex-col group relative">
-                                    
+
                                     {/* Event Top Banner */}
                                     <div className="h-48 bg-stone-50 relative overflow-hidden flex items-center justify-center rounded-t-[2rem]">
-                                        {/* Abstract soft background pattern/gradient */}
                                         <div className="absolute inset-0 bg-linear-to-br from-emerald-100/90 via-teal-50/60 to-orange-50/50 group-hover:scale-105 transition-transform duration-700"></div>
-                                        
-                                        {/* Decorative soft glowing orbs */}
                                         <div className="absolute top-0 right-0 w-40 h-40 bg-white/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-teal-200/40 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
 
-                                        {/* Date Badge */}
                                         <div className="absolute top-5 left-5 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-[1rem] text-center shadow-[0_4px_20px_rgb(0,0,0,0.06)] border border-white/60">
                                             <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-0.5">{month}</p>
                                             <p className="text-2xl font-black text-stone-800 leading-none">{day}</p>
                                         </div>
 
-                                        {/* Status Badge */}
                                         <span className="absolute top-5 right-5 px-3.5 py-1.5 bg-white/80 backdrop-blur-md text-stone-700 text-xs font-bold tracking-wide rounded-full border border-white/60 shadow-sm flex items-center gap-1.5">
                                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                             {event.status}
@@ -151,7 +155,7 @@ export default function Events() {
                                     {/* Event Details */}
                                     <div className="p-7 flex-1 flex flex-col z-10 bg-white">
                                         <h2 className="text-[1.35rem] font-bold text-stone-800 line-clamp-1 mb-3 group-hover:text-emerald-700 transition-colors">{event.title}</h2>
-                                        
+
                                         <p className="text-stone-500 text-[0.95rem] leading-relaxed line-clamp-2 flex-1 mb-6">
                                             {event.description || "No description provided. Please join to learn more about this community event."}
                                         </p>
@@ -163,30 +167,64 @@ export default function Events() {
                                             </div>
                                         </div>
 
-                                        {/* Join Button */}
-                                        <button
-                                            onClick={() => joinMutation.mutate(event.id)}
-                                            disabled={joinMutation.isPending}
-                                            className="w-full py-3.5 bg-emerald-50 hover:bg-emerald-500 text-emerald-700 hover:text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm group/btn disabled:opacity-60 disabled:pointer-events-none disabled:bg-stone-100 disabled:text-stone-400"
-                                        >
-                                            {joinMutation.isPending ? (
-                                                <span className="flex items-center gap-2">
-                                                    <div className="w-4 h-4 border-2 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
-                                                    Processing...
-                                                </span>
-                                            ) : (
-                                                <>
-                                                    <HeartIcon />
-                                                    Support This Cause
-                                                </>
+                                        {/* Action Buttons Container */}
+                                        <div className="flex flex-col gap-3 mt-auto">
+
+                                            {/* 🌟 Donation Progress Bar (যদি টগল ON থাকে) */}
+                                            {event.is_donation_enabled && (
+                                                <div className="mb-2">
+                                                    <div className="flex justify-between text-xs font-bold mb-1.5">
+                                                        <span className="text-emerald-600">৳{raised.toLocaleString()} raised</span>
+                                                        <span className="text-stone-500">Goal: ৳{goal.toLocaleString()}</span>
+                                                    </div>
+                                                    <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
+                                                        <div
+                                                            className="bg-emerald-500 h-1.5 rounded-full transition-all duration-1000"
+                                                            style={{ width: `${progressPercentage}%` }}
+                                                        ></div>
+                                                    </div>
+                                                </div>
                                             )}
-                                        </button>
+
+                                            {/* Join Button (সবার জন্য) */}
+                                            <button
+                                                onClick={() => joinMutation.mutate(event.id)}
+                                                disabled={joinMutation.isPending}
+                                                className="w-full py-3.5 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm disabled:opacity-60 disabled:pointer-events-none"
+                                            >
+                                                {joinMutation.isPending ? 'Processing...' : '🙋‍♂️ Join Event'}
+                                            </button>
+
+                                            {/* 🌟 THE DONATION BUTTON (শুধুমাত্র যদি ডোনেশন টগল ON থাকে) */}
+                                            {event.is_donation_enabled && (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setSelectedEventForDonation(event);
+                                                    }}
+                                                    className="w-full py-3.5 bg-emerald-50 hover:bg-emerald-500 text-emerald-700 hover:text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm group/btn"
+                                                >
+                                                    <HeartIcon />
+                                                    Donate to Event
+                                                </button>
+                                            )}
+
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })
                     )}
                 </div>
+
+                {/* 🌟 Universal Donation Modal for EVENTS */}
+                <DonationModal
+                    isOpen={!!selectedEventForDonation}
+                    onClose={() => setSelectedEventForDonation(null)}
+                    item={selectedEventForDonation}
+                    donationType="EVENT"
+                />
+
             </div>
         </div>
     );

@@ -1,11 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
-import Login from '../pages/Login/Login.tsx';
+import Login from '../pages/login/Login.tsx';
 import Dashboard from '../pages/dashboard/Dashboard.tsx';
 import ProtectedRoute from './ProtectedRoute';
 import Events from "../pages/events/Events.tsx";
 import MainLayout from "../components/layout/MainLayout.tsx";
 import Campaigns from "../pages/campaigns/Campaigns.tsx";
+import CustomCauseDonation from "../pages/donations/CustomCauseDonation.tsx";
 
 export default function AppRouter() {
     return (
@@ -21,6 +22,7 @@ export default function AppRouter() {
                     {/* Vobishhote aaro private route ekhane asbe jemon /events/create */}
                 </Route>
                 <Route path="/campaigns" element={<Campaigns/>} />
+                <Route path="/donations" element={<CustomCauseDonation/>}/>
             </Route>
             <Route path="/login" element={<Login />} />
         </Routes>

@@ -19,6 +19,7 @@ export class CampaignsService {
                 meta_title: data.meta_title,
                 meta_description: data.meta_description,
                 image_url: data.image_url,
+                is_donation_enabled: data.is_donation_enabled ?? true,
             }
         });
 

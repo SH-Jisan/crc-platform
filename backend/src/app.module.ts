@@ -17,6 +17,7 @@ import { DataExportModule } from './data-export/data-export.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
 import { SearchModule } from './search/search.module';
 import { HealthModule } from './health/health.module';
+import { CustomCausesDonationModule } from './custom-causes-donation/custom-causes-donation.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { HealthModule } from './health/health.module';
     AnnouncementsModule,
     SearchModule,
     HealthModule,
+    CustomCausesDonationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

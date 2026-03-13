@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getCampaigns } from '../../api/campaigns';
 import { useAuthStore } from '../../store/authStore';
 import CreateCampaignModal from './CreateCampaignModal';
-import DonateModal from './DonateModal';
+import DonationModal from '../donations/DonationModal.tsx';
 
 export default function Campaigns() {
     const { user } = useAuthStore();
@@ -96,7 +96,7 @@ export default function Campaigns() {
 
                                             <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
                                                 <div
-                                                    className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
+                                                    className="bg-linear-to-r from-blue-500 to-indigo-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
                                                     style={{ width: `${progressPercentage}%` }}
                                                 ></div>
                                             </div>
@@ -106,15 +106,24 @@ export default function Campaigns() {
                                         </div>
 
                                         {/* 🌟 THE ULTIMATE FIX: বাটন ক্লিকের ইভেন্টটি একদম নিখুঁত করে দেওয়া হলো */}
-                                        <button
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                setSelectedCampaign(campaign);
-                                            }}
-                                            className="mt-6 w-full py-3 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
-                                        >
-                                            ❤️ Donate to this Cause
-                                        </button>
+                                        {campaign.is_donation_enabled? (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setSelectedCampaign(campaign);
+                                                }}
+                                                className="mt-6 w-full py-3 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                            >
+                                                ❤️ Donate to this Cause
+                                            </button>
+                                        ):(
+                                            <button
+                                                disabled
+                                                className="mt-6 w-full py-3 bg-slate-100 text-slate-400 font-bold rounded-xl cursor-not-allowed border border-slate-200"
+                                            >
+                                                Donation Disabled
+                                            </button>
+                                        )}
                                     </div>
 
                                 </div>
@@ -129,10 +138,11 @@ export default function Campaigns() {
                     onClose={() => setIsModalOpen(false)}
                 />
 
-                <DonateModal
+                <DonationModal
                     isOpen={!!selectedCampaign}
                     onClose={() => setSelectedCampaign(null)}
-                    campaign={selectedCampaign}
+                    item={selectedCampaign}             // 🌟 campaign এর বদলে item
+                    donationType="CAMPAIGN"             // 🌟 বলে দিচ্ছি এটি ক্যাম্পেইনের ডোনেশন
                 />
 
             </div>

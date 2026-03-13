@@ -1,4 +1,4 @@
-import { IsString, IsDateString, IsOptional } from "class-validator"
+import {IsString, IsDateString, IsOptional, IsNumber, IsBoolean} from "class-validator"
 
 export class CreateEventDto{
 
@@ -22,4 +22,11 @@ export class CreateEventDto{
     @IsString()
     meta_description?: string
 
+    @IsBoolean()
+    @IsOptional()
+    is_donation_enabled?: boolean;
+
+    @IsNumber()
+    @IsOptional()
+    goal_amount?: number;
 }

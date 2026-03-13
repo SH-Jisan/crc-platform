@@ -1,26 +1,35 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createCampaign } from '../../api/campaigns';
 
-export default function CreateCampaignModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
+interface CreateCampaignModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignModalProps) {
     const queryClient = useQueryClient();
-    const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        goal_amount: '',
-        image_url: '', // 🌟 Image URL ফিল্ড যোগ করা হলো
-    });
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [goalAmount, setGoalAmount] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [isDonationEnabled, setIsDonationEnabled] = useState(true); // 🌟 State for Toggle
 
     const mutation = useMutation({
         mutationFn: createCampaign,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['campaigns'] });
             onClose();
-            setFormData({ title: '', description: '', goal_amount: '', image_url: '' });
-            alert("🎉 Campaign Created Successfully!");
+            // Reset form
+            setTitle('');
+            setDescription('');
+            setGoalAmount('');
+            setImageUrl('');
+            setIsDonationEnabled(true);
         },
-        onError: (error: any) => {
-            alert(error?.response?.data?.message || error?.response?.data?.error || "Something went wrong!");
+        onError: (error) => {
+            alert("Failed to create campaign!");
+            console.error(error);
         }
     });
 
@@ -29,85 +38,70 @@ export default function CreateCampaignModal({ isOpen, onClose }: { isOpen: boole
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         mutation.mutate({
-            title: formData.title,
-            description: formData.description,
-            goal_amount: Number(formData.goal_amount),
-            image_url: formData.image_url || undefined, // খালি থাকলে undefined পাঠাবে
+            title,
+            description,
+            goal_amount: isDonationEnabled?  Number(goalAmount) : 0,
+            image_url: imageUrl,
+            is_donation_enabled: isDonationEnabled, // 🌟 টগলের ডাটা পাঠানো হচ্ছে
         });
     };
 
     return (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fade-in">
-            <div className="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform transition-all">
-
-                <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <div>
-                        <h2 className="text-xl font-bold text-slate-800">Start a New Campaign</h2>
-                        <p className="text-xs text-slate-500 mt-1">Raise funds for a noble cause.</p>
-                    </div>
-                    <button onClick={onClose} className="text-slate-400 hover:text-rose-500 hover:bg-rose-50 p-2 rounded-lg transition-colors">✕</button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl overflow-hidden">
+                <div className="flex justify-between items-center p-6 border-b border-slate-100">
+                    <h2 className="text-xl font-bold text-slate-800">Create New Campaign</h2>
+                    <button onClick={onClose} className="text-slate-400 hover:text-rose-500 transition-colors">✕</button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-5">
+                <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div>
-                        <label className="block text-sm font-semibold text-slate-700 mb-1">Campaign Title</label>
-                        <input
-                            required
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                            placeholder="e.g. Winter Clothes for Orphans"
-                            value={formData.title}
-                            onChange={(e) => setFormData({...formData, title: e.target.value})}
-                        />
+                        <label className="block text-sm font-semibold text-slate-700 mb-1">Campaign Title *</label>
+                        <input type="text" required value={title} onChange={(e) => setTitle(e.target.value)}
+                               className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. Winter Clothes Distribution" />
                     </div>
 
                     <div>
                         <label className="block text-sm font-semibold text-slate-700 mb-1">Description</label>
-                        <textarea
-                            required
-                            rows={3}
-                            className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                            placeholder="Explain why this campaign is important..."
-                            value={formData.description}
-                            onChange={(e) => setFormData({...formData, description: e.target.value})}
-                        />
+                        <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)}
+                                  className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Tell us more about this cause..." />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            <label className="block text-sm font-semibold text-slate-700 mb-1">Goal Amount (৳)</label>
-                            <div className="relative">
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-500 font-bold">৳</span>
-                                <input
-                                    type="number"
-                                    required
-                                    min="100"
-                                    className="w-full pl-8 pr-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                                    placeholder="50000"
-                                    value={formData.goal_amount}
-                                    onChange={(e) => setFormData({...formData, goal_amount: e.target.value})}
-                                />
+                    <div className={`grid gap-4 ${isDonationEnabled ? 'grid-cols-2' : 'grid-cols-1'}`}>                        {isDonationEnabled && (
+                            <div className="animate-fade-in">
+                                <label className="block text-sm font-semibold text-slate-700 mb-1">Goal Amount (৳) *</label>
+                                <input type="number" required min="1" value={goalAmount} onChange={(e) => setGoalAmount(e.target.value)}
+                                       className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g. 50000" />
                             </div>
-                        </div>
-
+                        )}
                         <div>
                             <label className="block text-sm font-semibold text-slate-700 mb-1">Cover Image URL</label>
-                            <input
-                                type="url"
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm"
-                                placeholder="https://example.com/image.jpg"
-                                value={formData.image_url}
-                                onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                            />
+                            <input type="url" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)}
+                                   className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="https://..." />
                         </div>
                     </div>
 
-                    <div className="pt-4 mt-6 border-t border-slate-100">
-                        <button
-                            type="submit"
-                            disabled={mutation.isPending}
-                            className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 shadow-md transition-all flex justify-center items-center gap-2"
-                        >
-                            {mutation.isPending ? 'Creating...' : '🚀 Publish Campaign'}
+                    {/* 🌟 Request Donation Toggle Switch */}
+                    <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl mt-4">
+                        <div>
+                            <p className="font-semibold text-slate-800">Request Donations</p>
+                            <p className="text-xs text-slate-500">Allow users to donate money for this campaign.</p>
+                        </div>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                className="sr-only peer"
+                                checked={isDonationEnabled}
+                                onChange={() => setIsDonationEnabled(!isDonationEnabled)}
+                            />
+                            <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                        </label>
+                    </div>
+
+                    <div className="pt-4 flex gap-3">
+                        <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-slate-200 text-slate-600 font-semibold rounded-lg hover:bg-slate-50 transition-colors">Cancel</button>
+                        <button type="submit" disabled={mutation.isPending} className="flex-1 px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-70">
+                            {mutation.isPending ? 'Creating...' : 'Create Campaign'}
                         </button>
                     </div>
                 </form>

@@ -60,10 +60,10 @@ export default function Login() {
                 }
 
                 // ৩. ড্যাশবোর্ডে রিডাইরেক্ট করা
-                navigate('/dashboard');
+                navigate('/');
             }
         } catch (err: any) {
-            setError(err.message || 'Login failed. Please check your credentials.');
+            setError(err.message || 'login failed. Please check your credentials.');
         } finally {
             setLoading(false);
         }

@@ -25,7 +25,7 @@ export class DataExportService {
             Date: d.created_at.toISOString().split('T')[0],
             Donor_Name: d.user?.full_name || 'Anonymous',
             Phone: d.user?.phone || 'N/A',
-            Campaign: d.campaign.title,
+            Campaign: d.campaign?.title || 'N/A',
             Amount: d.amount,
             Method: d.method,
             Transaction_ID: d.transaction_id || 'N/A',

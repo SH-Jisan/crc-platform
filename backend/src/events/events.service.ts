@@ -18,6 +18,8 @@ export class EventsService {
         status: "UPCOMING",
         meta_title: data.meta_title,
         meta_description: data.meta_description,
+        is_donation_enabled: data.is_donation_enabled ?? false, // ডিফল্টভাবে ইভেন্টের ডোনেশন অফ থাকবে
+        goal_amount: data.is_donation_enabled ? Number(data.goal_amount) : 0,
       },
     });
   }

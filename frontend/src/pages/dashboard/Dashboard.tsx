@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore.ts';
+import CreateCustomCauseDonationModal from '../donations/CreateCustomCauseDonationModal.tsx'; // 🌟 Modal Import
 
 // SVG Icons
 const CrownIcon = () => (
@@ -17,9 +19,12 @@ const UsersIcon = () => (
     </svg>
 );
 
-const ActivityIcon = () => (
+const HeartHandshakeIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+        <path d="M12 5 9.04 7.96a2.17 2.17 0 0 0 0 3.08v0c.82.82 2.13.85 3 .07l2.07-1.9a2.82 2.82 0 0 1 3.79 0l2.96 2.66" />
+        <path d="m18 15-2-2" />
+        <path d="m15 18-2-2" />
     </svg>
 );
 
@@ -34,22 +39,26 @@ const SignOutIcon = () => (
 export default function Dashboard() {
     const { user, logout } = useAuthStore();
 
+    // 🌟 Modal State
+    const [isDonationFormOpen, setIsDonationFormOpen] = useState(false);
+
     // ইউজার ADMIN কিনা তা চেক করার লজিক
     const isAdmin = user?.roles?.includes('ADMIN');
 
     // Get initials safely
     const getInitials = () => {
-        if (user?.full_name) {
+        if (!user) return '?';
+        if (user.full_name) {
             const names = user.full_name.split(' ');
             if (names.length >= 2) return (names[0][0] + names[1][0]).toUpperCase();
             return names[0][0].toUpperCase();
         }
-        return user?.email?.charAt(0).toUpperCase() || '?';
+        return user.email?.charAt(0).toUpperCase() || '?';
     };
 
     return (
         <div className="min-h-screen py-16 px-6 bg-[#FAFAFA] font-sans selection:bg-emerald-100 selection:text-emerald-900">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-5xl mx-auto">
 
                 {/* Header Section */}
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 relative">
@@ -79,7 +88,7 @@ export default function Dashboard() {
                 <div className="bg-white rounded-[2rem] border border-stone-100/80 p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden group">
                     {/* Decorative Background Elements */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60"></div>
-                    
+
                     <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-8">
                         <div className="w-28 h-28 shrink-0 bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] ring-1 ring-stone-100/50">
                             {getInitials()}
@@ -125,10 +134,10 @@ export default function Dashboard() {
                         {/* Decorative Admin Background Glow */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-amber-500/15 transition-colors duration-700"></div>
                         <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
-                        
-                        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+
+                        <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8 text-center xl:text-left">
                             <div className="max-w-md">
-                                <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
+                                <div className="flex items-center justify-center xl:justify-start gap-3 mb-4">
                                     <div className="p-2.5 bg-white/10 rounded-xl text-amber-400 shadow-[0_4px_15px_rgb(0,0,0,0.2)]">
                                         <CrownIcon />
                                     </div>
@@ -139,19 +148,32 @@ export default function Dashboard() {
                                 </p>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto shrink-0">
+                            <div className="flex flex-col sm:flex-row flex-wrap justify-center xl:justify-end gap-4 w-full xl:w-auto shrink-0">
+
+                                {/* 🌟 The New Create Donation Button */}
+                                <button
+                                    onClick={() => setIsDonationFormOpen(true)}
+                                    className="px-7 py-4 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto"
+                                >
+                                    <HeartHandshakeIcon />
+                                    Emergency Fund
+                                </button>
+
                                 <button className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
                                     <UsersIcon />
                                     Manage Users
                                 </button>
-                                <button className="px-7 py-4 bg-stone-800 text-white font-bold rounded-xl border border-stone-700 hover:bg-stone-700 shadow-sm hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
-                                    <ActivityIcon />
-                                    View Audit Logs
-                                </button>
+
                             </div>
                         </div>
                     </div>
                 )}
+
+                {/* 🌟 Custom Cause (Donation Form) Modal */}
+                <CreateCustomCauseDonationModal
+                    isOpen={isDonationFormOpen}
+                    onClose={() => setIsDonationFormOpen(false)}
+                />
 
             </div>
         </div>

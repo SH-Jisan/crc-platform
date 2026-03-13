@@ -1,9 +1,10 @@
-import { IsString, IsNumber, IsOptional, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsNotEmpty, IsEnum, IsUUID, IsBoolean } from 'class-validator';
+import { DonationType } from '@prisma/client';
 
 export class CreateDonationDto {
-  @IsUUID()
+  @IsEnum(DonationType)
   @IsNotEmpty()
-  campaign_id: string;
+  donation_type: DonationType; // 🌟 CLUB, CAMPAIGN, EVENT, CUSTOM
 
   @IsNumber()
   @IsNotEmpty()
@@ -16,4 +17,34 @@ export class CreateDonationDto {
   @IsOptional()
   @IsString()
   transaction_id?: string;
+
+  // 🌟 Optional IDs (যেটার ডোনেশন, শুধু সেটার ID আসবে)
+  @IsOptional()
+  @IsUUID()
+  campaign_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  event_id?: string;
+
+  @IsOptional()
+  @IsUUID()
+  custom_cause_id?: string;
+
+  // 🌟 Guest Donation Info
+  @IsOptional()
+  @IsBoolean()
+  is_anonymous?: boolean;
+
+  @IsOptional()
+  @IsString()
+  donor_name?: string;
+
+  @IsOptional()
+  @IsString()
+  donor_email?: string;
+
+  @IsOptional()
+  @IsString()
+  donor_phone?: string;
 }

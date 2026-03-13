@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createDonation } from '../../api/donations';
+import { createDonation } from '../../api/donations.ts';
 
 interface DonateModalProps {
     isOpen: boolean;
     onClose: () => void;
-    campaign: any;
+    item?: any; // Campaign, Event বা Custom Cause এর ডাটা (Club এর ক্ষেত্রে null হতে পারে)
+    donationType: 'CAMPAIGN' | 'EVENT' | 'CLUB' | 'CUSTOM'; // 🌟 নতুন Prop
 }
 
-export default function DonateModal({ isOpen, onClose, campaign }: DonateModalProps) {
+export default function DonationModal({ isOpen, onClose, item, donationType }: DonateModalProps) {
     const queryClient = useQueryClient();
     const [amount, setAmount] = useState<number | ''>('');
     const [method, setMethod] = useState('bKash');
@@ -17,7 +18,10 @@ export default function DonateModal({ isOpen, onClose, campaign }: DonateModalPr
     const mutation = useMutation({
         mutationFn: createDonation,
         onSuccess: () => {
+            // রিফ্রেশ করার জন্য সব কি (Key) ইনভ্যালিডেট করে দিচ্ছি
             queryClient.invalidateQueries({ queryKey: ['campaigns'] });
+            queryClient.invalidateQueries({ queryKey: ['events'] });
+            queryClient.invalidateQueries({ queryKey: ['custom-causes'] });
             onClose();
             setAmount('');
             setTransactionId('');
@@ -28,49 +32,53 @@ export default function DonateModal({ isOpen, onClose, campaign }: DonateModalPr
         }
     });
 
-    if (!isOpen || !campaign) return null;
+    if (!isOpen) return null;
 
     const presetAmounts = [500, 1000, 2000, 5000];
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 🌟 Security Check 1: Amount ঠিক আছে কি না
         if (!amount || amount < 10) {
             alert("Please enter a valid amount (Minimum ৳10)");
             return;
         }
 
-        // 🌟 Security Check 2: Campaign ID আছে কি না
-        if (!campaign?.id) {
-            alert("Campaign ID is missing! Please refresh the page and try again.");
-            return;
-        }
-
-        // 🌟 The Ultimate Payload
+        // 🌟 The Universal Payload
         const donationPayload: any = {
-            campaign_id: String(campaign.id), // জোড় করে String/UUID বানিয়ে দেওয়া হলো
+            donation_type: donationType,
             amount: Number(amount),
             method: method,
         };
 
-        // Transaction ID শুধু তখনই পাঠাবো, যখন ইউজার সেটা বক্সে লিখবে
+        // Donation Type অনুযায়ী সঠিক ID টি Payload এ যুক্ত করা হচ্ছে
+        if (donationType === 'CAMPAIGN' && item?.id) donationPayload.campaign_id = String(item.id);
+        if (donationType === 'EVENT' && item?.id) donationPayload.event_id = String(item.id);
+        if (donationType === 'CUSTOM' && item?.id) donationPayload.custom_cause_id = String(item.id);
+
         if (transactionId.trim() !== '') {
             donationPayload.transaction_id = transactionId;
         }
 
-        // রিকোয়েস্ট পাঠানো হচ্ছে
         mutation.mutate(donationPayload);
     };
 
+    // টাইটেল ডায়নামিক করা হচ্ছে
+    const getTitle = () => {
+        if (donationType === 'CLUB') return "CRC General Fund";
+        return item?.title || "Noble Cause";
+    };
+
     return (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4 animate-fade-in">
-            <div className="bg-white rounded-[2rem] w-full max-w-md shadow-2xl overflow-hidden transform transition-all">
+        <div className="fixed inset-0 z-70 flex items-center justify-center bg-slate-900/70 backdrop-blur-sm p-4 animate-fade-in">
+            <div className="bg-white rounded-4xl w-full max-w-md shadow-2xl overflow-hidden transform transition-all">
 
                 <div className="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-start">
                     <div>
-                        <span className="text-xs font-bold text-rose-500 uppercase tracking-widest mb-1 block">You are supporting</span>
-                        <h2 className="text-xl font-bold text-slate-800 leading-tight">{campaign.title}</h2>
+                        <span className="text-xs font-bold text-rose-500 uppercase tracking-widest mb-1 block">
+                            {donationType === 'CLUB' ? 'Support Our Club' : 'You are supporting'}
+                        </span>
+                        <h2 className="text-xl font-bold text-slate-800 leading-tight line-clamp-2">{getTitle()}</h2>
                     </div>
                     <button onClick={onClose} className="p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-500 rounded-full transition-colors shrink-0">
                         ✕
@@ -78,7 +86,6 @@ export default function DonateModal({ isOpen, onClose, campaign }: DonateModalPr
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
-
                     <div>
                         <label className="block text-sm font-bold text-slate-700 mb-3">Select or Enter Amount (৳)</label>
                         <div className="grid grid-cols-4 gap-2 mb-3">
@@ -151,7 +158,7 @@ export default function DonateModal({ isOpen, onClose, campaign }: DonateModalPr
                         <button
                             type="submit"
                             disabled={mutation.isPending}
-                            className="w-full py-4 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:shadow-[0_6px_20px_rgb(244,63,94,0.45)] transition-all flex justify-center items-center gap-2 disabled:opacity-70 text-lg"
+                            className="w-full py-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:shadow-[0_6px_20px_rgb(244,63,94,0.45)] transition-all flex justify-center items-center gap-2 disabled:opacity-70 text-lg"
                         >
                             {mutation.isPending ? 'Processing...' : `Donate ৳${amount || '0'} Now`}
                         </button>
