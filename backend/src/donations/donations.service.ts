@@ -1,42 +1,47 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
 
 @Injectable()
 export class DonationsService {
-    constructor(private prisma: PrismaService){}
+    constructor(private prisma: PrismaService) {}
 
-    async donate(data: CreateDonationDto, userId: string){
-        const amount = typeof data.amount === 'string' ? parseFloat(data.amount) : data.amount;
+    async create(createDonationDto: CreateDonationDto, userId?: string) {
+        // ১. আগে চেক করবো ক্যাম্পেইনটি আছে কি না
+        const campaign = await this.prisma.campaign.findUnique({
+            where: { id: createDonationDto.campaign_id }
+        });
 
-        if (isNaN(amount) || amount <= 0) {
-            throw new BadRequestException("Invalid donation amount");
+        if (!campaign) {
+            throw new NotFoundException('Campaign not found');
         }
 
-        // Execute Prisma $transaction: Atomically save donation record and increment campaign funds
-        return this.prisma.$transaction(async (prisma) => {
-            // 1. Create the donation ledger record
+        // ২. ডাটাবেস ট্রানজেকশন (ডোনেশন সেভ হবে + ক্যাম্পেইনের ফান্ড আপডেট হবে)
+        const result = await this.prisma.$transaction(async (prisma) => {
+            // ডোনেশন রেকর্ড তৈরি
             const donation = await prisma.donation.create({
                 data: {
-                    amount: amount,
-                    method: data.method || "BKASH",
-                    transaction_id: data.transaction_id || `TRX-${Date.now()}`,
-                    campaign_id: data.campaign_id,
-                    user_id: userId
+                    campaign_id: createDonationDto.campaign_id,
+                    amount: createDonationDto.amount,
+                    method: createDonationDto.method,
+                    transaction_id: createDonationDto.transaction_id,
+                    user_id: userId, // কে ডোনেট করেছে তার আইডি
                 }
             });
 
-            // 2. Increment the raised_amount on the corresponding campaign
+            // ক্যাম্পেইনের raised_amount আপডেট করা
             await prisma.campaign.update({
-                where: { id: data.campaign_id },
+                where: { id: createDonationDto.campaign_id },
                 data: {
                     raised_amount: {
-                        increment: amount // Add the new donation payload to previous total
+                        increment: createDonationDto.amount
                     }
                 }
             });
 
             return donation;
         });
+
+        return result;
     }
 }

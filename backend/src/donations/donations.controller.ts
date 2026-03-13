@@ -1,15 +1,19 @@
-import { Controller, Post, Body, Req, UseGuards } from "@nestjs/common";
-import { DonationsService } from "./donations.service";
-import { AuthGuard } from "src/auth/auth.guard";
-import { CreateDonationDto } from "./dto/create-donation.dto";
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { DonationsService } from './donations.service';
+import { CreateDonationDto } from './dto/create-donation.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { GetUser } from '../common/decorators/get-user.decorator';
 
-@Controller("api/v1/donations")
+@Controller('donations')
 export class DonationsController {
-  constructor(private donationsService: DonationsService) {}
+  constructor(private readonly donationsService: DonationsService) {}
 
-  @UseGuards(AuthGuard)
   @Post()
-  donate(@Body() body: CreateDonationDto, @Req() req) {
-    return this.donationsService.donate(body, req.user.id);
+  @UseGuards(AuthGuard) // শুধুমাত্র লগিন করা ইউজাররাই ডোনেট করতে পারবে
+  create(
+      @Body() createDonationDto: CreateDonationDto,
+      @GetUser('id') userId: string // টোকেন থেকে ইউজারের আইডি নেওয়া হচ্ছে
+  ) {
+    return this.donationsService.create(createDonationDto, userId);
   }
 }

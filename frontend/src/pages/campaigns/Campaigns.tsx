@@ -3,11 +3,15 @@ import { useQuery } from '@tanstack/react-query';
 import { getCampaigns } from '../../api/campaigns';
 import { useAuthStore } from '../../store/authStore';
 import CreateCampaignModal from './CreateCampaignModal';
+import DonateModal from './DonateModal';
 
 export default function Campaigns() {
     const { user } = useAuthStore();
     const isAdmin = user?.roles?.includes('ADMIN');
+
+    // 🌟 Modals States
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCampaign, setSelectedCampaign] = useState<any>(null); // ডোনেশনের জন্য
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['campaigns'],
@@ -21,8 +25,7 @@ export default function Campaigns() {
     if (isLoading) return <div className="p-8 text-center text-slate-500 font-medium">Loading inspiring campaigns...</div>;
     if (isError) return <div className="p-8 text-center text-red-500 font-medium">Failed to load campaigns!</div>;
 
-    // 🌟 একটি সেফ ডিফল্ট ইমেজ লিংক
-    const DEFAULT_IMAGE = 'https://images.unsplash.com/photo-1532629345422-7515f3d16bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+    const DEFAULT_IMAGE = 'https://placehold.co/800x400/e2e8f0/475569?text=Support+Our+Cause';
 
     return (
         <div className="min-h-screen p-8 bg-slate-50">
@@ -57,7 +60,6 @@ export default function Campaigns() {
                             const raised = Number(campaign.raised_amount) || 0;
                             const progressPercentage = Math.min(Math.round((raised / goal) * 100), 100);
 
-                            // 🌟 FIX: ইমেজের লিংক স্ট্রিক্টলি চেক করা হচ্ছে (স্পেস থাকলে বাদ দিয়ে দেবে)
                             const validImageUrl = (campaign.image_url && campaign.image_url.trim() !== '')
                                 ? campaign.image_url
                                 : DEFAULT_IMAGE;
@@ -65,13 +67,11 @@ export default function Campaigns() {
                             return (
                                 <div key={campaign.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
 
-                                    {/* 🌟 FIX: bg-slate-200 দেওয়া হয়েছে, যাতে ইমেজ ফেইল করলেও সাদা না হয়ে সুন্দর গ্রে ব্যাকগ্রাউন্ড থাকে */}
                                     <div className="h-48 overflow-hidden relative bg-slate-200 flex items-center justify-center">
                                         <img
                                             src={validImageUrl}
                                             alt={campaign.title}
                                             onError={(e) => {
-                                                // ইনফিনিট লুপ ঠেকানোর জন্য onerror null করে দেওয়া হলো
                                                 e.currentTarget.onerror = null;
                                                 e.currentTarget.src = DEFAULT_IMAGE;
                                             }}
@@ -105,7 +105,14 @@ export default function Campaigns() {
                                             </p>
                                         </div>
 
-                                        <button className="mt-6 w-full py-3 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+                                        {/* 🌟 THE ULTIMATE FIX: বাটন ক্লিকের ইভেন্টটি একদম নিখুঁত করে দেওয়া হলো */}
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setSelectedCampaign(campaign);
+                                            }}
+                                            className="mt-6 w-full py-3 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                        >
                                             ❤️ Donate to this Cause
                                         </button>
                                     </div>
@@ -116,9 +123,16 @@ export default function Campaigns() {
                     )}
                 </div>
 
+                {/* Modals */}
                 <CreateCampaignModal
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
+                />
+
+                <DonateModal
+                    isOpen={!!selectedCampaign}
+                    onClose={() => setSelectedCampaign(null)}
+                    campaign={selectedCampaign}
                 />
 
             </div>
