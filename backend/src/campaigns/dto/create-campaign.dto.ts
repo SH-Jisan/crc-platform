@@ -1,13 +1,16 @@
-import { IsString, IsNumber, IsOptional, IsDateString } from 'class-validator';
+import {IsString, IsNumber, IsOptional, IsDateString, IsNotEmpty} from 'class-validator';
 
 export class CreateCampaignDto {
   @IsString()
+  @IsNotEmpty()
   title: string;
 
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsNumber()
+  @IsNotEmpty()
   goal_amount: number;
 
   @IsOptional()
@@ -25,4 +28,8 @@ export class CreateCampaignDto {
   @IsOptional()
   @IsString()
   meta_description?: string;
+
+  @IsOptional()
+  @IsString()
+  image_url?: string;
 }

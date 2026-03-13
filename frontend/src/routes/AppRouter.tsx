@@ -5,6 +5,7 @@ import Dashboard from '../pages/dashboard/Dashboard.tsx';
 import ProtectedRoute from './ProtectedRoute';
 import Events from "../pages/events/Events.tsx";
 import MainLayout from "../components/layout/MainLayout.tsx";
+import Campaigns from "../pages/campaigns/Campaigns.tsx";
 
 export default function AppRouter() {
     return (
@@ -19,6 +20,7 @@ export default function AppRouter() {
                     <Route path="/dashboard" element={<Dashboard />} />
                     {/* Vobishhote aaro private route ekhane asbe jemon /events/create */}
                 </Route>
+                <Route path="/campaigns" element={<Campaigns/>} />
             </Route>
             <Route path="/login" element={<Login />} />
         </Routes>
