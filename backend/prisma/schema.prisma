@@ -21,6 +21,11 @@ enum PaymentStatus {
   REFUNDED
 }
 
+enum PostType {
+  UPDATE
+  SUCCESS_STORY
+}
+
 model Profile {
   id         String   @id @db.Uuid
   full_name  String?
@@ -180,13 +185,21 @@ model Donation {
 }
 
 model Post {
-  id      String @id @default(uuid()) @db.Uuid
-  title   String
-  content String
-  status  String
+  id        String   @id @default(uuid()) @db.Uuid
+  post_type PostType @default(UPDATE)
+
+  title   String?
+  content String  @db.Text
+
+  media_url  String?
+  media_type String?
+
+  is_gallery_synced Boolean @default(false)
+  likes_count       Int     @default(0)
 
   meta_title       String?
   meta_description String?
+  status           String   @default("PUBLISHED")
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
 

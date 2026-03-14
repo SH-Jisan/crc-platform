@@ -1,21 +1,28 @@
-import { IsString, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsEnum, IsBoolean } from 'class-validator';
+import { PostType } from '@prisma/client';
 
 export class CreatePostDto {
-    @IsString()
-    title: string;
+    @IsEnum(PostType)
+    @IsOptional()
+    post_type?: PostType;
 
     @IsString()
+    @IsOptional()
+    title?: string;
+
+    @IsString()
+    @IsNotEmpty()
     content: string;
 
-    @IsOptional()
     @IsString()
-    status?: string;
+    @IsOptional()
+    media_url?: string;
 
-    @IsOptional()
     @IsString()
-    meta_title?: string;
+    @IsOptional()
+    media_type?: string; // 'IMAGE' or 'VIDEO'
 
+    @IsBoolean()
     @IsOptional()
-    @IsString()
-    meta_description?: string;
+    is_gallery_synced?: boolean;
 }
