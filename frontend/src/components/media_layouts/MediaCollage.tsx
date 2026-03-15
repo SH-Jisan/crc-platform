@@ -29,7 +29,9 @@ export default function MediaCollage({ media, onImageClick }: MediaCollageProps)
                         e.stopPropagation();
                         if (onImageClick) onImageClick(media.indexOf(item));
                     }}
-                    className={`object-cover bg-stone-100 cursor-zoom-in hover:opacity-95 transition-opacity ${customClasses}`}
+                    onContextMenu={(e) => e.preventDefault()}
+                    draggable={false}
+                    className={`object-cover bg-stone-100 cursor-zoom-in hover:opacity-95 transition-opacity select-none ${customClasses}`}
                     style={{ width: '100%', height: '100%' }}
                 />
             );

@@ -83,22 +83,22 @@ export default function SinglePost() {
                     <span>←</span> Back to Community Feed
                 </button>
 
-                <div className="bg-white rounded-[2rem] border border-stone-200/60 shadow-xl overflow-hidden">
-                    <div className="p-6 md:p-8 flex items-start justify-between gap-4">
+                <div className="bg-white rounded-2xl border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden">
+                    <div className="px-6 md:px-8 pt-6 pb-4 flex items-start justify-between gap-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-700 flex items-center justify-center font-bold text-2xl ring-2 ring-stone-50">
+                            <div className="w-14 h-14 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center font-bold text-2xl ring-1 ring-stone-200/60">
                                 {post.author?.full_name?.charAt(0).toUpperCase() || 'A'}
                             </div>
                             <div>
                                 <h3 className="font-bold text-stone-900 text-xl leading-tight">{post.author?.full_name || 'CRC Admin'}</h3>
-                                <p className="text-stone-500 font-medium">{date}</p>
+                                <p className="text-stone-500 text-[0.9rem] font-medium mt-1">{date}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="px-6 md:px-8 pb-4">
-                        {post.title && <h2 className="text-3xl font-extrabold text-stone-800 mb-4">{post.title}</h2>}
-                        <p className="text-stone-700 leading-relaxed whitespace-pre-wrap text-lg">{post.content}</p>
+                    <div className="px-6 md:px-8 pb-5">
+                        {post.title && <h2 className="text-3xl font-bold text-stone-900 mb-3 leading-snug">{post.title}</h2>}
+                        <p className="text-stone-700 leading-relaxed whitespace-pre-wrap text-[1.1rem]">{post.content}</p>
                     </div>
 
                     {/* Media Collage (+N Style) */}
@@ -108,33 +108,22 @@ export default function SinglePost() {
                         </div>
                     )}
 
-                    <div className="px-6 md:px-8 py-5 bg-stone-50/50 border-t border-stone-100 flex items-center">
+                    <div className="px-4 md:px-6 py-4 border-t border-stone-50 flex items-center justify-between">
                         <button
                             onClick={() => likeMutation.mutate(post.id)}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-stone-500 hover:text-emerald-600 hover:bg-emerald-50 font-bold transition-all"
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-stone-500 hover:text-emerald-600 hover:bg-stone-50 font-semibold transition-all group lg:text-lg"
                         >
-                            <ClapIcon />
-
+                            <div className="transition-transform group-hover:-translate-y-0.5"><ClapIcon /></div>
                             <span>{post.likes_count || 0} Applauds</span>
                         </button>
-                        <div className="px-6 md:px-8 py-5 bg-stone-50/50 border-t border-stone-100 flex items-center justify-between">
-                            <button
-                                onClick={() => likeMutation.mutate(post.id)}
-                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-stone-500 hover:text-emerald-600 hover:bg-emerald-50 font-bold transition-all"
-                            >
-                                <ClapIcon />
-                                <span>{post.likes_count || 0} Applauds</span>
-                            </button>
 
-                            {/* 🌟 New Share Button in Single Post Page */}
-                            <button
-                                onClick={handleShare}
-                                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-stone-400 hover:text-stone-600 hover:bg-stone-200/50 font-medium text-sm transition-all"
-                            >
-                                <ShareIcon />
-                                Share
-                            </button>
-                        </div>
+                        <button
+                            onClick={handleShare}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-50 font-medium transition-all"
+                        >
+                            <ShareIcon />
+                            Share
+                        </button>
                     </div>
                 </div>
             </div>

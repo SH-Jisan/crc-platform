@@ -7,6 +7,12 @@ datasource db {
   provider = "postgresql"
 }
 
+enum MemberStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 enum DonationType {
   CLUB
   CAMPAIGN
@@ -32,6 +38,13 @@ model Profile {
   avatar_url String?
   phone      String?
   bio        String?
+
+  university String?
+  department String?
+  session String?
+  student_id String?
+  status MemberStatus @default(PENDING)
+
   created_at DateTime @default(now())
 
   // Relations

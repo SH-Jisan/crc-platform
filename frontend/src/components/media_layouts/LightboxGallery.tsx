@@ -103,7 +103,9 @@ export default function LightboxGallery({ media, initialIndex, onClose }: Lightb
                         <img
                             src={currentMedia.url}
                             alt="Gallery item"
-                            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-zoom-in"
+                            onContextMenu={(e) => e.preventDefault()}
+                            draggable={false}
+                            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-zoom-in select-none"
                         />
                     ) : currentMedia.type === 'VIDEO' ? (
                         <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl bg-black border border-white/10">

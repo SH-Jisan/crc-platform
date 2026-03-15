@@ -103,23 +103,23 @@ export default function CommunityFeed() {
 
                             return (
                                 // 🌟 ID যুক্ত করা হয়েছে যাতে লিংকে ক্লিক করলে এখানে স্ক্রল করে চলে আসে
-                                <div id={post.id} key={post.id} className="bg-white rounded-[2rem] border border-stone-200/60 shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden transition-all hover:shadow-lg scroll-mt-24">
+                                <div id={post.id} key={post.id} className="bg-white rounded-2xl border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-0.5 scroll-mt-24">
 
-                                    <div className="p-6 md:p-8 flex items-start justify-between gap-4">
+                                    <div className="px-6 md:px-8 pt-6 pb-4 flex items-start justify-between gap-4">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-100 to-teal-100 text-emerald-700 flex items-center justify-center font-bold text-xl ring-2 ring-stone-50">
+                                            <div className="w-12 h-12 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center font-bold text-xl ring-1 ring-stone-200/60">
                                                 {post.author?.full_name?.charAt(0).toUpperCase() || 'A'}
                                             </div>
                                             <div>
-                                                <h3 className="font-bold text-stone-900 text-lg leading-tight">{post.author?.full_name || 'CRC Admin'}</h3>
-                                                <p className="text-stone-500 text-sm font-medium">{date}</p>
+                                                <h3 className="font-bold text-stone-900 text-[1.05rem] leading-tight hover:text-emerald-600 cursor-pointer transition-colors">{post.author?.full_name || 'CRC Admin'}</h3>
+                                                <p className="text-stone-500 text-[0.85rem] font-medium mt-0.5">{date}</p>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="px-6 md:px-8 pb-4">
-                                        {post.title && <h2 className="text-2xl font-extrabold text-stone-800 mb-3">{post.title}</h2>}
-                                        <p className="text-stone-600 leading-relaxed whitespace-pre-wrap text-[1.05rem]">{post.content}</p>
+                                    <div className="px-6 md:px-8 pb-5">
+                                        {post.title && <h2 className="text-xl font-bold text-stone-900 mb-2 leading-snug">{post.title}</h2>}
+                                        <p className="text-stone-600 leading-relaxed whitespace-pre-wrap text-[1rem]">{post.content}</p>
                                     </div>
 
                                     {/* 🌟 Media Collage (+N Style) */}
@@ -130,19 +130,19 @@ export default function CommunityFeed() {
                                     )}
 
                                     {/* Action Footer */}
-                                    <div className="px-6 md:px-8 py-4 bg-stone-50/50 border-t border-stone-100 flex items-center justify-between">
+                                    <div className="px-4 md:px-6 py-3 border-t border-stone-50 flex items-center justify-between">
                                         <button
                                             onClick={() => likeMutation.mutate(post.id)}
-                                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-stone-500 hover:text-emerald-600 hover:bg-emerald-50 font-bold transition-all"
+                                            className="flex items-center gap-2 px-4 py-2 rounded-full text-stone-500 hover:text-emerald-600 hover:bg-stone-50 font-semibold transition-all group"
                                         >
-                                            <ClapIcon />
+                                            <div className="transition-transform group-hover:-translate-y-0.5"><ClapIcon /></div>
                                             <span>{post.likes_count || 0} Applauds</span>
                                         </button>
 
                                         {/* 🌟 Specific Post Share Button */}
                                         <button
                                             onClick={() => handleShare(post)}
-                                            className="flex items-center gap-2 px-4 py-2 rounded-xl text-stone-400 hover:text-stone-600 hover:bg-stone-200/50 font-medium text-sm transition-all"
+                                            className="flex items-center gap-2 px-4 py-2 rounded-full text-stone-400 hover:text-stone-700 hover:bg-stone-50 font-medium text-[0.9rem] transition-all"
                                         >
                                             <ShareIcon />
                                             Share
