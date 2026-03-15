@@ -11,3 +11,9 @@ export const getCurrentUser = async () => {
             : []
     };
 };
+
+// 🌟 Public Profile API (লগইন ছাড়াই কল করা যাবে)
+export const getPublicProfile = async (crcId: string) => {
+    const response = await apiClient.get(`/users/public/${crcId}`);
+    return response.data.data;
+};

@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
+import { Injectable, NotFoundException } from "@nestjs/common"; // 🌟 NotFoundException ইমপোর্ট করতে ভুলবে না
 
+import { PrismaService } from "../prisma/prisma.service";
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+constructor(private prisma: PrismaService) {}
 
-  async getProfileWithRole(userId: string) {
+async getProfileWithRole(userId: string) {
     return this.prisma.profile.findUnique({
       where: { id: userId },
       include: {
@@ -16,8 +16,8 @@ export class UsersService {
     });
   }
 
-  // 🌟 PRO-LEVEL: Update or Insert (Upsert) Profile
-  async upsertProfile(userId: string, data: any) {
+// 🌟 PRO-LEVEL: Update or Insert (Upsert) Profile
+async upsertProfile(userId: string, data: any) {
     return this.prisma.profile.upsert({
       where: { id: userId },
       update: {
@@ -41,4 +41,38 @@ export class UsersService {
       },
     });
   }
+
+// ... (তোমার আগের কোডগুলো) ...
+
+// 🌟 Public Profile API (No sensitive data)
+async getPublicProfileByCrcId(crcId: string) {
+  const cleanCrcId = crcId.trim();
+  const profile = await this.prisma.profile.findUnique({
+    where: {
+      crc_id: cleanCrcId,
+    },
+    include: {
+      user_roles: {
+        include: { role: true },
+      },
+    },
+  });
+
+  // প্রোফাইল না থাকলে বা APPROVED না হলে Error ছুঁড়ে দেবো
+  if (!profile || profile.status !== 'APPROVED') {
+    throw new NotFoundException('Member not found or not approved yet.');
+  }
+
+  // 🌟 সিকিউরিটি: শুধুমাত্র পাবলিক ডাটা রিটার্ন করা হচ্ছে (ইমেইল বা ফোন নম্বর নেই)
+  return {
+    crc_id: profile.crc_id,
+    full_name: profile.full_name,
+    avatar_url: profile.avatar_url,
+    university: profile.university,
+    department: profile.department,
+    session: profile.session,
+    bio: profile.bio,
+    roles: profile.user_roles.map(ur => ur.role.name), // রোলগুলো বের করে আনা হচ্ছে
+  };
+}
 }

@@ -1,5 +1,6 @@
-import { Controller, Get, Patch, Body, UseGuards } from "@nestjs/common";
+import {Controller, Get, Patch, Body, UseGuards, Param} from "@nestjs/common";
 import { UsersService } from "./users.service";
+import { Public } from "../common/decorators/public.decorator"; // 🌟 Public Decorator
 import { AuthGuard } from "../auth/auth.guard";
 import { plainToInstance } from "class-transformer";
 import { UserResponseDto } from "./dto/user-response.dto";
@@ -10,6 +11,12 @@ import { GetUser } from "../common/decorators/get-user.decorator";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+
+  @Public()
+  @Get("public/:crcId")
+  async getPublicProfile(@Param("crcId") crcId: string) {
+    return this.usersService.getPublicProfileByCrcId(crcId);
+  }
   @Get("me")
   async getMe(@GetUser() user: any) {
     const userId = user?.id || user?.sub;

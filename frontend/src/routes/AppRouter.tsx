@@ -10,6 +10,7 @@ import CustomCauseDonation from "../pages/donations/CustomCauseDonation.tsx";
 import CommunityFeed from "../pages/posts/CommunityFeed.tsx";
 import SinglePost from "../pages/posts/SinglePost.tsx";
 import Signup from "../pages/login/Signup.tsx";
+import PublicProfile from "../pages/profile/PublicProfile.tsx";
 
 export default function AppRouter() {
     return (
@@ -31,6 +32,7 @@ export default function AppRouter() {
             <Route path="/login" element={<Login />} />
             <Route path="/post/:id" element={<SinglePost />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/member/:crcId" element={<PublicProfile />} />
         </Routes>
     );
 }
