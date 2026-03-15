@@ -61,11 +61,14 @@ export class AdminService {
   }
 
   // 🌟 মেম্বার এপ্রুভ/রিজেক্ট করা
-  async updateMemberStatus(userId: string, status: 'APPROVED' | 'REJECTED', roleName: string = 'MEMBER') {
+  async updateMemberStatus(userId: string, status: 'APPROVED' | 'REJECTED', roleName: string = 'MEMBER', crc_id?: string) {
     return this.prisma.$transaction(async (prisma) => {
       const profile = await prisma.profile.update({
         where: { id: userId },
-        data: { status },
+        data: {
+          status,
+        crc_id: crc_id || undefined,
+        },
       });
 
       if (status === 'APPROVED') {
@@ -104,6 +107,7 @@ export class AdminService {
           university: data.university,
           department: data.department,
           session: data.session,
+          crc_id: data.crc_id,
         },
       });
 

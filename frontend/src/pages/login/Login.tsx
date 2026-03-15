@@ -77,7 +77,8 @@ export default function Login() {
                             full_name: userProfile.full_name,
                             avatar_url: userProfile.avatar_url,
                             roles: userProfile.roles || [],
-                            status: userProfile.status
+                            status: userProfile.status,
+                            crc_id: userProfile.crc_id,
                         },
                         data.session.access_token
                     );

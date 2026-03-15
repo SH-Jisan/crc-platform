@@ -5,8 +5,8 @@ export const getPendingMembers = async () => {
     return response.data;
 };
 
-export const updateMemberStatus = async ({ id, status, role }: { id: string, status: 'APPROVED' | 'REJECTED', role: string }) => {
-    const response = await apiClient.patch(`/api/v1/admin/members/${id}/status`, { status, role });
+export const updateMemberStatus = async ({ id, status, role, crc_id }: { id: string, status: 'APPROVED' | 'REJECTED', role: string, crc_id?: string }) => {
+    const response = await apiClient.patch(`/api/v1/admin/members/${id}/status`, { status, role, crc_id });
     return response.data;
 };
 

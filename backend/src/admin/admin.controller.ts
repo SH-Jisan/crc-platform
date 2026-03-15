@@ -41,9 +41,9 @@ export class AdminController {
   @Patch("members/:id/status")
   updateMemberStatus(
       @Param('id') id: string,
-      @Body () body: {status: 'APPROVED' | 'REJECTED'; role?: string}
+      @Body () body: {status: 'APPROVED' | 'REJECTED'; role?: string; crc_id?: string}
   ) {
-    return this.adminService.updateMemberStatus(id, body.status, body.role || 'MEMBER');
+    return this.adminService.updateMemberStatus(id, body.status, body.role || 'MEMBER', body.crc_id);
   }
 
   @Roles('ADMIN')

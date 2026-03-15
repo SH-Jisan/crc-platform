@@ -19,6 +19,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
     const [selectedRoles, setSelectedRoles] = useState<Record<string, string>>({});
     const [editingMember, setEditingMember] = useState<string | null>(null);
     const [editForm, setEditForm] = useState<any>({});
+    const [crcIds, setCrcIds]=useState<Record<string, string>>({});
 
     // 🌟 Queries
     const { data: pendingData, isLoading: isPendingLoading } = useQuery({
@@ -56,12 +57,14 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
     // --- Action Handlers ---
     const handleStatusAction = (memberId: string, status: 'APPROVED' | 'REJECTED') => {
         const role = selectedRoles[memberId] || 'MEMBER';
-        statusMutation.mutate({ id: memberId, status, role });
+        const crc_id = crcIds[memberId];
+        statusMutation.mutate({ id: memberId, status, role, crc_id });
     };
 
     const startEditing = (member: any) => {
         setEditingMember(member.id);
         setEditForm({
+            crc_id: member.crc_id || '',
             full_name: member.full_name || '',
             phone: member.phone || '',
             university: member.university || '',
@@ -127,6 +130,13 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                                             <div className="grid grid-cols-2 gap-y-1 text-sm text-stone-500"><p>Uni: <span className="font-bold text-stone-700">{member.university}</span></p><p>Dept: <span className="font-bold text-stone-700">{member.department}</span></p></div>
                                         </div>
                                         <div className="flex flex-col sm:flex-row gap-3 bg-stone-50 p-2 rounded-xl border border-stone-100">
+                                            <input
+                                                type="text"
+                                                placeholder="CRC-ID (e.g. CRC-26-001)"
+                                                className="px-3 py-2 border rounded-lg text-sm font-bold w-full sm:w-40"
+                                                value={crcIds[member.id] || ""}
+                                                onChange={(e) => setCrcIds({ ...crcIds, [member.id]: e.target.value })}
+                                            />
                                             <select className="px-3 py-2 border rounded-lg text-sm font-bold" value={selectedRoles[member.id] || "MEMBER"} onChange={(e) => setSelectedRoles({ ...selectedRoles, [member.id]: e.target.value })}>
                                                 {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                                             </select>
@@ -151,7 +161,9 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                                         {editingMember === member.id ? (
                                             // 🌟 Edit Mode Form
                                             <div className="space-y-3">
+
                                                 <input type="text" className="w-full text-sm p-2 border rounded-lg font-bold" value={editForm.full_name} onChange={e => setEditForm({...editForm, full_name: e.target.value})} placeholder="Full Name" />
+                                                <input type="text" className="w-full text-sm p-2 border border-emerald-300 bg-emerald-50 rounded-lg font-bold text-emerald-800 placeholder:text-emerald-400" value={editForm.crc_id} onChange={e => setEditForm({...editForm, crc_id: e.target.value})} placeholder="Assign CRC-ID" />
                                                 <input type="text" className="w-full text-sm p-2 border rounded-lg" value={editForm.university} onChange={e => setEditForm({...editForm, university: e.target.value})} placeholder="University" />
                                                 <input type="text" className="w-full text-sm p-2 border rounded-lg" value={editForm.phone} onChange={e => setEditForm({...editForm, phone: e.target.value})} placeholder="Phone" />
 

@@ -36,4 +36,7 @@ export class UserResponseDto {
   @Expose()
   @Type(() => UserRoleDto)
   user_roles: UserRoleDto[];
+
+  @Expose()
+  crc_id: string;
 }

@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore.ts';
 import CreateCustomCauseDonationModal from '../donations/CreateCustomCauseDonationModal.tsx';
 import CreatePostModal from "../posts/CreatePostModal.tsx";
-import ManageMembersModal from "./ManageMembersModal.tsx"; // 🌟 Modal Import
+import ManageMembersModal from "./ManageMembersModal.tsx";
+import { QRCodeSVG } from 'qrcode.react'; // 🌟 QR Code Import
 
 // SVG Icons
 const CrownIcon = () => (
@@ -42,14 +43,10 @@ export default function Dashboard() {
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const { user, logout } = useAuthStore();
     const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
-
-    // 🌟 Modal State
     const [isDonationFormOpen, setIsDonationFormOpen] = useState(false);
 
-    // ইউজার ADMIN কিনা তা চেক করার লজিক
     const isAdmin = user?.roles?.includes('ADMIN');
 
-    // Get initials safely
     const getInitials = () => {
         if (!user) return '?';
         if (user.full_name) {
@@ -90,52 +87,63 @@ export default function Dashboard() {
 
                 {/* User Profile Card */}
                 <div className="bg-white rounded-4xl border border-stone-100/80 p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden group">
-                    {/* Decorative Background Elements */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60"></div>
 
-                    <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-8">
-                        <div className="w-28 h-28 shrink-0 bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] ring-1 ring-stone-100/50">
-                            {getInitials()}
-                        </div>
+                    <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
 
-                        <div className="flex-1 text-center sm:text-left flex flex-col justify-center h-full">
-                            <h2 className="text-3xl font-extrabold text-stone-800 mb-1">
-                                {user?.full_name || 'Anonymous User'}
-                            </h2>
-                            <p className="text-stone-500 text-lg font-medium mb-6">{user?.email}</p>
+                        {/* 🌟 Left: Avatar & Info */}
+                        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 w-full md:w-auto">
+                            <div className="w-28 h-28 shrink-0 bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] ring-1 ring-stone-100/50">
+                                {getInitials()}
+                            </div>
 
-                            {/* 🌟 Role UI Section 🌟 */}
-                            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
-                                <span className="text-sm uppercase tracking-wider font-bold text-stone-400 mt-1">Assigned Roles</span>
-                                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                                    {user?.roles && user.roles.length > 0 ? (
-                                        user.roles.map((role) => (
-                                            <span
-                                                key={role}
-                                                className={`px-4 py-1.5 text-xs font-bold rounded-full tracking-wide uppercase shadow-sm border ${
-                                                    role === 'ADMIN'
-                                                        ? 'bg-amber-50 text-amber-700 border-amber-200/50'
-                                                        : 'bg-emerald-50 text-emerald-700 border-emerald-200/50'
-                                                }`}
-                                            >
-                                                {role === 'ADMIN' ? '👑 ' : ''}{role}
-                                            </span>
-                                        ))
-                                    ) : (
-                                        <span className="px-4 py-1.5 bg-stone-50 text-stone-500 text-xs font-bold rounded-full border border-stone-200 shadow-sm uppercase">
-                                            Member
-                                        </span>
-                                    )}
+                            <div className="text-center sm:text-left flex flex-col justify-center h-full">
+                                <h2 className="text-3xl font-extrabold text-stone-800 mb-1">
+                                    {user?.full_name || 'Anonymous User'}
+                                </h2>
+                                <p className="text-stone-500 text-lg font-medium mb-6">{user?.email}</p>
+
+                                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3">
+                                    <span className="text-sm uppercase tracking-wider font-bold text-stone-400 mt-1">Assigned Roles</span>
+                                    <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                                        {user?.roles && user.roles.length > 0 ? (
+                                            user.roles.map((role) => (
+                                                <span key={role} className={`px-4 py-1.5 text-xs font-bold rounded-full tracking-wide uppercase shadow-sm border ${role === 'ADMIN' ? 'bg-amber-50 text-amber-700 border-amber-200/50' : 'bg-emerald-50 text-emerald-700 border-emerald-200/50'}`}>
+                                                    {role === 'ADMIN' ? '👑 ' : ''}{role.replace('_', ' ')}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="px-4 py-1.5 bg-stone-50 text-stone-500 text-xs font-bold rounded-full border border-stone-200 shadow-sm uppercase">Pending</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                        {/* 🌟 Right: The Magical QR Code Section */}
+                        {user?.crc_id && (
+                            <div className="shrink-0 flex flex-col items-center gap-3 bg-stone-50/50 p-5 rounded-3xl border border-stone-100 shadow-inner">
+                                <div className="p-3 bg-white rounded-2xl shadow-sm border border-stone-100">
+                                    <QRCodeSVG
+                                        value={`${window.location.origin}/member/${user.crc_id}`}
+                                        size={100}
+                                        level={"H"}
+                                        fgColor="#1c1917"
+                                    />
+                                </div>
+                                <div className="text-center">
+                                    <span className="block text-[10px] font-black uppercase tracking-widest text-stone-400 mb-0.5">MEMBER ID</span>
+                                    <span className="font-extrabold text-emerald-600 tracking-wide">{user.crc_id}</span>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
                 </div>
 
-                {/* 👑 Conditional UI: শুধু ADMIN রাই এই সেকশন দেখতে পাবে */}
+                {/* 👑 Conditional UI: ADMIN Section */}
                 {isAdmin && (
                     <div className="mt-8 bg-linear-to-br from-stone-900 to-stone-800 rounded-4xl border border-stone-800 p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group">
-                        {/* Decorative Admin Background Glow */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-amber-500/15 transition-colors duration-700"></div>
                         <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
 
@@ -153,8 +161,6 @@ export default function Dashboard() {
                             </div>
 
                             <div className="flex flex-col sm:flex-row flex-wrap justify-center xl:justify-end gap-4 w-full xl:w-auto shrink-0">
-
-                                {/* 🌟 The New Create Donation Button */}
                                 <button
                                     onClick={() => setIsDonationFormOpen(true)}
                                     className="px-7 py-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto"
@@ -169,32 +175,22 @@ export default function Dashboard() {
                                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                                     Create Story / Post
                                 </button>
-
                                 <button
                                     onClick={()=> setIsManageMembersOpen(true)}
-                                    className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
+                                    className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto"
+                                >
                                     <UsersIcon />
                                     Manage Users
                                 </button>
-
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* 🌟 Custom Cause (Donation Form) Modal */}
-                <CreateCustomCauseDonationModal
-                    isOpen={isDonationFormOpen}
-                    onClose={() => setIsDonationFormOpen(false)}
-                />
-                <CreatePostModal
-                    isOpen={isPostModalOpen}
-                    onClose={() => setIsPostModalOpen(false)}
-                />
-                <ManageMembersModal
-                    isOpen={isManageMembersOpen}
-                    onClose={() => setIsManageMembersOpen(false)}
-                />
+                {/* Modals */}
+                <CreateCustomCauseDonationModal isOpen={isDonationFormOpen} onClose={() => setIsDonationFormOpen(false)} />
+                <CreatePostModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} />
+                <ManageMembersModal isOpen={isManageMembersOpen} onClose={() => setIsManageMembersOpen(false)} />
 
             </div>
         </div>
