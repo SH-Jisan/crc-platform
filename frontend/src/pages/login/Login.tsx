@@ -30,6 +30,7 @@ export default function Login() {
         setError('');
 
         try {
+            // ১. Supabase দিয়ে লগইন করার চেষ্টা
             const { data, error: authError } = await supabase.auth.signInWithPassword({
                 email,
                 password,
@@ -38,39 +39,60 @@ export default function Login() {
             if (authError) throw authError;
 
             if (data.session && data.user) {
-                login(
-                    {
-                        id: data.user.id,
-                        email: data.user.email!,
-                        roles: [],
-                    },
-                    data.session.access_token
-                );
-
+                // ২. ব্যাকএন্ড থেকে ইউজারের প্রোফাইল (এবং Status) আনা
+                let userProfile;
                 try {
-                    const userProfile = await getCurrentUser();
+                    // টোকেন সেট করার জন্য টেম্পোরারি লগইন
+                    login({ id: data.user.id, email: data.user.email!, roles: [] }, data.session.access_token);
+
+                    userProfile = await getCurrentUser();
+                } catch (dbError) {
+                    console.error("Database profile fetch error:", dbError);
+                    throw new Error("Failed to load user profile.");
+                }
+
+                // 🌟 THE GATEKEEPER: Status Check
+                if (userProfile.status === 'PENDING') {
+                    await supabase.auth.signOut(); // জোর করে সাইনআউট
+                    useAuthStore.getState().logout(); // স্টোর ক্লিয়ার
+                    setError("Your account is still pending admin approval. Please wait.");
+                    return;
+                }
+
+                if (userProfile.status === 'REJECTED') {
+                    await supabase.auth.signOut(); // জোর করে সাইনআউট
+                    useAuthStore.getState().logout(); // স্টোর ক্লিয়ার
+                    setError("Your membership request has been rejected by the Admin.");
+                    return;
+                }
+
+                // ৩. যদি APPROVED হয়, তবেই ফাইনাল লগইন করানো হবে
+                if (userProfile.status === 'APPROVED' || !userProfile.status) {
                     login(
                         {
                             id: userProfile.id,
                             email: data.user.email!,
                             full_name: userProfile.full_name,
                             avatar_url: userProfile.avatar_url,
-                            roles: userProfile.roles,
+                            roles: userProfile.roles || [],
+                            status: userProfile.status
                         },
                         data.session.access_token
                     );
-                } catch (dbError) {
-                    console.error("Database profile fetch error:", dbError);
+                    navigate('/'); // লগইন সফল! ড্যাশবোর্ডে বা হোমে পাঠিয়ে দাও
                 }
-                navigate('/');
             }
         } catch (err: any) {
-            setError(err.message || 'Login failed. Please check your credentials.');
+            // Supabase এর এররগুলো ইউজার ফ্রেন্ডলি করা
+            if (err.message === "Invalid login credentials") {
+                setError("Incorrect email or password.");
+            } else {
+                setError(err.message || 'Login failed. Please check your credentials.');
+            }
         } finally {
             setLoading(false);
         }
     };
-
     return (
         <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-6 relative overflow-hidden font-sans">
             {/* Decorative Background Elements */}
@@ -189,4 +211,4 @@ export default function Login() {
             </div>
         </div>
     );
-}
+}

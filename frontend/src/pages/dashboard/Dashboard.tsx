@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore.ts';
 import CreateCustomCauseDonationModal from '../donations/CreateCustomCauseDonationModal.tsx';
-import CreatePostModal from "../posts/CreatePostModal.tsx"; // 🌟 Modal Import
+import CreatePostModal from "../posts/CreatePostModal.tsx";
+import ManageMembersModal from "./ManageMembersModal.tsx"; // 🌟 Modal Import
 
 // SVG Icons
 const CrownIcon = () => (
@@ -40,6 +41,7 @@ const SignOutIcon = () => (
 export default function Dashboard() {
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const { user, logout } = useAuthStore();
+    const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
 
     // 🌟 Modal State
     const [isDonationFormOpen, setIsDonationFormOpen] = useState(false);
@@ -168,7 +170,9 @@ export default function Dashboard() {
                                     Create Story / Post
                                 </button>
 
-                                <button className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
+                                <button
+                                    onClick={()=> setIsManageMembersOpen(true)}
+                                    className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto">
                                     <UsersIcon />
                                     Manage Users
                                 </button>
@@ -186,6 +190,10 @@ export default function Dashboard() {
                 <CreatePostModal
                     isOpen={isPostModalOpen}
                     onClose={() => setIsPostModalOpen(false)}
+                />
+                <ManageMembersModal
+                    isOpen={isManageMembersOpen}
+                    onClose={() => setIsManageMembersOpen(false)}
                 />
 
             </div>

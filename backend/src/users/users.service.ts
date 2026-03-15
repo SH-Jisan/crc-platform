@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
 export class UsersService {
@@ -10,10 +10,34 @@ export class UsersService {
       where: { id: userId },
       include: {
         user_roles: {
-          include: {
-            role: true,
-          },
+          include: { role: true },
         },
+      },
+    });
+  }
+
+  // 🌟 PRO-LEVEL: Update or Insert (Upsert) Profile
+  async upsertProfile(userId: string, data: any) {
+    return this.prisma.profile.upsert({
+      where: { id: userId },
+      update: {
+        full_name: data.full_name,
+        phone: data.phone,
+        university: data.university,
+        department: data.department,
+        session: data.session,
+        student_id: data.student_id,
+        // Status PENDING ই থাকবে বাই ডিফল্ট
+      },
+      create: {
+        id: userId,
+        full_name: data.full_name,
+        phone: data.phone,
+        university: data.university,
+        department: data.department,
+        session: data.session,
+        student_id: data.student_id,
+        status: 'PENDING', // নতুন সাইনআপ সবসময় PENDING
       },
     });
   }

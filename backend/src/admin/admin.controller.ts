@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import {Body, Controller, Get, Param, Patch, UseGuards} from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { AuthGuard } from "../auth/auth.guard";
 import { RolesGuard } from "../auth/roles.guard";
@@ -28,4 +28,20 @@ export class AdminController {
   recentDonations() {
     return this.adminService.recentDonations();
   }
+
+  @Roles('ADMIN')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get("pending-members")
+  getPendingMembers(){
+    return this.adminService.getPendingMembers();
+  }
+
+  @Roles('ADMIN')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Patch("members/:id/status")
+  updateMemberStatus(
+      @Param('id') id: string,
+      @Body () body: {status: 'APPROVED' | 'REJECTED'; role?: string}
+  ) {
+    return this.adminService.updateMemberStatus(id, body.status, body.role || 'MEMBER');  }
 }

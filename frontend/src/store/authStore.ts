@@ -7,6 +7,7 @@ interface User {
     full_name?: string;
     avatar_url?: string;
     roles: string[]; // ['ADMIN', 'MEMBER'] etc.
+    status?: string;
 }
 
 interface AuthState {
@@ -28,8 +29,13 @@ export const useAuthStore = create<AuthState>()(
 
             login: (user, token) => set({ user, token, isAuthenticated: true }),
 
-            logout: () => {
-                // Ekhane Supabase thekeo sign out korar logic thakbe pore
+            logout: async () => {
+                // 🌟 Supabase থেকেও সাইনআউট করানো হচ্ছে
+                try {
+                    const { supabase } = await import('../api/supabase');
+                    await supabase.auth.signOut();
+                } catch(e) {}
+
                 set({ user: null, token: null, isAuthenticated: false });
             },
         }),

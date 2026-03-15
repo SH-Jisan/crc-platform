@@ -29,10 +29,9 @@ export class UserResponseDto {
 
   @Expose()
   bio: string;
-  
-  // Phone might be considered sensitive, skipping exposure unless needed
-  // @Expose()
-  // phone: string;
+
+  @Expose()
+  status: string;
 
   @Expose()
   @Type(() => UserRoleDto)
