@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPostById, likePost } from '../../api/posts';
+import MediaCollage from '../../components/media_layouts/MediaCollage.tsx';
+import LightboxGallery from '../../components/media_layouts/LightboxGallery.tsx';
 
-const getYouTubeEmbedUrl = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : null;
-};
+
 
 const ClapIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -21,17 +19,13 @@ const ShareIcon = () => (
     </svg>
 );
 
-const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-);
+
 
 export default function SinglePost() {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+    const [activeGallery, setActiveGallery] = useState<{ media: any[], initialIndex: number } | null>(null);
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['post', id],
@@ -80,8 +74,6 @@ export default function SinglePost() {
 
     const date = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const mediaArr = Array.isArray(post.media) ? post.media : [];
-    const images = mediaArr.filter((m: any) => m.type === 'IMAGE');
-    const videos = mediaArr.filter((m: any) => m.type === 'VIDEO');
 
     return (
         <div className="min-h-screen py-16 px-4 sm:px-6 bg-[#FAFAFA] font-sans">
@@ -109,30 +101,10 @@ export default function SinglePost() {
                         <p className="text-stone-700 leading-relaxed whitespace-pre-wrap text-lg">{post.content}</p>
                     </div>
 
-                    {/* Images Grid */}
-                    {images.length > 0 && (
-                        <div className="px-6 md:px-8 pb-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            {images.map((img: any, idx: number) => (
-                                <img
-                                    key={idx} src={img.url} alt="Post media"
-                                    onClick={() => setZoomedImage(img.url)}
-                                    className={`w-full object-cover rounded-2xl border border-stone-100 shadow-sm cursor-zoom-in hover:opacity-95 transition-opacity ${images.length === 1 ? 'col-span-full max-h-[600px]' : 'aspect-square'}`}
-                                />
-                            ))}
-                        </div>
-                    )}
-
-                    {/* Videos */}
-                    {videos.length > 0 && (
-                        <div className="px-6 md:px-8 pb-6 space-y-4">
-                            {videos.map((vid: any, idx: number) => {
-                                const youtubeUrl = getYouTubeEmbedUrl(vid.url);
-                                return youtubeUrl ? (
-                                    <div key={idx} className="w-full aspect-video rounded-2xl overflow-hidden shadow-sm bg-stone-900">
-                                        <iframe width="100%" height="100%" src={youtubeUrl} title="YouTube" frameBorder="0" allowFullScreen></iframe>
-                                    </div>
-                                ) : null;
-                            })}
+                    {/* Media Collage (+N Style) */}
+                    {mediaArr.length > 0 && (
+                        <div className="px-6 md:px-8 pb-6">
+                            <MediaCollage media={mediaArr} onImageClick={(index) => setActiveGallery({ media: mediaArr, initialIndex: index })} />
                         </div>
                     )}
 
@@ -167,12 +139,13 @@ export default function SinglePost() {
                 </div>
             </div>
 
-            {/* Zoom Lightbox */}
-            {zoomedImage && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12 backdrop-blur-sm" onClick={() => setZoomedImage(null)}>
-                    <button className="absolute top-6 right-6 text-white/70 hover:text-white bg-black/50 p-2 rounded-full"><CloseIcon /></button>
-                    <img src={zoomedImage} alt="Zoomed" className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-zoom-in" onClick={(e) => e.stopPropagation()} />
-                </div>
+            {/* Universal Lightbox Gallery */}
+            {activeGallery && (
+                <LightboxGallery 
+                    media={activeGallery.media} 
+                    initialIndex={activeGallery.initialIndex} 
+                    onClose={() => setActiveGallery(null)} 
+                />
             )}
         </div>
     );

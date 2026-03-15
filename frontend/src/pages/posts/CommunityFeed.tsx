@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPosts, likePost } from '../../api/posts';
+import MediaCollage from '../../components/media_layouts/MediaCollage.tsx';
+import LightboxGallery from '../../components/media_layouts/LightboxGallery.tsx';
 
-const getYouTubeEmbedUrl = (url: string) => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : null;
-};
+
 
 // SVG Icons
 const ClapIcon = () => (
@@ -22,17 +20,13 @@ const ShareIcon = () => (
     </svg>
 );
 
-const CloseIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-);
+
 
 export default function CommunityFeed() {
     const queryClient = useQueryClient();
 
     // 🌟 Lightbox (Zoom) State
-    const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+    const [activeGallery, setActiveGallery] = useState<{ media: any[], initialIndex: number } | null>(null);
 
     const { data, isLoading } = useQuery({
         queryKey: ['posts'],
@@ -75,71 +69,7 @@ export default function CommunityFeed() {
             alert('Post link copied to clipboard! 📋');
         }
     };
-    // 🌟 Smart Image Grid Renderer (Like Facebook/Twitter)
-    const renderImageGrid = (images: any[]) => {
-        if (!images || images.length === 0) return null;
-
-        if (images.length === 1) {
-            return (
-                <img
-                    src={images[0].url}
-                    alt="Post media"
-                    onClick={() => setZoomedImage(images[0].url)}
-                    className="w-full max-h-[500px] object-cover rounded-2xl border border-stone-100 shadow-sm cursor-zoom-in hover:opacity-95 transition-opacity"
-                />
-            );
-        }
-
-        if (images.length === 2) {
-            return (
-                <div className="grid grid-cols-2 gap-2">
-                    {images.map((img, idx) => (
-                        <img
-                            key={idx} src={img.url} alt="Post media"
-                            onClick={() => setZoomedImage(img.url)}
-                            className="w-full aspect-square object-cover rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity"
-                        />
-                    ))}
-                </div>
-            );
-        }
-
-        if (images.length === 3) {
-            return (
-                <div className="grid grid-cols-2 gap-2">
-                    <img
-                        src={images[0].url} alt="Post media" onClick={() => setZoomedImage(images[0].url)}
-                        className="w-full h-full object-cover rounded-xl col-span-1 row-span-2 cursor-zoom-in hover:opacity-95 transition-opacity"
-                    />
-                    <img
-                        src={images[1].url} alt="Post media" onClick={() => setZoomedImage(images[1].url)}
-                        className="w-full aspect-square object-cover rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity"
-                    />
-                    <img
-                        src={images[2].url} alt="Post media" onClick={() => setZoomedImage(images[2].url)}
-                        className="w-full aspect-square object-cover rounded-xl cursor-zoom-in hover:opacity-95 transition-opacity"
-                    />
-                </div>
-            );
-        }
-
-        // 4 or more images
-        return (
-            <div className="grid grid-cols-2 gap-2">
-                {images.slice(0, 4).map((img, idx) => (
-                    <div key={idx} className="relative cursor-zoom-in group" onClick={() => setZoomedImage(img.url)}>
-                        <img src={img.url} alt="Post media" className="w-full aspect-square object-cover rounded-xl hover:opacity-95 transition-opacity" />
-                        {/* 🌟 +N Overlay for extra images */}
-                        {idx === 3 && images.length > 4 && (
-                            <div className="absolute inset-0 bg-black/60 rounded-xl flex items-center justify-center backdrop-blur-[2px] transition-all group-hover:bg-black/70">
-                                <span className="text-white text-3xl font-bold tracking-wider">+{images.length - 4}</span>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
-        );
-    };
+    // 🌟 Smart Image Grid Renderer (Removed in favor of Carousel)
 
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
@@ -170,8 +100,6 @@ export default function CommunityFeed() {
                             const date = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
                             const mediaArr = Array.isArray(post.media) ? post.media : [];
-                            const images = mediaArr.filter((m: any) => m.type === 'IMAGE');
-                            const videos = mediaArr.filter((m: any) => m.type === 'VIDEO');
 
                             return (
                                 // 🌟 ID যুক্ত করা হয়েছে যাতে লিংকে ক্লিক করলে এখানে স্ক্রল করে চলে আসে
@@ -194,24 +122,10 @@ export default function CommunityFeed() {
                                         <p className="text-stone-600 leading-relaxed whitespace-pre-wrap text-[1.05rem]">{post.content}</p>
                                     </div>
 
-                                    {/* 🌟 New Smart Grid Layout for Images */}
-                                    {images.length > 0 && (
+                                    {/* 🌟 Media Collage (+N Style) */}
+                                    {mediaArr.length > 0 && (
                                         <div className="px-6 md:px-8 pb-6">
-                                            {renderImageGrid(images)}
-                                        </div>
-                                    )}
-
-                                    {/* Videos Rendering */}
-                                    {videos.length > 0 && (
-                                        <div className="px-6 md:px-8 pb-6 space-y-4">
-                                            {videos.map((vid: any, idx: number) => {
-                                                const youtubeUrl = getYouTubeEmbedUrl(vid.url);
-                                                return youtubeUrl ? (
-                                                    <div key={idx} className="w-full aspect-video rounded-2xl overflow-hidden border border-stone-100 shadow-sm bg-stone-900">
-                                                        <iframe width="100%" height="100%" src={youtubeUrl} title="YouTube" frameBorder="0" allowFullScreen></iframe>
-                                                    </div>
-                                                ) : null;
-                                            })}
+                                            <MediaCollage media={mediaArr} onImageClick={(index) => setActiveGallery({ media: mediaArr, initialIndex: index })} />
                                         </div>
                                     )}
 
@@ -242,25 +156,13 @@ export default function CommunityFeed() {
                 </div>
             </div>
 
-            {/* 🌟 Image Zoom Lightbox Modal */}
-            {zoomedImage && (
-                <div
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12 animate-fade-in backdrop-blur-sm"
-                    onClick={() => setZoomedImage(null)}
-                >
-                    <button
-                        onClick={() => setZoomedImage(null)}
-                        className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors bg-black/50 hover:bg-black/80 p-2 rounded-full backdrop-blur-md"
-                    >
-                        <CloseIcon />
-                    </button>
-                    <img
-                        src={zoomedImage}
-                        alt="Zoomed"
-                        className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transform scale-100 animate-zoom-in"
-                        onClick={(e) => e.stopPropagation()} // ছবিতে ক্লিক করলে যেন জুম বন্ধ না হয়ে যায়
-                    />
-                </div>
+            {/* 🌟 Universal Lightbox Gallery */}
+            {activeGallery && (
+                <LightboxGallery 
+                    media={activeGallery.media} 
+                    initialIndex={activeGallery.initialIndex} 
+                    onClose={() => setActiveGallery(null)} 
+                />
             )}
 
         </div>
