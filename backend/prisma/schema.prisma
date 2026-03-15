@@ -33,7 +33,8 @@ enum PostType {
 }
 
 model Profile {
-  id         String   @id @db.Uuid
+  id         String  @id @db.Uuid
+  crc_id     String? @unique
   full_name  String?
   avatar_url String?
   phone      String?
@@ -41,9 +42,9 @@ model Profile {
 
   university String?
   department String?
-  session String?
+  session    String?
   student_id String?
-  status MemberStatus @default(PENDING)
+  status     MemberStatus @default(PENDING)
 
   created_at DateTime @default(now())
 
