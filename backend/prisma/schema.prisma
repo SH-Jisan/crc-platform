@@ -191,8 +191,7 @@ model Post {
   title   String?
   content String  @db.Text
 
-  media_url  String?
-  media_type String?
+  media Json?
 
   is_gallery_synced Boolean @default(false)
   likes_count       Int     @default(0)

@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsEnum, IsBoolean } from 'class-validator';
+import {IsString, IsNotEmpty, IsOptional, IsEnum, IsBoolean, IsArray} from 'class-validator';
 import { PostType } from '@prisma/client';
 
 export class CreatePostDto {
@@ -14,13 +14,9 @@ export class CreatePostDto {
     @IsNotEmpty()
     content: string;
 
-    @IsString()
+    @IsArray()
     @IsOptional()
-    media_url?: string;
-
-    @IsString()
-    @IsOptional()
-    media_type?: string; // 'IMAGE' or 'VIDEO'
+    media?: any[]; // [{ url: string, type: 'IMAGE' | 'VIDEO' }]
 
     @IsBoolean()
     @IsOptional()

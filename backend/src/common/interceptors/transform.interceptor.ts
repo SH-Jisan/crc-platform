@@ -8,13 +8,19 @@ export interface Response<T> {
 }
 
 @Injectable()
-export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> {
-    intercept(context: ExecutionContext, next: CallHandler): Observable<Response<T>> {
+export class TransformInterceptor<T> implements NestInterceptor<T, any> {
+    intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
         return next.handle().pipe(
-            map(data => ({
-                success: true,
-                data,
-            })),
+            map(data => {
+                if (typeof data === 'string' && data.trim().toLowerCase().startsWith('<!doctype html>')) {
+                    return data;
+                }
+
+                return {
+                    success: true,
+                    data,
+                };
+            }),
         );
     }
 }

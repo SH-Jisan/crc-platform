@@ -14,3 +14,8 @@ export const likePost = async (id: string) => {
     const response = await apiClient.patch(`/posts/${id}/like`);
     return response.data;
 };
+
+export const getPostById = async (id: string) => {
+    const response = await apiClient.get(`/posts/${id}`);
+    return response.data;
+};

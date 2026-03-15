@@ -7,31 +7,36 @@ export class PostsService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreatePostDto, userId: string) {
-    // 🌟 Transaction ব্যবহার করছি যাতে পোস্ট এবং গ্যালারি দুটোই একসাথে সেভ হয়
     return this.prisma.$transaction(async (prisma) => {
-      // ১. আগে পোস্ট তৈরি করা
       const post = await prisma.post.create({
         data: {
           post_type: data.post_type || 'UPDATE',
           title: data.title,
           content: data.content,
-          media_url: data.media_url,
-          media_type: data.media_type,
+          // 🌟 THE FIX: null এর বদলে undefined দেওয়া হয়েছে
+          media: data.media && data.media.length > 0 ? data.media : undefined,
           is_gallery_synced: data.is_gallery_synced || false,
           author_id: userId,
         }
       });
 
-      // ২. 🌟 Smart Gallery Sync Logic
-      // যদি ইউজার গ্যালারিতে সিঙ্ক করতে চায় এবং সেটি যদি কোনো ছবি হয়!
-      if (data.is_gallery_synced && data.media_url && data.media_type === 'IMAGE') {
-        await prisma.gallery.create({
-          data: {
-            image_url: data.media_url,
-            caption: data.title || 'Community Update', // টাইটেল না থাকলে ডিফল্ট ক্যাপশন
+      // 🌟 Smart Gallery Sync (একাধিক ছবির জন্য)
+      if (data.is_gallery_synced && data.media && data.media.length > 0) {
+        // শুধুমাত্র 'IMAGE' টাইপের মিডিয়াগুলো ফিল্টার করে বের করছি
+        const imageMedia = data.media.filter((m: any) => m.type === 'IMAGE');
+
+        if (imageMedia.length > 0) {
+          const galleryData = imageMedia.map(img => ({
+            image_url: img.url,
+            caption: data.title || 'Community Update',
             uploaded_by: userId,
-          }
-        });
+          }));
+
+          // সবগুলো ছবি একসাথে গ্যালারিতে সেভ করছি
+          await prisma.gallery.createMany({
+            data: galleryData,
+          });
+        }
       }
 
       return post;
@@ -39,7 +44,6 @@ export class PostsService {
   }
 
   async findAll() {
-    // সব পোস্ট নিয়ে আসবো এবং সাথে লেখকের নাম ও ছবিও আনবো
     return this.prisma.post.findMany({
       orderBy: { created_at: 'desc' },
       include: {
@@ -52,8 +56,24 @@ export class PostsService {
       }
     });
   }
+  // 🌟 সিঙ্গেল পোস্ট খোঁজার ফাংশন
+  async findOne(id: string) {
+    const post = await this.prisma.post.findUnique({
+      where: { id },
+      include: {
+        author: {
+          select: {
+            full_name: true,
+            avatar_url: true,
+          }
+        }
+      }
+    });
 
-  // 🌟 এঙ্গেজমেন্ট: লাইক/ক্ল্যাপ বাড়ানো
+    if (!post) throw new NotFoundException('Post not found');
+    return post;
+  }
+
   async incrementLike(id: string) {
     const post = await this.prisma.post.findUnique({ where: { id } });
     if (!post) throw new NotFoundException('Post not found');

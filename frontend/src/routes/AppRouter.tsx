@@ -8,6 +8,7 @@ import MainLayout from "../components/layout/MainLayout.tsx";
 import Campaigns from "../pages/campaigns/Campaigns.tsx";
 import CustomCauseDonation from "../pages/donations/CustomCauseDonation.tsx";
 import CommunityFeed from "../pages/posts/CommunityFeet.tsx";
+import SinglePost from "../pages/posts/SinglePost.tsx";
 
 export default function AppRouter() {
     return (
@@ -27,6 +28,7 @@ export default function AppRouter() {
                 <Route path="/donations" element={<CustomCauseDonation/>}/>
             </Route>
             <Route path="/login" element={<Login />} />
+            <Route path="/post/:id" element={<SinglePost />} />
         </Routes>
     );
 }
