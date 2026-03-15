@@ -47,39 +47,86 @@ export class AdminService {
     });
   }
 
-  // 🌟 মেম্বার এপ্রুভ/রিজেক্ট করা এবং অটোমেটিক Role Assign করা
+  // 🌟 ১. শুধু Approved মেম্বারদের লিস্ট আনা
+  async getApprovedMembers() {
+    return this.prisma.profile.findMany({
+      where: { status: "APPROVED" },
+      include: {
+        user_roles: {
+          include: { role: true },
+        },
+      },
+      orderBy: { created_at: "desc" },
+    });
+  }
+
+  // 🌟 মেম্বার এপ্রুভ/রিজেক্ট করা
   async updateMemberStatus(userId: string, status: 'APPROVED' | 'REJECTED', roleName: string = 'MEMBER') {
     return this.prisma.$transaction(async (prisma) => {
-      // ১. প্রোফাইলের স্ট্যাটাস আপডেট করা
       const profile = await prisma.profile.update({
         where: { id: userId },
         data: { status },
       });
 
-      // ২. যদি এপ্রুভ হয়, তবে তাকে স্পেসিফিক Role দেওয়া (যেমন: ADMIN, MEDIA_MANAGER, MEMBER)
       if (status === 'APPROVED') {
-        // প্রো-টিপ: ডাটাবেসে Role না থাকলে অটোমেটিক তৈরি (Upsert) করে নেবে, ফলে ক্র্যাশ করবে না!
+        // ১. Role টেবিলে রোল নিশ্চিত করা
         const role = await prisma.role.upsert({
           where: { name: roleName },
           update: {},
           create: { name: roleName },
         });
 
-        // আগে থেকেই এই Role আছে কিনা চেক করা (Unique Constraint Error ঠেকানোর জন্য)
-        const existingUserRole = await prisma.userRole.findUnique({
-          where: { user_id_role_id: { user_id: userId, role_id: role.id } },
+        // ২. পুরোনো সব রোল ডিলিট করে ফ্রেশ করে নতুন রোল অ্যাসাইন করা (UserRole Fix)
+        await prisma.userRole.deleteMany({
+          where: { user_id: userId },
         });
 
-        if (!existingUserRole) {
-          await prisma.userRole.create({
-            data: {
-              user_id: userId,
-              role_id: role.id,
-            },
-          });
-        }
+        await prisma.userRole.create({
+          data: {
+            user_id: userId,
+            role_id: role.id,
+            assigned_at: new Date(), // 🌟 এটি Auto Logout এর জন্য সবচেয়ে জরুরি!
+          },
+        });
       }
+      return profile;
+    });
+  }
 
+  // 🌟 মেম্বারদের Info এবং Role আপডেট করা
+  async updateMemberInfo(userId: string, data: any) {
+    return this.prisma.$transaction(async (prisma) => {
+      const profile = await prisma.profile.update({
+        where: { id: userId },
+        data: {
+          full_name: data.full_name,
+          phone: data.phone,
+          university: data.university,
+          department: data.department,
+          session: data.session,
+        },
+      });
+
+      if (data.roleName) {
+        const role = await prisma.role.upsert({
+          where: { name: data.roleName },
+          update: {},
+          create: { name: data.roleName },
+        });
+
+        // 🌟 পুরোনো রোল মুছে নতুন রোল দেওয়া এবং টাইম আপডেট করা
+        await prisma.userRole.deleteMany({
+          where: { user_id: userId },
+        });
+
+        await prisma.userRole.create({
+          data: {
+            user_id: userId,
+            role_id: role.id,
+            assigned_at: new Date(), // 🌟 এটি Auto Logout ট্রিগার করবে!
+          },
+        });
+      }
       return profile;
     });
   }

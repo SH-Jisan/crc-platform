@@ -43,5 +43,23 @@ export class AdminController {
       @Param('id') id: string,
       @Body () body: {status: 'APPROVED' | 'REJECTED'; role?: string}
   ) {
-    return this.adminService.updateMemberStatus(id, body.status, body.role || 'MEMBER');  }
+    return this.adminService.updateMemberStatus(id, body.status, body.role || 'MEMBER');
+  }
+
+  @Roles('ADMIN')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get("members")
+  getApprovedMembers(){
+    return this.adminService.getApprovedMembers();
+  }
+
+  @Roles('ADMIN')
+  @UseGuards(AuthGuard, RolesGuard)
+  @Patch("members/:id")
+  updateMemberInfo(
+      @Param('id') id: string,
+      @Body () body: any
+  ){
+    return this.adminService.updateMemberInfo(id, body);
+  }
 }
