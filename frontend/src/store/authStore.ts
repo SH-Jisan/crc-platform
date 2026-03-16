@@ -31,13 +31,23 @@ export const useAuthStore = create<AuthState>()(
             login: (user, token) => set({ user, token, isAuthenticated: true }),
 
             logout: async () => {
-                // 🌟 Supabase থেকেও সাইনআউট করানো হচ্ছে
                 try {
+                    // 🌟 Supabase থেকে সাইনআউট করানো হচ্ছে
                     const { supabase } = await import('../api/supabase');
                     await supabase.auth.signOut();
-                } catch(e) {}
+                } catch (e) {
+                    // 403 বা অন্য কোনো এরর আসলে আমরা সেটা জাস্ট কনসোলে দেখাবো, অ্যাপ ফেইল করবে না
+                    console.warn('Supabase logout issue (Ignored):', e);
+                } finally {
+                    // 🌟 THE FIX: ডাটাবেস যাই বলুক, আমরা লোকাল স্টেট জিরো করে দেবো
+                    set({ user: null, token: null, isAuthenticated: false });
 
-                set({ user: null, token: null, isAuthenticated: false });
+                    // ব্রাউজারের ক্যাশ থেকে ইউজার ডাটা মুছে ফেলা
+                    localStorage.removeItem('crc-auth-storage');
+
+                    // লগইন পেজে সরাসরি পাঠিয়ে দেওয়া (যাতে কোনো মেমোরি ক্যাশ না থাকে)
+                    window.location.href = '/login';
+                }
             },
         }),
         {
