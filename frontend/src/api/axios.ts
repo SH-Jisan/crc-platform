@@ -1,10 +1,18 @@
 import axios from 'axios';
 import { useAuthStore } from "../store/authStore.ts";
 
-// Supabase session theke token neoar jonno ekta helper function
+// 🌟 ১. Base URL ক্লিন এবং সেটআপ করা
+let rawBaseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+
+// যদি Netlify থেকে আসা লিংকের শেষে ভুল করে স্ল্যাশ (/) থাকে, সেটা কেটে দেবে
+if (rawBaseURL.endsWith('/')) {
+    rawBaseURL = rawBaseURL.slice(0, -1);
+}
+// যদি লিংকে /api/v1 না থাকে, তাহলে অটোমেটিক জুড়ে দেবে
+const finalBaseURL = rawBaseURL.endsWith('/api/v1') ? rawBaseURL : `${rawBaseURL}/api/v1`;
 
 export const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
+    baseURL: finalBaseURL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -13,10 +21,18 @@ export const apiClient = axios.create({
 // Request Interceptor: Protita API call er aage token jure dibe
 apiClient.interceptors.request.use(
     (config) => {
-        const token = useAuthStore.getState().token; // 🔥 Zustand theke direct token nilam
+        const token = useAuthStore.getState().token; // Zustand theke direct token nilam
         if (token && config.headers) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+
+        // 🌟 ২. THE AXIOS TRAP FIX:
+        // যদি এপিআই কলের শুরুতে স্ল্যাশ (/) থাকে (যেমন: '/users/me'),
+        // সেটাকে কেটে শুধু 'users/me' বানিয়ে দেবে। এতে Axios আর /api/v1 কাটবে না!
+        if (config.url && config.url.startsWith('/')) {
+            config.url = config.url.substring(1);
+        }
+
         return config;
     },
     (error) => {
@@ -29,9 +45,9 @@ apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            // Token expire hoye gele ba vhul thakle logout logic ekhane asbe
             console.error('Unauthorized! Please login again.');
-            // window.location.href = '/login'; // Force redirect korte pari
+            // Zustand এর ভেতরের logout ফাংশন কল করা সবচেয়ে নিরাপদ
+            useAuthStore.getState().logout();
         }
         return Promise.reject(error);
     }
