@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { IS_PUBLIC_KEY } from '../common/decorators/public.decorator';
 import * as jwt from 'jsonwebtoken';
-import jwksRsa from 'jwks-rsa';
+import * as jwksRsa from 'jwks-rsa';
 
 
 @Injectable()
