@@ -3,7 +3,8 @@ import { useAuthStore } from '../../store/authStore.ts';
 import CreateCustomCauseDonationModal from '../donations/CreateCustomCauseDonationModal.tsx';
 import CreatePostModal from "../posts/CreatePostModal.tsx";
 import ManageMembersModal from "./ManageMembersModal.tsx";
-import { QRCodeSVG } from 'qrcode.react'; // 🌟 QR Code Import
+import { QRCodeSVG } from 'qrcode.react';
+import CertificateModal from "./CertificateModal.tsx"; // 🌟 QR Code Import
 
 // SVG Icons
 const CrownIcon = () => (
@@ -44,6 +45,7 @@ export default function Dashboard() {
     const { user, logout } = useAuthStore();
     const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
     const [isDonationFormOpen, setIsDonationFormOpen] = useState(false);
+    const [isCertificateModalOpen, setIsCertificateModalOpen] = useState(false);
 
     const isAdmin = user?.roles?.includes('ADMIN');
 
@@ -135,6 +137,15 @@ export default function Dashboard() {
                                     <span className="block text-[10px] font-black uppercase tracking-widest text-stone-400 mb-0.5">MEMBER ID</span>
                                     <span className="font-extrabold text-emerald-600 tracking-wide">{user.crc_id}</span>
                                 </div>
+                                <button
+                                    onClick={() => setIsCertificateModalOpen(true)}
+                                    className="w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                    Get Certificate
+                                </button>
                             </div>
                         )}
 
@@ -191,6 +202,11 @@ export default function Dashboard() {
                 <CreateCustomCauseDonationModal isOpen={isDonationFormOpen} onClose={() => setIsDonationFormOpen(false)} />
                 <CreatePostModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} />
                 <ManageMembersModal isOpen={isManageMembersOpen} onClose={() => setIsManageMembersOpen(false)} />
+                <CertificateModal
+                    isOpen={isCertificateModalOpen}
+                    onClose={() => setIsCertificateModalOpen(false)}
+                    user={user}
+                />
 
             </div>
         </div>
