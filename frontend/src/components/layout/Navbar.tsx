@@ -40,6 +40,7 @@ export default function Navbar() {
         navigate('/login');
     };
 
+    // 🌟 Members link is perfectly placed here!
     const navLinks = [
         { name: 'Events', path: '/events' },
         { name: 'Campaigns', path: '/campaigns' },
@@ -51,19 +52,19 @@ export default function Navbar() {
     const isActive = (path: string) => location.pathname.startsWith(path);
 
     return (
-        <nav 
+        <nav
             className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-                isScrolled 
-                ? 'bg-white/80 backdrop-blur-xl border-b border-stone-200/50 py-3 shadow-[0_2px_20px_rgb(0,0,0,0.03)]' 
-                : 'bg-transparent py-5'
+                isScrolled
+                    ? 'bg-white/80 backdrop-blur-xl border-b border-stone-200/50 py-3 shadow-[0_2px_20px_rgb(0,0,0,0.03)]'
+                    : 'bg-transparent py-5'
             }`}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex justify-between items-center">
 
                     {/* Logo / Brand Name */}
-                    <div 
-                        className="flex-shrink-0 flex items-center gap-4 cursor-pointer group" 
+                    <div
+                        className="flex-shrink-0 flex items-center gap-4 cursor-pointer group"
                         onClick={() => navigate('/')}
                     >
                         <div className="relative">
@@ -102,7 +103,7 @@ export default function Navbar() {
                     {/* Right Side Actions */}
                     <div className="hidden lg:flex items-center gap-5">
                         <Link
-                            to="/donation"
+                            to="/donations"
                             className="px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-linear-to-r from-rose-500 to-rose-400 hover:from-rose-600 hover:to-rose-500 rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:shadow-[0_6px_20px_rgb(244,63,94,0.45)] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
                             <HeartIcon />
@@ -113,8 +114,8 @@ export default function Navbar() {
 
                         {user ? (
                             <div className="flex items-center gap-2">
-                                <Link 
-                                    to="/dashboard" 
+                                <Link
+                                    to="/dashboard"
                                     className={`p-2 rounded-xl border border-stone-200/60 hover:bg-stone-50 transition-all ${
                                         isActive('/dashboard') ? 'bg-stone-100 text-emerald-600' : 'text-stone-600'
                                     }`}
@@ -160,7 +161,7 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Menu Dropdown */}
-            <div 
+            <div
                 className={`lg:hidden fixed inset-x-4 top-24 bg-white/95 backdrop-blur-2xl rounded-[2rem] border border-stone-200/50 shadow-[0_20px_50px_rgb(0,0,0,0.15)] overflow-hidden transition-all duration-500 origin-top ${
                     isMobileMenuOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none'
                 }`}
@@ -184,7 +185,7 @@ export default function Navbar() {
                     <div className="h-px bg-stone-100 my-2"></div>
 
                     <Link
-                        to="/donation"
+                        to="/donations"
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="py-4 rounded-2xl text-center text-[1.1rem] font-black text-white bg-linear-to-r from-rose-500 to-rose-400 shadow-lg flex items-center justify-center gap-2"
                     >

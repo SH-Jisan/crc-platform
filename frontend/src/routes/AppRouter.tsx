@@ -11,6 +11,8 @@ import CommunityFeed from "../pages/posts/CommunityFeed.tsx";
 import SinglePost from "../pages/posts/SinglePost.tsx";
 import Signup from "../pages/login/Signup.tsx";
 import PublicProfile from "../pages/profile/PublicProfile.tsx";
+import MembersDirectory from "../pages/members/MembersDirectory.tsx";
+import Gallery from "../pages/gallery/Gallery.tsx";
 
 export default function AppRouter() {
     return (
@@ -28,6 +30,8 @@ export default function AppRouter() {
                 <Route path="/posts" element={<CommunityFeed/>}/>
                 <Route path="/campaigns" element={<Campaigns/>} />
                 <Route path="/donations" element={<CustomCauseDonation/>}/>
+                <Route path="/members" element={<MembersDirectory />} />
+                <Route path="/gallery" element={<Gallery />} /> {/* 🌟 গ্যালারি রাউট */}
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/post/:id" element={<SinglePost />} />

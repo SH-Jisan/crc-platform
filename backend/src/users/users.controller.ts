@@ -1,4 +1,4 @@
-import {Controller, Get, Patch, Body, UseGuards, Param} from "@nestjs/common";
+import { Controller, Get, Patch, Body, UseGuards, Param } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { Public } from "../common/decorators/public.decorator"; // 🌟 Public Decorator
 import { AuthGuard } from "../auth/auth.guard";
@@ -11,12 +11,20 @@ import { GetUser } from "../common/decorators/get-user.decorator";
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // 🌟 THE FIX: Members লিস্টের রাউটটি অবশ্যই :crcId এর উপরে থাকতে হবে!
+  @Public()
+  @Get('public/members')
+  async getPublicMembers(){
+    return this.usersService.getPublicMembers();
+  }
 
+  // 🌟 Single Profile রাউটটি নিচে চলে আসলো
   @Public()
   @Get("public/:crcId")
   async getPublicProfile(@Param("crcId") crcId: string) {
     return this.usersService.getPublicProfileByCrcId(crcId);
   }
+
   @Get("me")
   async getMe(@GetUser() user: any) {
     const userId = user?.id || user?.sub;
