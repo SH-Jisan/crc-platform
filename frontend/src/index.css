@@ -1,18 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap');
 @import "tailwindcss";
-
-/* ১. Google ফন্ট ইমপোর্ট করা হলো */
 
 @layer base {
   html {
-    /* পুরো অ্যাপে Inter ফন্ট এবং স্মুথ স্ক্রল সেট করা হলো */
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     scroll-behavior: smooth;
   }
 
   body {
-    /* সুন্দর ব্যাকগ্রাউন্ড এবং টেক্সট রেন্ডারিং অপটিমাইজেশন */
-    @apply bg-slate-50 text-slate-900 antialiased;
+    @apply bg-[#F4F4F4] text-[#222222] antialiased;
     text-rendering: optimizeLegibility;
   }
 

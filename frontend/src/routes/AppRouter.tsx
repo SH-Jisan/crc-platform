@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from '../pages/Home';
+import Home from '../pages/home/Home.tsx';
 import Login from '../pages/login/Login.tsx';
 import Dashboard from '../pages/dashboard/Dashboard.tsx';
 import ProtectedRoute from './ProtectedRoute';
