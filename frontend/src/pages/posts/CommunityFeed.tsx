@@ -79,7 +79,7 @@ export default function CommunityFeed() {
 
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
-            <div className="w-12 h-12 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin"></div>
+            <div className="w-12 h-12 border-4 border-[#D64A26]/20 border-t-[#D64A26] rounded-full animate-spin"></div>
         </div>
     );
 
@@ -88,11 +88,11 @@ export default function CommunityFeed() {
             <div className="max-w-3xl mx-auto">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
                     <div className="text-center sm:text-left">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-sm font-semibold mb-4 border border-emerald-100 shadow-sm">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-[#D64A26] text-sm font-semibold mb-4 border border-orange-100 shadow-sm">
+                            <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span>
                             Community Feed
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-800 tracking-tight mb-4 md:mb-0">
+                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-stone-800 tracking-tight mb-4 md:mb-0">
                             Stories & Updates
                         </h1>
                     </div>
@@ -100,13 +100,16 @@ export default function CommunityFeed() {
                     {isAdmin && (
                         <button
                             onClick={() => setIsPostModalOpen(true)}
-                            className="shrink-0 px-7 py-4 bg-stone-900 text-white font-semibold rounded-2xl hover:bg-stone-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto"
+                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-[#D64A26] text-white font-bold tracking-widest uppercase rounded-xl hover:bg-[#b53d1e] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Create Story / Post
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            <span className="relative z-10 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Create Story / Post
+                            </span>
                         </button>
                     )}
                 </div>
@@ -124,22 +127,22 @@ export default function CommunityFeed() {
 
                             return (
                                 // 🌟 ID যুক্ত করা হয়েছে যাতে লিংকে ক্লিক করলে এখানে স্ক্রল করে চলে আসে
-                                <div id={post.id} key={post.id} className="bg-white rounded-2xl border border-stone-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-0.5 scroll-mt-24">
+                                <div id={post.id} key={post.id} className="bg-white/95 backdrop-blur-sm rounded-2xl border border-stone-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 scroll-mt-24">
 
                                     <div className="px-6 md:px-8 pt-6 pb-4 flex items-start justify-between gap-4">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-full bg-stone-100 text-stone-600 flex items-center justify-center font-bold text-xl ring-1 ring-stone-200/60">
+                                            <div className="w-12 h-12 rounded-full bg-stone-100 text-[#D64A26] flex items-center justify-center font-bold text-xl ring-1 ring-stone-200/60">
                                                 {post.author?.full_name?.charAt(0).toUpperCase() || 'A'}
                                             </div>
                                             <div>
-                                                <h3 className="font-bold text-stone-900 text-[1.05rem] leading-tight hover:text-emerald-600 cursor-pointer transition-colors">{post.author?.full_name || 'CRC Admin'}</h3>
+                                                <h3 className="font-bold text-stone-900 text-[1.05rem] leading-tight hover:text-[#D64A26] cursor-pointer transition-colors">{post.author?.full_name || 'CRC Admin'}</h3>
                                                 <p className="text-stone-500 text-[0.85rem] font-medium mt-0.5">{date}</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="px-6 md:px-8 pb-5">
-                                        {post.title && <h2 className="text-xl font-bold text-stone-900 mb-2 leading-snug">{post.title}</h2>}
+                                        {post.title && <h2 className="text-xl font-serif font-bold text-stone-900 mb-2 leading-snug">{post.title}</h2>}
                                         <p className="text-stone-600 leading-relaxed whitespace-pre-wrap text-[1rem]">{post.content}</p>
                                     </div>
 
@@ -154,7 +157,7 @@ export default function CommunityFeed() {
                                     <div className="px-4 md:px-6 py-3 border-t border-stone-50 flex items-center justify-between">
                                         <button
                                             onClick={() => likeMutation.mutate(post.id)}
-                                            className="flex items-center gap-2 px-4 py-2 rounded-full text-stone-500 hover:text-emerald-600 hover:bg-stone-50 font-semibold transition-all group"
+                                            className="flex items-center gap-2 px-4 py-2 rounded-full text-stone-500 hover:text-[#D64A26] hover:bg-orange-50 font-semibold transition-all group"
                                         >
                                             <div className="transition-transform group-hover:-translate-y-0.5"><ClapIcon /></div>
                                             <span>{post.likes_count || 0} Applauds</span>

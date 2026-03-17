@@ -75,12 +75,12 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
 
                 <div className="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-start">
                     <div>
-                        <span className="text-xs font-bold text-rose-500 uppercase tracking-widest mb-1 block">
+                        <span className="text-xs font-bold text-[#D64A26] uppercase tracking-widest mb-1 block">
                             {donationType === 'CLUB' ? 'Support Our Club' : 'You are supporting'}
                         </span>
                         <h2 className="text-xl font-bold text-slate-800 leading-tight line-clamp-2">{getTitle()}</h2>
                     </div>
-                    <button onClick={onClose} className="p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-500 rounded-full transition-colors shrink-0">
+                    <button onClick={onClose} className="p-2 text-slate-400 hover:bg-orange-50 hover:text-[#D64A26] rounded-full transition-colors shrink-0">
                         ✕
                     </button>
                 </div>
@@ -96,8 +96,8 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                                     onClick={() => setAmount(preset)}
                                     className={`py-2 rounded-xl text-sm font-bold border transition-all ${
                                         amount === preset
-                                            ? 'bg-rose-50 border-rose-500 text-rose-600'
-                                            : 'bg-white border-slate-200 text-slate-600 hover:border-rose-300'
+                                            ? 'bg-orange-50 border-[#D64A26] text-[#D64A26]'
+                                            : 'bg-white border-slate-200 text-slate-600 hover:border-orange-300'
                                     }`}
                                 >
                                     ৳{preset}
@@ -112,7 +112,7 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                                 min="10"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))}
-                                className="w-full pl-8 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500 outline-none transition-all font-bold text-slate-800 text-lg"
+                                className="w-full pl-8 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] outline-none transition-all font-bold text-slate-800 text-lg"
                                 placeholder="Custom Amount"
                             />
                         </div>
@@ -148,7 +148,7 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                                 required
                                 value={transactionId}
                                 onChange={(e) => setTransactionId(e.target.value)}
-                                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none transition-all text-sm uppercase"
+                                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26] outline-none transition-all text-sm uppercase"
                                 placeholder="e.g. 8KDF39J2L"
                             />
                         </div>
@@ -158,9 +158,12 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                         <button
                             type="submit"
                             disabled={mutation.isPending}
-                            className="w-full py-4 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:shadow-[0_6px_20px_rgb(244,63,94,0.45)] transition-all flex justify-center items-center gap-2 disabled:opacity-70 text-lg"
+                            className="relative overflow-hidden group/btn w-full py-4 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-bold rounded-xl shadow-[0_4px_15px_rgba(214,74,38,0.3)] hover:shadow-[0_6px_20px_rgba(214,74,38,0.45)] transition-all flex justify-center items-center gap-2 disabled:opacity-70 text-lg"
                         >
-                            {mutation.isPending ? 'Processing...' : `Donate ৳${amount || '0'} Now`}
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            <span className="relative z-10 flex items-center justify-center gap-2">
+                                {mutation.isPending ? 'Processing...' : `Donate ৳${amount || '0'} Now`}
+                            </span>
                         </button>
                     </div>
 

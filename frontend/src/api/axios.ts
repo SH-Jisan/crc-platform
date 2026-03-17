@@ -45,7 +45,7 @@ apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            console.error('Unauthorized! Please login again.');
+            console.error('Unauthorized! Please auth again.');
             // Zustand এর ভেতরের logout ফাংশন কল করা সবচেয়ে নিরাপদ
             useAuthStore.getState().logout();
         }

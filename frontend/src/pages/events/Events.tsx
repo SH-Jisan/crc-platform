@@ -80,14 +80,14 @@ export default function Events() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative">
                     <div className="relative z-10 max-w-2xl">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-sm font-semibold mb-6 border border-emerald-100/50 shadow-sm">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-[#D64A26] text-sm font-semibold mb-6 border border-orange-100/50 shadow-sm">
                             <HeartIcon />
                             <span>Make a Difference Today</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-800 tracking-tight leading-[1.15]">
-                            Community <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-500 to-teal-500">Initiatives</span>
+                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-stone-800 tracking-tight leading-[1.15]">
+                            Community <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D64A26] to-[#F1795D]">Initiatives</span>
                         </h1>
-                        <p className="mt-5 text-lg text-stone-500 leading-relaxed max-w-xl font-medium">
+                        <p className="mt-5 text-lg text-stone-500/90 leading-relaxed max-w-xl font-medium">
                             Join our efforts to support the community. Whether it's feeding the hungry or helping underprivileged children, your participation matters.
                         </p>
                     </div>
@@ -95,13 +95,16 @@ export default function Events() {
                     {isAdmin && (
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="shrink-0 px-7 py-4 bg-stone-900 text-white font-semibold rounded-2xl hover:bg-stone-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-[#D64A26] text-white font-bold tracking-widest uppercase rounded-xl hover:bg-[#b53d1e] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="12" y1="5" x2="12" y2="19"></line>
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                            </svg>
-                            Create Event
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            <span className="relative z-10 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                </svg>
+                                Create Event
+                            </span>
                         </button>
                     )}
                 </div>
@@ -133,34 +136,37 @@ export default function Events() {
                             const progressPercentage = Math.min(Math.round((raised / goal) * 100), 100);
 
                             return (
-                                <div key={event.id} className="bg-white rounded-[2rem] border border-stone-100/80 overflow-hidden shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-400 flex flex-col group relative">
+                                <div key={event.id} className="bg-white/95 backdrop-blur-sm rounded-xl border border-slate-100 overflow-hidden shadow-md hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col group relative">
 
                                     {/* Event Top Banner */}
-                                    <div className="h-48 bg-stone-50 relative overflow-hidden flex items-center justify-center rounded-t-[2rem]">
-                                        <div className="absolute inset-0 bg-linear-to-br from-emerald-100/90 via-teal-50/60 to-orange-50/50 group-hover:scale-105 transition-transform duration-700"></div>
+                                    <div className="h-48 bg-stone-50 relative overflow-hidden flex items-center justify-center rounded-t-xl group/image">
+                                        <div className="absolute inset-0 bg-linear-to-br from-[#D64A26]/10 via-orange-50/50 to-white/50 group-hover/image:scale-105 transition-transform duration-700"></div>
                                         <div className="absolute top-0 right-0 w-40 h-40 bg-white/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-teal-200/40 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
+                                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-200/40 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
 
-                                        <div className="absolute top-5 left-5 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-[1rem] text-center shadow-[0_4px_20px_rgb(0,0,0,0.06)] border border-white/60">
-                                            <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-0.5">{month}</p>
+                                        {/* Image Sweep Effect */}
+                                        <div className="absolute inset-0 z-10 w-full h-full -translate-x-full group-hover:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none"></div>
+
+                                        <div className="absolute top-5 left-5 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl text-center shadow-lg border border-white/60 z-20">
+                                            <p className="text-xs font-bold text-[#D64A26] uppercase tracking-widest mb-0.5">{month}</p>
                                             <p className="text-2xl font-black text-stone-800 leading-none">{day}</p>
                                         </div>
 
-                                        <span className="absolute top-5 right-5 px-3.5 py-1.5 bg-white/80 backdrop-blur-md text-stone-700 text-xs font-bold tracking-wide rounded-full border border-white/60 shadow-sm flex items-center gap-1.5">
-                                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <span className="absolute top-5 right-5 px-3.5 py-1.5 bg-[#D64A26] backdrop-blur-md text-white text-xs font-bold tracking-widest uppercase rounded-full border border-white/20 shadow-md flex items-center gap-1.5 z-20">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
                                             {event.status}
                                         </span>
                                     </div>
 
                                     {/* Event Details */}
                                     <div className="p-7 flex-1 flex flex-col z-10 bg-white">
-                                        <h2 className="text-[1.35rem] font-bold text-stone-800 line-clamp-1 mb-3 group-hover:text-emerald-700 transition-colors">{event.title}</h2>
+                                        <h2 className="text-xl font-serif font-bold text-stone-800 line-clamp-1 mb-3 group-hover:text-[#D64A26] transition-colors">{event.title}</h2>
 
-                                        <p className="text-stone-500 text-[0.95rem] leading-relaxed line-clamp-2 flex-1 mb-6">
+                                        <p className="text-stone-500/90 text-sm leading-relaxed line-clamp-2 flex-1 mb-6">
                                             {event.description || "No description provided. Please join to learn more about this community event."}
                                         </p>
 
-                                        <div className="flex items-center gap-3 py-3.5 border-y border-stone-100 text-stone-500 text-sm font-medium mb-6">
+                                        <div className="flex items-center gap-3 py-3.5 border-y border-slate-100 text-stone-500/90 text-[13px] font-bold uppercase tracking-wider mb-6">
                                             <div className="flex items-center gap-2 px-3 py-1.5 bg-stone-50 rounded-lg max-w-full border border-stone-100/50">
                                                 <LocationIcon />
                                                 <span className="truncate">{event.location || "Location to be announced"}</span>
@@ -173,13 +179,13 @@ export default function Events() {
                                             {/* 🌟 Donation Progress Bar (যদি টগল ON থাকে) */}
                                             {event.is_donation_enabled && (
                                                 <div className="mb-2">
-                                                    <div className="flex justify-between text-xs font-bold mb-1.5">
-                                                        <span className="text-emerald-600">৳{raised.toLocaleString()} raised</span>
-                                                        <span className="text-stone-500">Goal: ৳{goal.toLocaleString()}</span>
+                                                    <div className="flex justify-between text-[11px] font-black uppercase tracking-widest mb-1.5">
+                                                        <span className="text-[#D64A26]">৳{raised.toLocaleString()} raised</span>
+                                                        <span className="text-stone-400">Goal: ৳{goal.toLocaleString()}</span>
                                                     </div>
-                                                    <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
+                                                    <div className="w-full bg-[#F4F4F4] rounded-full h-1.5 overflow-hidden">
                                                         <div
-                                                            className="bg-emerald-500 h-1.5 rounded-full transition-all duration-1000"
+                                                            className="bg-gradient-to-r from-[#D64A26] to-[#F1795D] h-1.5 rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(214,74,38,0.4)]"
                                                             style={{ width: `${progressPercentage}%` }}
                                                         ></div>
                                                     </div>
@@ -190,9 +196,10 @@ export default function Events() {
                                             <button
                                                 onClick={() => joinMutation.mutate(event.id)}
                                                 disabled={joinMutation.isPending}
-                                                className="w-full py-3.5 bg-stone-900 hover:bg-stone-800 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm disabled:opacity-60 disabled:pointer-events-none"
+                                                className="relative overflow-hidden group/btn w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-60 disabled:pointer-events-none mt-2"
                                             >
-                                                {joinMutation.isPending ? 'Processing...' : '🙋‍♂️ Join Event'}
+                                                <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                                                <span className="relative z-10">{joinMutation.isPending ? 'Processing...' : '🙋‍♂️ Join Event'}</span>
                                             </button>
 
                                             {/* 🌟 THE DONATION BUTTON (শুধুমাত্র যদি ডোনেশন টগল ON থাকে) */}
@@ -202,10 +209,12 @@ export default function Events() {
                                                         e.preventDefault();
                                                         setSelectedEventForDonation(event);
                                                     }}
-                                                    className="w-full py-3.5 bg-emerald-50 hover:bg-emerald-500 text-emerald-700 hover:text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-sm group/btn"
+                                                    className="relative overflow-hidden group/btn w-full py-3 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-bold rounded-xl transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
                                                 >
-                                                    <HeartIcon />
-                                                    Donate to Event
+                                                    <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                                                    <span className="relative z-10 flex items-center gap-2">
+                                                        <HeartIcon /> Donate to Event
+                                                    </span>
                                                 </button>
                                             )}
 

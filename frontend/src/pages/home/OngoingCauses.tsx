@@ -23,9 +23,11 @@ export default function OngoingCauses({ onDonate }: { onDonate: (cause: any) => 
                         const progressPercentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
                         return (
-                            <div key={campaign.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md border border-slate-100 overflow-hidden flex flex-col group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                            <div key={campaign.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md border border-slate-100 overflow-hidden flex flex-col group hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300">
                                 <div className="relative h-48 bg-slate-100 overflow-hidden">
-                                    <img src={campaign.image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Cause'} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                    {/* Image Sweep Effect */}
+                                    <div className="absolute inset-0 z-10 w-full h-full -translate-x-full group-hover:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none"></div>
+                                    <img src={campaign.image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Cause'} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                 </div>
                                 <div className="p-6 flex-1 flex flex-col">
                                     <h3 className="text-xl font-serif font-bold text-[#222222] mb-3 group-hover:text-[#D64A26] transition-colors line-clamp-2">{campaign.title}</h3>
@@ -43,9 +45,10 @@ export default function OngoingCauses({ onDonate }: { onDonate: (cause: any) => 
 
                                     <button
                                         onClick={() => onDonate(campaign)}
-                                        className="w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-md"
+                                        className="relative overflow-hidden group/btn w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5"
                                     >
-                                        Donate Now
+                                        <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                                        <span className="relative z-10">Donate Now</span>
                                     </button>
                                 </div>
                             </div>

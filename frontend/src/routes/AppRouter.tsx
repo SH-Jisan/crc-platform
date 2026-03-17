@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from '../pages/home/Home.tsx';
-import Login from '../pages/login/Login.tsx';
+import Login from '../pages/auth/Login.tsx';
 import Dashboard from '../pages/dashboard/Dashboard.tsx';
 import ProtectedRoute from './ProtectedRoute';
 import Events from "../pages/events/Events.tsx";
@@ -9,7 +9,7 @@ import Campaigns from "../pages/campaigns/Campaigns.tsx";
 import CustomCauseDonation from "../pages/donations/CustomCauseDonation.tsx";
 import CommunityFeed from "../pages/posts/CommunityFeed.tsx";
 import SinglePost from "../pages/posts/SinglePost.tsx";
-import Signup from "../pages/login/Signup.tsx";
+import Signup from "../pages/auth/Signup.tsx";
 import PublicProfile from "../pages/profile/PublicProfile.tsx";
 import MembersDirectory from "../pages/members/MembersDirectory.tsx";
 import Gallery from "../pages/gallery/Gallery.tsx";
@@ -22,7 +22,7 @@ export default function AppRouter() {
                 <Route path="/" element={<Home />} />
                 <Route path="/events" element={<Events/>}/>
 
-                {/* Protected Routes (Shudhu login kora user ra pabe) */}
+                {/* Protected Routes (Shudhu auth kora user ra pabe) */}
                 <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<Dashboard />} />
                     {/* Vobishhote aaro private route ekhane asbe jemon /events/create */}

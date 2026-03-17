@@ -64,12 +64,12 @@ export default function Dashboard() {
                 {/* Header Section */}
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12 relative">
                     <div className="relative z-10 w-full sm:w-auto">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-sm font-semibold mb-6 border border-emerald-100/50 shadow-sm">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-[#D64A26] text-sm font-semibold mb-6 border border-orange-100/50 shadow-sm">
+                            <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span>
                             <span>Dashboard Overview</span>
                         </div>
                         <h1 className="text-4xl md:text-5xl font-extrabold text-stone-800 tracking-tight leading-[1.15]">
-                            Welcome, <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-500 to-teal-500">{user?.full_name?.split(' ')[0] || 'Member'}</span>
+                            Welcome, <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D64A26] to-[#F1795D]">{user?.full_name?.split(' ')[0] || 'Member'}</span>
                         </h1>
                         <p className="mt-4 text-lg text-stone-500 font-medium">
                             Manage your community activities and contributions.
@@ -86,14 +86,14 @@ export default function Dashboard() {
                 </div>
 
                 {/* User Profile Card */}
-                <div className="bg-white rounded-4xl border border-stone-100/80 p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60"></div>
+                <div className="bg-white rounded-4xl border border-stone-100/80 p-8 md:p-10 shadow-[0_4px_20px_rgb(0,0,0,0.03)] relative overflow-hidden group hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-300">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-orange-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-60"></div>
 
                     <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
 
                         {/* 🌟 Left: Avatar & Info */}
                         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-8 w-full md:w-auto">
-                            <div className="w-28 h-28 shrink-0 bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] ring-1 ring-stone-100/50">
+                            <div className="w-28 h-28 shrink-0 bg-linear-to-br from-orange-100 to-red-100 text-[#D64A26] rounded-full flex items-center justify-center text-4xl font-extrabold border-4 border-white shadow-[0_4px_20px_rgb(0,0,0,0.06)] ring-1 ring-stone-100/50">
                                 {getInitials()}
                             </div>
 
@@ -108,7 +108,7 @@ export default function Dashboard() {
                                     <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                                         {user?.roles && user.roles.length > 0 ? (
                                             user.roles.map((role) => (
-                                                <span key={role} className={`px-4 py-1.5 text-xs font-bold rounded-full tracking-wide uppercase shadow-sm border ${role === 'ADMIN' ? 'bg-amber-50 text-amber-700 border-amber-200/50' : 'bg-emerald-50 text-emerald-700 border-emerald-200/50'}`}>
+                                                <span key={role} className={`px-4 py-1.5 text-xs font-bold rounded-full tracking-wide uppercase shadow-sm border ${role === 'ADMIN' ? 'bg-amber-50 text-amber-700 border-amber-200/50' : 'bg-orange-50 text-[#D64A26] border-orange-200/50'}`}>
                                                     {role === 'ADMIN' ? '👑 ' : ''}{role.replace('_', ' ')}
                                                 </span>
                                             ))
@@ -133,16 +133,19 @@ export default function Dashboard() {
                                 </div>
                                 <div className="text-center">
                                     <span className="block text-[10px] font-black uppercase tracking-widest text-stone-400 mb-0.5">MEMBER ID</span>
-                                    <span className="font-extrabold text-emerald-600 tracking-wide">{user.crc_id}</span>
+                                    <span className="font-extrabold text-[#D64A26] tracking-wide">{user.crc_id}</span>
                                 </div>
                                 <button
                                     onClick={() => setIsCertificateModalOpen(true)}
-                                    className="w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2"
+                                    className="relative overflow-hidden group/btn w-full px-4 py-2.5 bg-[#D64A26] hover:bg-[#b53d1e] text-white text-xs font-bold uppercase tracking-wider rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center gap-2"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                    Get Certificate
+                                    <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                                    <span className="relative z-10 flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        Get Certificate
+                                    </span>
                                 </button>
                             </div>
                         )}
@@ -154,7 +157,7 @@ export default function Dashboard() {
                 {isAdmin && (
                     <div className="mt-8 bg-linear-to-br from-stone-900 to-stone-800 rounded-4xl border border-stone-800 p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-amber-500/15 transition-colors duration-700"></div>
-                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
+                        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#D64A26]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
 
                         <div className="relative z-10 flex flex-col xl:flex-row items-center justify-between gap-8 text-center xl:text-left">
                             <div className="max-w-md">

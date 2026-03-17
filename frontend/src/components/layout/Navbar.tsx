@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { supabase } from '../../api/supabase';
+import crcLogo from '../../assets/logo/crc_logo.png';
 
 // SVG Icons
 const HeartIcon = () => (
@@ -37,7 +38,7 @@ export default function Navbar() {
         await supabase.auth.signOut();
         logout();
         setIsMobileMenuOpen(false);
-        navigate('/login');
+        navigate('/auth');
     };
 
     // 🌟 Members link is perfectly placed here!
@@ -55,8 +56,8 @@ export default function Navbar() {
         <nav
             className={`sticky top-0 z-50 w-full transition-all duration-300 ${
                 isScrolled
-                    ? 'bg-white/80 backdrop-blur-xl border-b border-stone-200/50 py-3 shadow-[0_2px_20px_rgb(0,0,0,0.03)]'
-                    : 'bg-transparent py-5'
+                    ? 'bg-white/90 backdrop-blur-md border-b border-stone-200/50 py-2 shadow-md'
+                    : 'bg-transparent py-3'
             }`}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -64,38 +65,38 @@ export default function Navbar() {
 
                     {/* Logo / Brand Name */}
                     <div
-                        className="flex-shrink-0 flex items-center gap-4 cursor-pointer group"
+                        className="flex-shrink-0 flex items-center gap-3 cursor-pointer group"
                         onClick={() => navigate('/')}
                     >
-                        <div className="relative">
-                            <div className="w-11 h-11 bg-linear-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center text-white font-black text-lg shadow-[0_4px_15px_rgb(16,185,129,0.25)] group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
-                                CR
-                            </div>
-                            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-orange-400 rounded-full border-2 border-white shadow-sm"></div>
-                        </div>
+                        <img 
+                            src={crcLogo} 
+                            alt="CRC Logo" 
+                            className="w-10 h-10 md:w-11 md:h-11 object-contain group-hover:scale-105 transition-transform duration-300"
+                        />
                         <div className="hidden sm:flex flex-col">
-                            <span className="font-black text-xl text-stone-800 tracking-tight leading-tight">
+                            <span className="font-black text-lg md:text-xl text-stone-800 tracking-tight leading-tight">
                                 Come for Road Child
-                            </span>
-                            <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest mt-0.5">
-                                University Chapter
                             </span>
                         </div>
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden lg:flex items-center bg-stone-100/50 backdrop-blur-md p-1.5 rounded-2xl border border-stone-200/30">
+                    <div className="hidden lg:flex items-center bg-stone-100/50 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-stone-200/30">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                className={`px-5 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                                className={`relative px-4 py-2 text-[15px] font-bold transition-all duration-300 group overflow-hidden rounded-xl ${
                                     isActive(link.path)
-                                        ? 'bg-white text-emerald-600 shadow-[0_2px_10px_rgb(0,0,0,0.04)] border border-stone-100'
-                                        : 'text-stone-500 hover:text-stone-800'
+                                        ? 'bg-white text-[#D64A26] shadow-sm border border-stone-100'
+                                        : 'text-stone-500 hover:text-[#D64A26] hover:bg-white/40'
                                 }`}
                             >
                                 {link.name}
+                                {/* Animated underline effect */}
+                                {!isActive(link.path) && (
+                                    <span className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-[#D64A26] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full opacity-50"></span>
+                                )}
                             </Link>
                         ))}
                     </div>
@@ -104,10 +105,13 @@ export default function Navbar() {
                     <div className="hidden lg:flex items-center gap-5">
                         <Link
                             to="/donations"
-                            className="px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-linear-to-r from-rose-500 to-rose-400 hover:from-rose-600 hover:to-rose-500 rounded-xl shadow-[0_4px_15px_rgb(244,63,94,0.3)] hover:shadow-[0_6px_20px_rgb(244,63,94,0.45)] hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="relative overflow-hidden group px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-[#D64A26] hover:bg-[#b53d1e] rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
+                            {/* Button Shine Effect */}
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            
                             <HeartIcon />
-                            Support a Cause
+                            <span className="relative z-10">Support a Cause</span>
                         </Link>
 
                         <div className="w-px h-6 bg-stone-200/80"></div>
@@ -117,7 +121,7 @@ export default function Navbar() {
                                 <Link
                                     to="/dashboard"
                                     className={`p-2 rounded-xl border border-stone-200/60 hover:bg-stone-50 transition-all ${
-                                        isActive('/dashboard') ? 'bg-stone-100 text-emerald-600' : 'text-stone-600'
+                                        isActive('/dashboard') ? 'bg-stone-100 text-[#D64A26]' : 'text-stone-600'
                                     }`}
                                     title="Dashboard"
                                 >
@@ -133,7 +137,7 @@ export default function Navbar() {
                         ) : (
                             <Link
                                 to="/login"
-                                className="px-6 py-2.5 text-xs font-black uppercase tracking-widest text-emerald-700 bg-emerald-50 hover:bg-emerald-500 hover:text-white rounded-xl border border-emerald-100/50 transition-all duration-300"
+                                className="px-6 py-2.5 text-xs font-black uppercase tracking-widest text-[#D64A26] bg-orange-50 hover:bg-[#D64A26] hover:text-white rounded-xl border border-orange-100/50 transition-all duration-300"
                             >
                                 SIGN IN
                             </Link>
@@ -174,8 +178,8 @@ export default function Navbar() {
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`px-5 py-3.5 rounded-2xl text-[1.05rem] font-bold transition-all ${
                                 isActive(link.path)
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-100/50'
-                                    : 'text-stone-600 hover:bg-stone-50'
+                                    ? 'bg-orange-50 text-[#D64A26] border border-orange-100/50'
+                                    : 'text-stone-600 hover:bg-stone-50 hover:text-[#D64A26]'
                             }`}
                         >
                             {link.name}
@@ -187,7 +191,7 @@ export default function Navbar() {
                     <Link
                         to="/donations"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="py-4 rounded-2xl text-center text-[1.1rem] font-black text-white bg-linear-to-r from-rose-500 to-rose-400 shadow-lg flex items-center justify-center gap-2"
+                        className="py-4 rounded-2xl text-center text-[1.1rem] font-black text-white bg-[#D64A26] shadow-lg flex items-center justify-center gap-2"
                     >
                         <HeartIcon />
                         SUPPORT A CAUSE
@@ -214,7 +218,7 @@ export default function Navbar() {
                         <Link
                             to="/login"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="mt-2 py-4 rounded-2xl text-center font-black text-emerald-700 bg-emerald-50 border border-emerald-100"
+                            className="mt-2 py-4 rounded-2xl text-center font-black text-[#D64A26] bg-orange-50 border border-orange-100"
                         >
                             SIGN IN
                         </Link>

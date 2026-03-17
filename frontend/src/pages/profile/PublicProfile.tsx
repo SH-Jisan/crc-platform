@@ -4,7 +4,7 @@ import { getPublicProfile } from '../../api/auth';
 
 // SVG Icons
 const VerifiedIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-emerald-500 drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#D64A26] drop-shadow-sm" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6 12.6l1.5-1.5 2.6 2.6 6.4-6.4 1.5 1.5-7.9 7.9z"/>
     </svg>
 );
@@ -41,7 +41,7 @@ export default function PublicProfile() {
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-stone-50">
-                <div className="w-10 h-10 border-4 border-stone-200 border-t-emerald-600 rounded-full animate-spin flex items-center justify-center shadow-lg"></div>
+                <div className="w-10 h-10 border-4 border-stone-200 border-t-[#D64A26] rounded-full animate-spin flex items-center justify-center shadow-lg"></div>
             </div>
         );
     }
@@ -69,8 +69,8 @@ export default function PublicProfile() {
     return (
         <div className="min-h-screen bg-[#F8FAFC] py-12 px-4 relative flex items-center justify-center font-sans overflow-hidden">
             {/* Soft Background Elements for Beauty */}
-            <div className="absolute top-[0%] left-[-10%] w-[50%] h-[50%] bg-emerald-100/40 blur-[130px] rounded-full pointer-events-none"></div>
-            <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-teal-100/40 blur-[130px] rounded-full pointer-events-none"></div>
+            <div className="absolute top-[0%] left-[-10%] w-[50%] h-[50%] bg-[#D64A26]/10 blur-[130px] rounded-full pointer-events-none"></div>
+            <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-orange-100/40 blur-[130px] rounded-full pointer-events-none"></div>
 
             <div className="w-full max-w-[440px] relative z-10 animate-fade-in-up">
                 
@@ -87,7 +87,7 @@ export default function PublicProfile() {
 
                         <div className="relative z-10 flex items-center gap-2 text-white">
                             <span className="font-extrabold tracking-widest text-lg">CRC.</span>
-                            <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_10px_rgba(52,211,153,0.8)]"></span>
+                            <span className="w-1.5 h-1.5 bg-[#D64A26] rounded-full shadow-[0_0_10px_rgba(214,74,38,0.8)]"></span>
                         </div>
                         
                         <div className="relative z-10 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-stone-50 text-xs font-bold tracking-widest border border-white/20 shadow-lg">
@@ -135,15 +135,15 @@ export default function PublicProfile() {
                         {/* Bio / Quote (Optional) */}
                         {profile.bio && (
                             <div className="mb-8 p-5 bg-stone-50/80 rounded-2xl border border-stone-100 text-sm text-stone-600 font-semibold italic relative shadow-inner">
-                                <svg className="absolute top-2.5 left-3 w-5 h-5 text-emerald-600/20" fill="currentColor" viewBox="0 0 32 32"><path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/></svg>
+                                <svg className="absolute top-2.5 left-3 w-5 h-5 text-[#D64A26]/20" fill="currentColor" viewBox="0 0 32 32"><path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/></svg>
                                 <span className="relative z-10 px-6 block tracking-wide">{profile.bio}</span>
                             </div>
                         )}
 
                         {/* Info Grid */}
                         <div className="space-y-4 text-left">
-                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-emerald-100 transition-all duration-300 group">
-                                <div className="w-12 h-12 rounded-full bg-stone-50 flex items-center justify-center group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors shrink-0">
+                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-100 transition-all duration-300 group">
+                                <div className="w-12 h-12 rounded-full bg-stone-50 flex items-center justify-center group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors shrink-0">
                                     <UnivIcon />
                                 </div>
                                 <div className="flex-1">
@@ -153,8 +153,8 @@ export default function PublicProfile() {
                             </div>
                             
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-cyan-100 transition-all duration-300 group">
-                                    <div className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 group-hover:bg-cyan-50 group-hover:text-cyan-600 transition-colors">
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-100 transition-all duration-300 group">
+                                    <div className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors">
                                         <DeptIcon />
                                     </div>
                                     <div>
@@ -163,8 +163,8 @@ export default function PublicProfile() {
                                     </div>
                                 </div>
                                 
-                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-teal-100 transition-all duration-300 group">
-                                    <div className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 group-hover:bg-teal-50 group-hover:text-teal-600 transition-colors">
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-100 transition-all duration-300 group">
+                                    <div className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors">
                                         <SessionIcon />
                                     </div>
                                     <div>
@@ -180,7 +180,7 @@ export default function PublicProfile() {
 
                 {/* Footer Link */}
                 <div className="mt-8 flex justify-center pb-8">
-                    <Link to="/" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm text-stone-400 hover:text-emerald-700 hover:bg-white hover:shadow-md transition-all font-bold text-[10px] tracking-widest uppercase">
+                    <Link to="/" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm text-stone-400 hover:text-[#D64A26] hover:bg-white hover:shadow-md transition-all font-bold text-[10px] tracking-widest uppercase">
                         University Volunteer Network
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />

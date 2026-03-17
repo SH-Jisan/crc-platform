@@ -32,7 +32,7 @@ export default function Signup() {
 
             if (!data.session) {
                 alert("Signup successful! Please check your email to verify your account.");
-                navigate('/login');
+                navigate('/auth');
                 return;
             }
 
@@ -53,7 +53,7 @@ export default function Signup() {
             alert("Registration successful! 🎉 Your request is pending for Admin approval.");
 
             // 🌟 সিকিউরিটির জন্য সাইনআপের পর ইউজারকে লগইন পেজে পাঠানো সবচেয়ে নিরাপদ
-            navigate('/login');
+            navigate('/auth');
 
         } catch (error: any) {
             alert(error.message || "Something went wrong during signup!");
@@ -92,18 +92,18 @@ export default function Signup() {
                         {/* Row 1: Full Name */}
                         <div>
                             <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Full Name *</label>
-                            <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="John Doe" />
+                            <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="John Doe" />
                         </div>
 
                         {/* Row 2: Email & Password */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Email *</label>
-                                <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="you@university.edu" />
+                                <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="you@university.edu" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Password *</label>
-                                <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="••••••••" minLength={6} />
+                                <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="••••••••" minLength={6} />
                             </div>
                         </div>
 
@@ -111,11 +111,11 @@ export default function Signup() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">University *</label>
-                                <input required type="text" name="university" value={formData.university} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="E.g. Dhaka University" />
+                                <input required type="text" name="university" value={formData.university} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="E.g. Dhaka University" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Department *</label>
-                                <input required type="text" name="department" value={formData.department} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="E.g. Computer Science" />
+                                <input required type="text" name="department" value={formData.department} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="E.g. Computer Science" />
                             </div>
                         </div>
 
@@ -123,32 +123,35 @@ export default function Signup() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Session *</label>
-                                <input required type="text" name="session" value={formData.session} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="2021-2022" />
+                                <input required type="text" name="session" value={formData.session} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="2021-2022" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Student ID</label>
-                                <input type="text" name="studentId" value={formData.studentId} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="Optional" />
+                                <input type="text" name="studentId" value={formData.studentId} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="Optional" />
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Phone *</label>
-                                <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="01XXX..." />
+                                <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="01XXX..." />
                             </div>
                         </div>
 
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full py-3.5 mt-2 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-xl transition-all disabled:opacity-70 flex items-center justify-center gap-2"
+                            className="relative overflow-hidden group/btn w-full py-3.5 mt-2 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-70 flex items-center justify-center gap-2"
                         >
-                            {isLoading ? (
-                                <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Submitting Request...</>
-                            ) : 'Submit Application'}
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            <span className="relative z-10 flex items-center gap-2">
+                                {isLoading ? (
+                                    <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Submitting Request...</>
+                                ) : 'Submit Application'}
+                            </span>
                         </button>
                     </form>
 
                     <div className="mt-8 text-center pt-6 border-t border-stone-100">
                         <p className="text-stone-500 text-sm font-medium">
-                            Already have an account? <Link to="/login" className="text-emerald-700 font-bold hover:underline">Sign in here</Link>
+                            Already have an account? <Link to="/login" className="text-[#D64A26] font-bold hover:underline">Sign in here</Link>
                         </p>
                     </div>
                 </div>

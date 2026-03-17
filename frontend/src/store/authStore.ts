@@ -46,7 +46,7 @@ export const useAuthStore = create<AuthState>()(
                     localStorage.removeItem('crc-auth-storage');
 
                     // লগইন পেজে সরাসরি পাঠিয়ে দেওয়া (যাতে কোনো মেমোরি ক্যাশ না থাকে)
-                    window.location.href = '/login';
+                    window.location.href = '/auth';
                 }
             },
         }),

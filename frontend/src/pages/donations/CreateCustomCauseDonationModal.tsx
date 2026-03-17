@@ -52,27 +52,28 @@ export default function CreateCustomCauseDonationModal({ isOpen, onClose }: Prop
                     <div>
                         <label className="block text-sm font-medium text-slate-700">Cause Title *</label>
                         <input required value={title} onChange={(e) => setTitle(e.target.value)}
-                               className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none"
+                               className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26] outline-none"
                                placeholder="e.g. Flood Relief Fund 2026" />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-slate-700">Description</label>
                         <textarea rows={3} value={description} onChange={(e) => setDescription(e.target.value)}
-                                  className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none"
+                                  className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26] outline-none"
                                   placeholder="Briefly describe the emergency..." />
                     </div>
 
                     <div>
                         <label className="block text-sm font-medium text-slate-700">Goal Amount (৳) - Optional</label>
                         <input type="number" min="1" value={goalAmount} onChange={(e) => setGoalAmount(e.target.value)}
-                               className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-rose-500 outline-none"
+                               className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26] outline-none"
                                placeholder="Leave empty for unlimited collection" />
                     </div>
 
                     <button type="submit" disabled={mutation.isPending}
-                            className="w-full py-3 mt-4 bg-rose-600 text-white font-bold rounded-xl hover:bg-rose-700 transition-all disabled:opacity-70">
-                        {mutation.isPending ? 'Creating...' : 'Publish Fund'}
+                            className="relative overflow-hidden group/btn w-full py-3 mt-4 bg-[#D64A26] text-white font-bold rounded-xl hover:bg-[#b53d1e] transition-all shadow-md hover:shadow-lg disabled:opacity-70">
+                        <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                        <span className="relative z-10">{mutation.isPending ? 'Creating...' : 'Publish Fund'}</span>
                     </button>
                 </form>
             </div>

@@ -28,21 +28,26 @@ export default function Campaigns() {
     const DEFAULT_IMAGE = 'https://placehold.co/800x400/e2e8f0/475569?text=Support+Our+Cause';
 
     return (
-        <div className="min-h-screen p-8 bg-slate-50">
+        <div className="min-h-screen py-16 px-6 bg-[#FAFAFA] font-sans selection:bg-[#D64A26]/10 selection:text-[#D64A26]">
             <div className="max-w-7xl mx-auto">
 
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
-                    <div>
-                        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Active Campaigns</h1>
-                        <p className="mt-2 text-lg text-slate-500">Your small contribution can bring a big smile.</p>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative">
+                    <div className="relative z-10 max-w-2xl">
+                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-stone-800 tracking-tight leading-[1.15]">
+                            Active <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D64A26] to-[#F1795D]">Campaigns</span>
+                        </h1>
+                        <p className="mt-5 text-lg text-stone-500/90 leading-relaxed max-w-xl font-medium">Your small contribution can bring a big smile.</p>
                     </div>
 
                     {isAdmin && (
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="px-6 py-3 bg-slate-900 text-white font-semibold rounded-xl hover:bg-slate-800 shadow-md transition-all flex items-center gap-2"
+                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-[#D64A26] text-white font-bold tracking-widest uppercase rounded-xl hover:bg-[#b53d1e] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
-                            <span>+</span> Create Campaign
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            <span className="relative z-10 flex items-center gap-2">
+                                <span>+</span> Create Campaign
+                            </span>
                         </button>
                     )}
                 </div>
@@ -65,9 +70,12 @@ export default function Campaigns() {
                                 : DEFAULT_IMAGE;
 
                             return (
-                                <div key={campaign.id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group flex flex-col">
+                                <div key={campaign.id} className="bg-white/95 backdrop-blur-sm rounded-xl border border-slate-100 overflow-hidden shadow-md hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col group relative">
 
-                                    <div className="h-48 overflow-hidden relative bg-slate-200 flex items-center justify-center">
+                                    <div className="h-48 relative overflow-hidden flex items-center justify-center bg-stone-50 rounded-t-xl group/image">
+                                        {/* Image Sweep Effect */}
+                                        <div className="absolute inset-0 z-10 w-full h-full -translate-x-full group-hover:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none"></div>
+
                                         <img
                                             src={validImageUrl}
                                             alt={campaign.title}
@@ -75,51 +83,55 @@ export default function Campaigns() {
                                                 e.currentTarget.onerror = null;
                                                 e.currentTarget.src = DEFAULT_IMAGE;
                                             }}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            className="w-full h-full object-cover group-hover/image:scale-105 transition-transform duration-700"
                                         />
-                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-emerald-600 shadow-sm uppercase">
+                                        
+                                        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-[#D64A26] uppercase tracking-widest shadow-md border border-white/60 z-20 flex items-center gap-1.5">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-[#D64A26] animate-pulse"></span>
                                             {campaign.status || 'ACTIVE'}
                                         </div>
                                     </div>
 
-                                    <div className="p-6 flex-1 flex flex-col">
-                                        <h2 className="text-xl font-bold text-slate-800 line-clamp-2">{campaign.title}</h2>
-                                        <p className="mt-2 text-slate-500 text-sm line-clamp-3 flex-1">
+                                    <div className="p-7 flex-1 flex flex-col bg-white">
+                                        <h2 className="text-xl font-serif font-bold text-stone-800 line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
+                                        <p className="text-stone-500/90 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
                                             {campaign.description}
                                         </p>
 
-                                        <div className="mt-6">
-                                            <div className="flex justify-between text-sm font-semibold mb-2">
-                                                <span className="text-blue-600">৳{raised.toLocaleString()} raised</span>
-                                                <span className="text-slate-500">Goal: ৳{goal.toLocaleString()}</span>
+                                        <div className="mt-auto">
+                                            <div className="flex justify-between text-[11px] font-black uppercase tracking-widest mb-1.5">
+                                                <span className="text-[#D64A26]">৳{raised.toLocaleString()} raised</span>
+                                                <span className="text-stone-400">Goal: ৳{goal.toLocaleString()}</span>
                                             </div>
 
-                                            <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
+                                            <div className="w-full bg-[#F4F4F4] rounded-full h-1.5 overflow-hidden">
                                                 <div
-                                                    className="bg-linear-to-r from-blue-500 to-indigo-600 h-2.5 rounded-full transition-all duration-1000 ease-out"
+                                                    className="bg-gradient-to-r from-[#D64A26] to-[#F1795D] h-1.5 rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(214,74,38,0.4)]"
                                                     style={{ width: `${progressPercentage}%` }}
                                                 ></div>
                                             </div>
-                                            <p className="text-xs text-right mt-1.5 font-bold text-slate-400">
+                                            <p className="text-[10px] text-right mt-1.5 font-bold text-stone-400 uppercase tracking-widest">
                                                 {progressPercentage}% Funded
                                             </p>
                                         </div>
 
-                                        {/* 🌟 THE ULTIMATE FIX: বাটন ক্লিকের ইভেন্টটি একদম নিখুঁত করে দেওয়া হলো */}
                                         {campaign.is_donation_enabled? (
                                             <button
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     setSelectedCampaign(campaign);
                                                 }}
-                                                className="mt-6 w-full py-3 bg-linear-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all"
+                                                className="relative overflow-hidden group/btn mt-6 w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
                                             >
-                                                ❤️ Donate to this Cause
+                                                <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                                                <span className="relative z-10 flex items-center gap-2">
+                                                    ❤️ Donate to this Cause
+                                                </span>
                                             </button>
                                         ):(
                                             <button
                                                 disabled
-                                                className="mt-6 w-full py-3 bg-slate-100 text-slate-400 font-bold rounded-xl cursor-not-allowed border border-slate-200"
+                                                className="mt-6 w-full py-3 bg-stone-100 text-stone-400 font-bold uppercase tracking-widest text-xs rounded-xl cursor-not-allowed border border-stone-200"
                                             >
                                                 Donation Disabled
                                             </button>

@@ -95,14 +95,14 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                     <div className="flex gap-2 p-1 bg-stone-200/50 rounded-xl w-fit">
                         <button
                             onClick={() => setActiveTab('PENDING')}
-                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'PENDING' ? 'bg-white text-emerald-600 shadow-sm' : 'text-stone-500 hover:text-stone-700'}`}
+                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'PENDING' ? 'bg-white text-[#D64A26] shadow-sm' : 'text-stone-500 hover:text-stone-700'}`}
                         >
                             Pending Requests
                             {pendingMembers.length > 0 && <span className="ml-2 bg-rose-500 text-white px-2 py-0.5 rounded-full text-[10px]">{pendingMembers.length}</span>}
                         </button>
                         <button
                             onClick={() => setActiveTab('MEMBERS')}
-                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'MEMBERS' ? 'bg-white text-emerald-600 shadow-sm' : 'text-stone-500 hover:text-stone-700'}`}
+                            className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${activeTab === 'MEMBERS' ? 'bg-white text-[#D64A26] shadow-sm' : 'text-stone-500 hover:text-stone-700'}`}
                         >
                             All Members
                         </button>
@@ -115,7 +115,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                     {/* ---------------- PENDING TAB ---------------- */}
                     {activeTab === 'PENDING' && (
                         isPendingLoading ? (
-                            <div className="flex justify-center items-center py-20"><div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div></div>
+                            <div className="flex justify-center items-center py-20"><div className="w-8 h-8 border-4 border-[#D64A26] border-t-transparent rounded-full animate-spin"></div></div>
                         ) : pendingMembers.length === 0 ? (
                             <div className="text-center py-16"><h3 className="text-lg font-bold text-stone-700">All Caught Up!</h3><p className="text-stone-500">No pending requests right now.</p></div>
                         ) : (
@@ -140,7 +140,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                                             <select className="px-3 py-2 border rounded-lg text-sm font-bold" value={selectedRoles[member.id] || "MEMBER"} onChange={(e) => setSelectedRoles({ ...selectedRoles, [member.id]: e.target.value })}>
                                                 {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                                             </select>
-                                            <button onClick={() => handleStatusAction(member.id, 'APPROVED')} className="px-4 py-2 bg-emerald-600 text-white text-sm font-bold rounded-lg shadow-sm">Approve</button>
+                                            <button onClick={() => handleStatusAction(member.id, 'APPROVED')} className="px-4 py-2 bg-[#D64A26] text-white text-sm font-bold rounded-lg shadow-sm">Approve</button>
                                             <button onClick={() => handleStatusAction(member.id, 'REJECTED')} className="px-4 py-2 bg-red-50 text-red-600 border border-red-200 text-sm font-bold rounded-lg">Reject</button>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                     {/* ---------------- MEMBERS TAB ---------------- */}
                     {activeTab === 'MEMBERS' && (
                         isMembersLoading ? (
-                            <div className="flex justify-center items-center py-20"><div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div></div>
+                            <div className="flex justify-center items-center py-20"><div className="w-8 h-8 border-4 border-[#D64A26] border-t-transparent rounded-full animate-spin"></div></div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                                 {approvedMembers.map((member: any) => (
@@ -163,16 +163,16 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                                             <div className="space-y-3">
 
                                                 <input type="text" className="w-full text-sm p-2 border rounded-lg font-bold" value={editForm.full_name} onChange={e => setEditForm({...editForm, full_name: e.target.value})} placeholder="Full Name" />
-                                                <input type="text" className="w-full text-sm p-2 border border-emerald-300 bg-emerald-50 rounded-lg font-bold text-emerald-800 placeholder:text-emerald-400" value={editForm.crc_id} onChange={e => setEditForm({...editForm, crc_id: e.target.value})} placeholder="Assign CRC-ID" />
+                                                <input type="text" className="w-full text-sm p-2 border border-orange-300 bg-orange-50 rounded-lg font-bold text-[#D64A26] placeholder:text-orange-400" value={editForm.crc_id} onChange={e => setEditForm({...editForm, crc_id: e.target.value})} placeholder="Assign CRC-ID" />
                                                 <input type="text" className="w-full text-sm p-2 border rounded-lg" value={editForm.university} onChange={e => setEditForm({...editForm, university: e.target.value})} placeholder="University" />
                                                 <input type="text" className="w-full text-sm p-2 border rounded-lg" value={editForm.phone} onChange={e => setEditForm({...editForm, phone: e.target.value})} placeholder="Phone" />
 
-                                                <select className="w-full text-sm p-2 border rounded-lg font-bold text-emerald-700 bg-emerald-50" value={editForm.roleName} onChange={e => setEditForm({...editForm, roleName: e.target.value})}>
+                                                <select className="w-full text-sm p-2 border rounded-lg font-bold text-[#D64A26] bg-orange-50" value={editForm.roleName} onChange={e => setEditForm({...editForm, roleName: e.target.value})}>
                                                     {ROLES.map(role => <option key={role} value={role}>{role}</option>)}
                                                 </select>
 
                                                 <div className="flex gap-2 pt-2">
-                                                    <button onClick={() => handleSaveUpdate(member.id)} className="flex-1 bg-emerald-600 text-white py-2 rounded-lg text-sm font-bold">Save</button>
+                                                    <button onClick={() => handleSaveUpdate(member.id)} className="flex-1 bg-[#D64A26] text-white py-2 rounded-lg text-sm font-bold">Save</button>
                                                     <button onClick={() => setEditingMember(null)} className="flex-1 bg-stone-100 text-stone-600 py-2 rounded-lg text-sm font-bold">Cancel</button>
                                                 </div>
                                             </div>
@@ -180,7 +180,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                                             // 🌟 View Mode
                                             <>
                                                 <div className="flex justify-between items-start mb-3">
-                                                    <div className="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center font-bold text-lg">{member.full_name?.charAt(0)}</div>
+                                                    <div className="w-12 h-12 bg-orange-100 text-[#D64A26] rounded-full flex items-center justify-center font-bold text-lg">{member.full_name?.charAt(0)}</div>
                                                     <span className="px-2.5 py-1 bg-stone-100 text-stone-600 text-[10px] font-bold uppercase rounded-full border border-stone-200">
                                                         {member.user_roles?.[0]?.role?.name || 'MEMBER'}
                                                     </span>
@@ -188,7 +188,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                                                 <h3 className="font-bold text-stone-800 text-lg">{member.full_name}</h3>
                                                 <p className="text-xs text-stone-500 mb-4">{member.university}</p>
 
-                                                <button onClick={() => startEditing(member)} className="w-full py-2 bg-stone-50 hover:bg-emerald-50 text-stone-600 hover:text-emerald-700 text-sm font-bold rounded-xl border border-stone-200 transition-colors">
+                                                <button onClick={() => startEditing(member)} className="w-full py-2 bg-stone-50 hover:bg-orange-50 text-stone-600 hover:text-[#D64A26] text-sm font-bold rounded-xl border border-stone-200 transition-colors">
                                                     Edit Info & Role
                                                 </button>
                                             </>

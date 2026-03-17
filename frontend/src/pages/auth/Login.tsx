@@ -6,7 +6,7 @@ import React from "react";
 import { getCurrentUser } from '../../api/auth';
 
 const CommunityLogo = () => (
-    <div className="w-16 h-16 bg-stone-100 text-emerald-700 rounded-xl flex items-center justify-center mb-6 border border-stone-200">
+    <div className="w-16 h-16 bg-stone-100 text-[#D64A26] rounded-xl flex items-center justify-center mb-6 border border-stone-200">
         <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
@@ -87,7 +87,7 @@ export default function Login() {
             }
         } catch (err: any) {
             // Supabase এর এররগুলো ইউজার ফ্রেন্ডলি করা
-            if (err.message === "Invalid login credentials") {
+            if (err.message === "Invalid auth credentials") {
                 setError("Incorrect email or password.");
             } else {
                 setError(err.message || 'Login failed. Please check your credentials.');
@@ -130,7 +130,7 @@ export default function Login() {
                                 <input
                                     type="email"
                                     required
-                                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400"
+                                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400"
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -146,13 +146,13 @@ export default function Login() {
                         <div>
                             <div className="flex justify-between items-center mb-1.5 ml-1">
                                 <label className="block text-sm font-semibold text-stone-700">Password</label>
-                                <button type="button" className="text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors">Forgot Password?</button>
+                                <button type="button" className="text-sm font-medium text-[#D64A26] hover:text-[#b53d1e] transition-colors">Forgot Password?</button>
                             </div>
                             <div className="relative group">
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     required
-                                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400"
+                                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400"
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -179,22 +179,25 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-3.5 mt-2 bg-emerald-700 hover:bg-emerald-800 text-white font-semibold rounded-xl transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                            className="relative overflow-hidden group/btn w-full py-3.5 mt-2 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                         >
-                            {loading ? (
-                                <>
-                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                    <span>Processing...</span>
-                                </>
-                            ) : (
-                                <span>Sign In</span>
-                            )}
+                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                            <span className="relative z-10 flex items-center gap-2">
+                                {loading ? (
+                                    <>
+                                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        <span>Processing...</span>
+                                    </>
+                                ) : (
+                                    <span>Sign In</span>
+                                )}
+                            </span>
                         </button>
                     </form>
 
                     <div className="mt-8 pt-6 border-t border-stone-100 w-full text-center">
                         <p className="text-stone-500 text-sm font-medium">
-                            Don't have an account? <Link to="/signup" className="text-emerald-700 font-bold hover:underline">Apply for Membership</Link>
+                            Don't have an account? <Link to="/signup" className="text-[#D64A26] font-bold hover:underline">Apply for Membership</Link>
                         </p>
                     </div>
                 </div>

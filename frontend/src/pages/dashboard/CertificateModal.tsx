@@ -65,53 +65,51 @@ export default function CertificateModal({ isOpen, onClose, user }: Props) {
                 <div className="p-8 overflow-x-auto flex justify-center bg-stone-200/50">
                     {isLoading ? (
                         <div className="py-32 flex flex-col items-center gap-4">
-                            <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+                            <div className="w-12 h-12 border-4 border-[#D64A26]/20 border-t-[#D64A26] rounded-full animate-spin"></div>
                             <span className="text-stone-500 font-bold tracking-widest uppercase text-sm animate-pulse">Generating Certificate...</span>
                         </div>
                     ) : !profile ? (
                         <div className="py-32 text-center text-rose-500 font-bold">Could not load profile data. Make sure you have a valid CRC-ID.</div>
                     ) : (
                         // 🌟 THE ACTUAL CERTIFICATE DESIGN 🌟
-                        <div
-                            ref={certificateRef}
-                            className="relative flex-shrink-0 bg-white"
+                            <div className="relative flex-shrink-0 bg-white"
                             style={{
                                 width: '1123px',
                                 height: '794px',
                                 backgroundImage: `url('https://www.transparenttextures.com/patterns/cubes.png')`,
-                                border: '20px solid #047857'
+                                border: '20px solid #D64A26'
                             }}
                         >
                             {/* Inner Border */}
-                            <div className="absolute inset-2 border-[4px] border-double border-emerald-600/30 m-4"></div>
+                            <div className="absolute inset-2 border-[4px] border-double border-[#D64A26]/30 m-4"></div>
 
                             {/* Watermark */}
                             <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-                                <span className="text-[250px] font-black tracking-tighter text-emerald-900 transform -rotate-45">CRC</span>
+                                <span className="text-[250px] font-black tracking-tighter text-[#D64A26] transform -rotate-45">CRC</span>
                             </div>
 
                             <div className="relative z-10 h-full flex flex-col items-center justify-center px-24 text-center">
                                 {/* Header */}
                                 <div className="mb-12 flex flex-col items-center">
-                                    <div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl font-black shadow-lg mb-6 border-4 bg-linear-to-br from-emerald-500 to-teal-700 text-white border-white ring-2 ring-emerald-100">
+                                    <div className="w-24 h-24 rounded-full flex items-center justify-center text-4xl font-black shadow-lg mb-6 border-4 bg-linear-to-br from-[#D64A26] to-[#F1795D] text-white border-white ring-2 ring-orange-100">
                                         CR
                                     </div>
                                     <h1 className="text-6xl font-black tracking-tight uppercase text-stone-800" style={{ fontFamily: 'Georgia, serif' }}>Certificate of Appreciation</h1>
-                                    <p className="font-bold tracking-[0.3em] uppercase mt-4 text-sm text-emerald-700">Come for Road Child (CRC)</p>
+                                    <p className="font-bold tracking-[0.3em] uppercase mt-4 text-sm text-[#D64A26]">Come for Road Child (CRC)</p>
                                 </div>
 
                                 {/* Body Text */}
                                 <div className="max-w-4xl mx-auto space-y-6">
                                     <p className="text-2xl italic text-stone-500" style={{ fontFamily: 'Georgia, serif' }}>This is proudly presented to</p>
 
-                                    <h2 className="text-5xl font-extrabold uppercase tracking-wide border-b-2 border-emerald-200 pb-4 text-emerald-800 inline-block px-12">
+                                    <h2 className="text-5xl font-extrabold uppercase tracking-wide border-b-2 border-orange-200 pb-4 text-[#D64A26] inline-block px-12">
                                         {profile.full_name}
                                     </h2>
 
                                     <p className="text-xl leading-relaxed font-medium mt-6 text-stone-600">
                                         from the department of <strong className="text-stone-800">{profile.department || 'N/A'}</strong> at <strong className="text-stone-800">{profile.university || 'N/A'}</strong>.
                                         <br/><br/>
-                                        In recognition of their outstanding dedication and service as a <strong className="uppercase text-emerald-700">{profile.roles?.[0]?.replace('_', ' ') || 'Member'}</strong> during the academic session <strong className="text-stone-800">{profile.session || 'N/A'}</strong>. Their contribution has made a significant impact on our community initiatives.
+                                        In recognition of their outstanding dedication and service as a <strong className="uppercase text-[#D64A26]">{profile.roles?.[0]?.replace('_', ' ') || 'Member'}</strong> during the academic session <strong className="text-stone-800">{profile.session || 'N/A'}</strong>. Their contribution has made a significant impact on our community initiatives.
                                     </p>
                                 </div>
 
@@ -124,8 +122,8 @@ export default function CertificateModal({ isOpen, onClose, user }: Props) {
                                     </div>
 
                                     <div className="flex flex-col items-center">
-                                        <div className="w-24 h-24 rounded-full border border-emerald-200 bg-emerald-50 flex items-center justify-center mb-2">
-                                            <span className="text-xs font-bold text-center leading-tight text-emerald-700">OFFICIAL<br/>SEAL</span>
+                                        <div className="w-24 h-24 rounded-full border border-orange-200 bg-orange-50 flex items-center justify-center mb-2">
+                                            <span className="text-xs font-bold text-center leading-tight text-[#D64A26]">OFFICIAL<br/>SEAL</span>
                                         </div>
                                         <p className="text-xs font-bold text-stone-400">ID: {profile.crc_id}</p>
                                     </div>
@@ -147,18 +145,21 @@ export default function CertificateModal({ isOpen, onClose, user }: Props) {
                     <button
                         onClick={handleDownloadPDF}
                         disabled={isDownloading || isLoading || !profile}
-                        className="px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(16,185,129,0.3)] transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="relative overflow-hidden group/btn px-8 py-3 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isDownloading ? (
-                            <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> Generating PDF...</>
-                        ) : (
-                            <>
-                                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                </svg>
-                                Download Official Certificate
-                            </>
-                        )}
+                        <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
+                        <span className="relative z-10 flex items-center gap-2">
+                            {isDownloading ? (
+                                <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> Generating PDF...</>
+                            ) : (
+                                <>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Download Official Certificate
+                                </>
+                            )}
+                        </span>
                     </button>
                 </div>
             </div>
