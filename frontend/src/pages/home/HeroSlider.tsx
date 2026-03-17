@@ -46,10 +46,20 @@ export default function HeroSlider() {
     }, [slidesData.length]);
 
     const getBackgroundAnimationClass = (index: number) => {
-        if (index % 4 === 0) return 'box-appear';
-        if (index % 4 === 1) return 'slice-appear';
-        if (index % 4 === 2) return 'smooth-zoom';
-        return 'cinematic-fade';
+        const animations = [
+            'box-appear',
+            'slice-appear',
+            'smooth-zoom',
+            'cinematic-fade',
+            'pan-left',
+            'pan-right',
+            'zoom-out',
+            'rotate-zoom',
+            'blur-in',
+            'slide-up',
+            'scale-up-down'
+        ];
+        return animations[index % animations.length];
     };
 
     return (
@@ -59,12 +69,26 @@ export default function HeroSlider() {
                 @keyframes sliceAppear { 0% { transform: translateY(100%); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
                 @keyframes smoothZoom { 0% { transform: scale(1.1); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
                 @keyframes cinematicFade { 0% { transform: scale(1.05); filter: blur(10px); opacity: 0; } 100% { transform: scale(1); filter: blur(0px); opacity: 1; } }
+                @keyframes panLeft { 0% { transform: scale(1.1) translateX(5%); opacity: 0; } 100% { transform: scale(1) translateX(0); opacity: 1; } }
+                @keyframes panRight { 0% { transform: scale(1.1) translateX(-5%); opacity: 0; } 100% { transform: scale(1) translateX(0); opacity: 1; } }
+                @keyframes zoomOut { 0% { transform: scale(1.2); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+                @keyframes rotateZoom { 0% { transform: scale(1.2) rotate(2deg); opacity: 0; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+                @keyframes blurIn { 0% { filter: blur(20px); opacity: 0; transform: scale(1.02); } 100% { filter: blur(0px); opacity: 1; transform: scale(1); } }
+                @keyframes slideUp { 0% { transform: translateY(10%); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+                @keyframes scaleUpDown { 0% { transform: scale(0.95); opacity: 0; } 50% { transform: scale(1.02); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
                 @keyframes textRevealUp { 0% { transform: translateY(30px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 
                 .box-appear { animation: boxAppear 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
                 .slice-appear { animation: sliceAppear 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
                 .smooth-zoom { animation: smoothZoom 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
                 .cinematic-fade { animation: cinematicFade 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .pan-left { animation: panLeft 2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .pan-right { animation: panRight 2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .zoom-out { animation: zoomOut 2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .rotate-zoom { animation: rotateZoom 2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .blur-in { animation: blurIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .slide-up { animation: slideUp 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+                .scale-up-down { animation: scaleUpDown 2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
                 
                 .text-reveal-h1 { animation: textRevealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
                 .text-reveal-p { animation: textRevealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; opacity: 0; }

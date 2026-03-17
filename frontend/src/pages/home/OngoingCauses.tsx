@@ -23,7 +23,7 @@ export default function OngoingCauses({ onDonate }: { onDonate: (cause: any) => 
                         const progressPercentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
                         return (
-                            <div key={campaign.id} className="bg-white rounded-lg shadow-sm border border-slate-100 overflow-hidden flex flex-col group hover:shadow-md transition-shadow">
+                            <div key={campaign.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-md border border-slate-100 overflow-hidden flex flex-col group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                                 <div className="relative h-48 bg-slate-100 overflow-hidden">
                                     <img src={campaign.image_url || 'https://placehold.co/600x400/e2e8f0/475569?text=Cause'} alt={campaign.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 </div>
@@ -37,13 +37,13 @@ export default function OngoingCauses({ onDonate }: { onDonate: (cause: any) => 
                                             <span>{progressPercentage}%</span>
                                         </div>
                                         <div className="w-full bg-[#F4F4F4] rounded-full h-1.5 overflow-hidden">
-                                            <div className="bg-[#D64A26] h-1.5 rounded-full transition-all duration-1000" style={{ width: `${progressPercentage}%` }}></div>
+                                            <div className="bg-gradient-to-r from-[#D64A26] to-[#F1795D] h-1.5 rounded-full transition-all duration-1000 shadow-[0_0_8px_rgba(214,74,38,0.4)]" style={{ width: `${progressPercentage}%` }}></div>
                                         </div>
                                     </div>
 
                                     <button
                                         onClick={() => onDonate(campaign)}
-                                        className="w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded hover:bg-[#D64A26] hover:text-white transition-colors uppercase tracking-widest text-xs"
+                                        className="w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-md"
                                     >
                                         Donate Now
                                     </button>

@@ -17,7 +17,7 @@ export default function EmergencyBar() {
     if (!hasActiveEmergency) return null;
 
     return (
-        <div className="bg-rose-600 text-white px-4 py-1.5 shadow-sm relative z-50 text-xs">
+        <div className="bg-gradient-to-r from-rose-600 to-red-600 text-white px-4 py-1.5 shadow-lg relative z-50 text-xs">
             <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-center">
                 <div className="flex items-center gap-1.5 font-bold animate-pulse">
                     <AlertCircleIcon />

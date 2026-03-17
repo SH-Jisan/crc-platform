@@ -27,13 +27,15 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
                     const progressPercentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
                     return (
-                        <div key={cause.id} className="flex flex-col lg:flex-row bg-white rounded-xl shadow-md border border-slate-100 overflow-hidden">
+                        <div key={cause.id} className="flex flex-col lg:flex-row bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 overflow-hidden transform transition-all duration-300 hover:shadow-2xl group">
                             <div className="w-full lg:w-1/2">
-                                <img
-                                    src={cause.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"}
-                                    alt="Featured Cause"
-                                    className="w-full h-full min-h-87.5 object-cover"
-                                />
+                                <div className="w-full h-full overflow-hidden">
+                                    <img
+                                        src={cause.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"}
+                                        alt="Featured Cause"
+                                        className="w-full h-full min-h-87.5 object-cover transform transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                </div>
                             </div>
                             <div className="w-full lg:w-1/2 p-10 md:p-14 flex flex-col justify-center">
                                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded bg-[#D64A26]/10 text-[#D64A26] text-xs font-bold uppercase tracking-widest mb-6 border border-[#D64A26]/20 w-fit">
@@ -48,13 +50,13 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
                                         <span className="text-sm font-bold text-[#666666] uppercase tracking-wider">raised of ৳{goal.toLocaleString()}</span>
                                     </div>
                                     <div className="w-full bg-[#F4F4F4] rounded-full h-2 overflow-hidden">
-                                        <div className="bg-[#D64A26] h-2 rounded-full transition-all duration-1000" style={{ width: `${progressPercentage}%` }}></div>
+                                        <div className="bg-gradient-to-r from-[#D64A26] to-[#F1795D] h-2 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(214,74,38,0.5)]" style={{ width: `${progressPercentage}%` }}></div>
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={() => onDonate(cause)}
-                                    className="w-full sm:w-fit px-8 py-4 bg-[#D64A26] text-white font-bold uppercase tracking-widest rounded hover:bg-[#b53d1e] transition-colors flex items-center justify-center gap-2"
+                                    className="w-full sm:w-fit px-8 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest rounded transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1 flex items-center justify-center gap-2"
                                 >
                                     <HeartIcon /> Donate to this cause
                                 </button>
