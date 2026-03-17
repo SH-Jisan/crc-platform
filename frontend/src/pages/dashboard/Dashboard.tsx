@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore.ts';
 import CreateCustomCauseDonationModal from '../donations/CreateCustomCauseDonationModal.tsx';
-import CreatePostModal from "../posts/CreatePostModal.tsx";
 import ManageMembersModal from "./ManageMembersModal.tsx";
 import { QRCodeSVG } from 'qrcode.react';
 import CertificateModal from "./CertificateModal.tsx"; // 🌟 QR Code Import
@@ -41,7 +40,6 @@ const SignOutIcon = () => (
 );
 
 export default function Dashboard() {
-    const [isPostModalOpen, setIsPostModalOpen] = useState(false);
     const { user, logout } = useAuthStore();
     const [isManageMembersOpen, setIsManageMembersOpen] = useState(false);
     const [isDonationFormOpen, setIsDonationFormOpen] = useState(false);
@@ -180,13 +178,6 @@ export default function Dashboard() {
                                     Emergency Fund
                                 </button>
                                 <button
-                                    onClick={() => setIsPostModalOpen(true)}
-                                    className="px-7 py-4 bg-linear-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-xl shadow-[0_4px_15px_rgb(16,185,129,0.3)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                                    Create Story / Post
-                                </button>
-                                <button
                                     onClick={()=> setIsManageMembersOpen(true)}
                                     className="px-7 py-4 bg-white text-stone-900 font-bold rounded-xl hover:bg-stone-100 shadow-[0_4px_15px_rgb(255,255,255,0.1)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2.5 cursor-pointer w-full sm:w-auto"
                                 >
@@ -200,7 +191,6 @@ export default function Dashboard() {
 
                 {/* Modals */}
                 <CreateCustomCauseDonationModal isOpen={isDonationFormOpen} onClose={() => setIsDonationFormOpen(false)} />
-                <CreatePostModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} />
                 <ManageMembersModal isOpen={isManageMembersOpen} onClose={() => setIsManageMembersOpen(false)} />
                 <CertificateModal
                     isOpen={isCertificateModalOpen}

@@ -3,7 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPosts, likePost } from '../../api/posts';
 import MediaCollage from '../../components/media_layouts/MediaCollage.tsx';
 import LightboxGallery from '../../components/media_layouts/LightboxGallery.tsx';
-
+import CreatePostModal from './CreatePostModal.tsx';
+import { useAuthStore } from '../../store/authStore.ts';
 
 
 // SVG Icons
@@ -24,6 +25,11 @@ const ShareIcon = () => (
 
 export default function CommunityFeed() {
     const queryClient = useQueryClient();
+    const { user } = useAuthStore();
+    const isAdmin = user?.roles?.includes('ADMIN');
+
+    // 🌟 Create Post State
+    const [isPostModalOpen, setIsPostModalOpen] = useState(false);
 
     // 🌟 Lightbox (Zoom) State
     const [activeGallery, setActiveGallery] = useState<{ media: any[], initialIndex: number } | null>(null);
@@ -80,14 +86,29 @@ export default function CommunityFeed() {
     return (
         <div className="min-h-screen py-16 px-4 sm:px-6 bg-[#FAFAFA] font-sans">
             <div className="max-w-3xl mx-auto">
-                <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-sm font-semibold mb-4 border border-emerald-100 shadow-sm">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Community Feed
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-12">
+                    <div className="text-center sm:text-left">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 text-emerald-600 text-sm font-semibold mb-4 border border-emerald-100 shadow-sm">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Community Feed
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-800 tracking-tight mb-4 md:mb-0">
+                            Stories & Updates
+                        </h1>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-stone-800 tracking-tight mb-4">
-                        Stories & Updates
-                    </h1>
+                    
+                    {isAdmin && (
+                        <button
+                            onClick={() => setIsPostModalOpen(true)}
+                            className="shrink-0 px-7 py-4 bg-stone-900 text-white font-semibold rounded-2xl hover:bg-stone-800 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.2)] hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 w-full sm:w-auto"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            Create Story / Post
+                        </button>
+                    )}
                 </div>
 
                 <div className="space-y-10">
@@ -164,6 +185,9 @@ export default function CommunityFeed() {
                     onClose={() => setActiveGallery(null)} 
                 />
             )}
+
+            {/* 🌟 Create Post Modal */}
+            <CreatePostModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} />
 
         </div>
     );
