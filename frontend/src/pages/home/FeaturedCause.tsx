@@ -32,7 +32,7 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
                                 <img
                                     src={cause.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"}
                                     alt="Featured Cause"
-                                    className="w-full h-full min-h-[350px] object-cover"
+                                    className="w-full h-full min-h-87.5 object-cover"
                                 />
                             </div>
                             <div className="w-full lg:w-1/2 p-10 md:p-14 flex flex-col justify-center">

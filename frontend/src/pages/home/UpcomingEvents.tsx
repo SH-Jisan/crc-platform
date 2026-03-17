@@ -18,7 +18,7 @@ export default function UpcomingEvents() {
                                 const eventDate = new Date(event.event_date);
                                 return (
                                     <div key={event.id} className="flex gap-6 items-start group">
-                                        <div className="flex flex-col items-center justify-center bg-[#D64A26] min-w-[70px] h-[70px] text-center text-white rounded-sm shadow-sm">
+                                        <div className="flex flex-col items-center justify-center bg-[#D64A26] min-w-17.5 h-17.5 text-center text-white rounded-sm shadow-sm">
                                             <span className="text-xs font-bold uppercase tracking-wider">{eventDate.toLocaleDateString('en-US', { month: 'short' })}</span>
                                             <span className="text-2xl font-bold leading-none">{eventDate.toLocaleDateString('en-US', { day: '2-digit' })}</span>
                                         </div>

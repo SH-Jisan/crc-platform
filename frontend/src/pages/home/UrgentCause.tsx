@@ -42,7 +42,7 @@ export default function UrgentCause({ onDonate }: { onDonate: (cause: any) => vo
                         return (
                             <div key={cause.id} className="flex flex-col lg:flex-row gap-12 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                                 <div className="w-full lg:w-1/2">
-                                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" alt="Featured Cause" className="w-full h-full min-h-[300px] object-cover" />
+                                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop" alt="Featured Cause" className="w-full h-full min-h-75 object-cover" />
                                 </div>
                                 <div className="w-full lg:w-1/2 p-8 md:p-10 flex flex-col justify-center">
                                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-4 border border-rose-100 w-fit">
