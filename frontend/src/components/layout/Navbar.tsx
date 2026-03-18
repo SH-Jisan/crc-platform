@@ -56,7 +56,7 @@ export default function Navbar() {
         <nav
             className={`sticky top-0 z-50 w-full transition-all duration-300 ${
                 isScrolled
-                    ? 'bg-white/90 backdrop-blur-md border-b border-stone-200/50 py-2 shadow-md'
+                    ? 'bg-white/95 backdrop-blur-md border-b border-slate-100 py-2 shadow-md'
                     : 'bg-transparent py-3'
             }`}
         >
@@ -74,22 +74,22 @@ export default function Navbar() {
                             className="w-10 h-10 md:w-11 md:h-11 object-contain group-hover:scale-105 transition-transform duration-300"
                         />
                         <div className="hidden sm:flex flex-col">
-                            <span className="font-black text-lg md:text-xl text-stone-800 tracking-tight leading-tight">
+                            <span className="font-black text-lg md:text-xl text-[#222222] tracking-tight leading-tight">
                                 Come for Road Child
                             </span>
                         </div>
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden lg:flex items-center bg-stone-100/50 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-stone-200/30">
+                    <div className="hidden lg:flex items-center bg-slate-50/50 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-slate-200/30">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
                                 to={link.path}
                                 className={`relative px-4 py-2 text-[15px] font-bold transition-all duration-300 group overflow-hidden rounded-xl ${
                                     isActive(link.path)
-                                        ? 'bg-white text-[#D64A26] shadow-sm border border-stone-100'
-                                        : 'text-stone-500 hover:text-[#D64A26] hover:bg-white/40'
+                                        ? 'bg-white text-[#D64A26] shadow-sm border border-slate-100'
+                                        : 'text-[#666666] hover:text-[#D64A26] hover:bg-white/40'
                                 }`}
                             >
                                 {link.name}
@@ -105,10 +105,9 @@ export default function Navbar() {
                     <div className="hidden lg:flex items-center gap-5">
                         <Link
                             to="/donations"
-                            className="relative overflow-hidden group px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-[#D64A26] hover:bg-[#b53d1e] rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="relative overflow-hidden group px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
                             {/* Button Shine Effect */}
-                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                             
                             <HeartIcon />
                             <span className="relative z-10">Support a Cause</span>
@@ -120,8 +119,8 @@ export default function Navbar() {
                             <div className="flex items-center gap-2">
                                 <Link
                                     to="/dashboard"
-                                    className={`p-2 rounded-xl border border-stone-200/60 hover:bg-stone-50 transition-all ${
-                                        isActive('/dashboard') ? 'bg-stone-100 text-[#D64A26]' : 'text-stone-600'
+                                    className={`p-2 rounded-xl border border-slate-200/60 hover:bg-slate-50 transition-all ${
+                                        isActive('/dashboard') ? 'bg-slate-100 text-[#D64A26]' : 'text-[#666666]'
                                     }`}
                                     title="Dashboard"
                                 >
@@ -148,7 +147,7 @@ export default function Navbar() {
                     <div className="lg:hidden">
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="p-2.5 rounded-xl text-stone-600 bg-stone-100/80 border border-stone-200/50 focus:outline-none hover:bg-stone-200/50 transition-colors"
+                            className="p-2.5 rounded-xl text-[#666666] bg-slate-100/80 border border-slate-200/50 focus:outline-none hover:bg-slate-200/50 transition-colors"
                         >
                             {isMobileMenuOpen ? (
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -166,7 +165,7 @@ export default function Navbar() {
 
             {/* Mobile Menu Dropdown */}
             <div
-                className={`lg:hidden fixed inset-x-4 top-24 bg-white/95 backdrop-blur-2xl rounded-[2rem] border border-stone-200/50 shadow-[0_20px_50px_rgb(0,0,0,0.15)] overflow-hidden transition-all duration-500 origin-top ${
+                className={`lg:hidden fixed inset-x-4 top-24 bg-white/95 backdrop-blur-2xl rounded-[2rem] border border-slate-200/50 shadow-[0_20px_50px_rgb(0,0,0,0.15)] overflow-hidden transition-all duration-500 origin-top ${
                     isMobileMenuOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none'
                 }`}
             >
@@ -179,14 +178,14 @@ export default function Navbar() {
                             className={`px-5 py-3.5 rounded-2xl text-[1.05rem] font-bold transition-all ${
                                 isActive(link.path)
                                     ? 'bg-orange-50 text-[#D64A26] border border-orange-100/50'
-                                    : 'text-stone-600 hover:bg-stone-50 hover:text-[#D64A26]'
+                                    : 'text-[#666666] hover:bg-slate-50 hover:text-[#D64A26]'
                             }`}
                         >
                             {link.name}
                         </Link>
                     ))}
 
-                    <div className="h-px bg-stone-100 my-2"></div>
+                    <div className="h-px bg-slate-100 my-2"></div>
 
                     <Link
                         to="/donations"
@@ -202,7 +201,7 @@ export default function Navbar() {
                             <Link
                                 to="/dashboard"
                                 onClick={() => setIsMobileMenuOpen(false)}
-                                className="py-3.5 bg-stone-100 text-stone-700 font-bold rounded-2xl flex items-center justify-center gap-2 border border-stone-200/50"
+                                className="py-3.5 bg-slate-50 text-[#666666] hover:text-[#222222] font-bold rounded-2xl flex items-center justify-center gap-2 border border-slate-200/50"
                             >
                                 <UserIcon />
                                 DASHBOARD

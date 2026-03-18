@@ -33,18 +33,17 @@ export default function Campaigns() {
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative">
                     <div className="relative z-10 max-w-2xl">
-                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-stone-800 tracking-tight leading-[1.15]">
+                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-[#222222] tracking-tight leading-[1.15]">
                             Active <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D64A26] to-[#F1795D]">Campaigns</span>
                         </h1>
-                        <p className="mt-5 text-lg text-stone-500/90 leading-relaxed max-w-xl font-medium">Your small contribution can bring a big smile.</p>
+                        <p className="mt-5 text-lg text-[#666666] leading-relaxed max-w-xl font-medium">Your small contribution can bring a big smile.</p>
                     </div>
 
                     {isAdmin && (
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-[#D64A26] text-white font-bold tracking-widest uppercase rounded-xl hover:bg-[#b53d1e] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold tracking-widest uppercase rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
                         >
-                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                             <span className="relative z-10 flex items-center gap-2">
                                 <span>+</span> Create Campaign
                             </span>
@@ -56,8 +55,8 @@ export default function Campaigns() {
                     {campaigns.length === 0 ? (
                         <div className="col-span-full p-12 text-center bg-white rounded-2xl border border-slate-200 shadow-sm">
                             <div className="text-5xl mb-4">🌱</div>
-                            <h3 className="text-xl font-bold text-slate-800">No active campaigns right now</h3>
-                            <p className="text-slate-500 mt-2">Check back later or create a new one if you are an admin.</p>
+                            <h3 className="text-xl font-bold text-[#222222]">No active campaigns right now</h3>
+                            <p className="text-[#666666] mt-2">Check back later or create a new one if you are an admin.</p>
                         </div>
                     ) : (
                         campaigns.map((campaign: any) => {
@@ -72,9 +71,8 @@ export default function Campaigns() {
                             return (
                                 <div key={campaign.id} className="bg-white/95 backdrop-blur-sm rounded-xl border border-slate-100 overflow-hidden shadow-md hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col group relative">
 
-                                    <div className="h-48 relative overflow-hidden flex items-center justify-center bg-stone-50 rounded-t-xl group/image">
+                                    <div className="h-48 relative overflow-hidden flex items-center justify-center bg-slate-100 rounded-t-xl group/image">
                                         {/* Image Sweep Effect */}
-                                        <div className="absolute inset-0 z-10 w-full h-full -translate-x-full group-hover:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12 pointer-events-none"></div>
 
                                         <img
                                             src={validImageUrl}
@@ -93,15 +91,15 @@ export default function Campaigns() {
                                     </div>
 
                                     <div className="p-7 flex-1 flex flex-col bg-white">
-                                        <h2 className="text-xl font-serif font-bold text-stone-800 line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
-                                        <p className="text-stone-500/90 text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
+                                        <h2 className="text-xl font-serif font-bold text-[#222222] line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
+                                        <p className="text-[#666666] text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
                                             {campaign.description}
                                         </p>
 
                                         <div className="mt-auto">
                                             <div className="flex justify-between text-[11px] font-black uppercase tracking-widest mb-1.5">
                                                 <span className="text-[#D64A26]">৳{raised.toLocaleString()} raised</span>
-                                                <span className="text-stone-400">Goal: ৳{goal.toLocaleString()}</span>
+                                                <span className="text-[#666666]">Goal: ৳{goal.toLocaleString()}</span>
                                             </div>
 
                                             <div className="w-full bg-[#F4F4F4] rounded-full h-1.5 overflow-hidden">
@@ -110,7 +108,7 @@ export default function Campaigns() {
                                                     style={{ width: `${progressPercentage}%` }}
                                                 ></div>
                                             </div>
-                                            <p className="text-[10px] text-right mt-1.5 font-bold text-stone-400 uppercase tracking-widest">
+                                            <p className="text-[10px] text-right mt-1.5 font-bold text-slate-400 uppercase tracking-widest">
                                                 {progressPercentage}% Funded
                                             </p>
                                         </div>
@@ -123,7 +121,6 @@ export default function Campaigns() {
                                                 }}
                                                 className="relative overflow-hidden group/btn mt-6 w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
                                             >
-                                                <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                                                 <span className="relative z-10 flex items-center gap-2">
                                                     ❤️ Donate to this Cause
                                                 </span>
@@ -131,7 +128,7 @@ export default function Campaigns() {
                                         ):(
                                             <button
                                                 disabled
-                                                className="mt-6 w-full py-3 bg-stone-100 text-stone-400 font-bold uppercase tracking-widest text-xs rounded-xl cursor-not-allowed border border-stone-200"
+                                                className="mt-6 w-full py-3 bg-slate-100 text-slate-400 font-bold uppercase tracking-widest text-xs rounded-xl cursor-not-allowed border border-slate-200"
                                             >
                                                 Donation Disabled
                                             </button>

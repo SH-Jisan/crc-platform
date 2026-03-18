@@ -64,83 +64,82 @@ export default function Signup() {
     };
 
     return (
-        <div className="min-h-screen flex bg-stone-50 font-sans">
+        <div className="min-h-screen flex bg-[#FAFAFA] font-sans">
             {/* Left Side - Branding (Hidden on mobile) */}
-            <div className="hidden lg:flex w-5/12 bg-stone-900 p-12 flex-col justify-between relative overflow-hidden">
+            <div className="hidden lg:flex w-5/12 bg-[#1A1A1A] p-12 flex-col justify-between relative overflow-hidden">
                 <div className="relative z-10">
                     <Link to="/" className="text-white font-bold text-2xl tracking-tight">CRC.</Link>
                 </div>
                 <div className="relative z-10 text-white">
                     <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">University Volunteer<br />Network</h1>
-                    <p className="text-stone-400 text-lg max-w-md font-medium">Join us in driving meaningful social change. Apply for membership to access the portal and participate in upcoming campaigns and activities.</p>
+                    <p className="text-slate-400 text-lg max-w-md font-medium">Join us in driving meaningful social change. Apply for membership to access the portal and participate in upcoming campaigns and activities.</p>
                 </div>
-                <div className="relative z-10 text-stone-500 text-sm font-medium">
+                <div className="relative z-10 text-slate-500 text-sm font-medium">
                     © {new Date().getFullYear()} Come for Road Child.
                 </div>
             </div>
 
             {/* Right Side - Signup Form */}
             <div className="w-full lg:w-7/12 flex items-center justify-center p-6 sm:p-12">
-                <div className="w-full max-w-2xl bg-white p-8 sm:p-10 rounded-2xl shadow-sm border border-stone-200">
+                <div className="w-full max-w-2xl bg-white/95 backdrop-blur-sm p-8 sm:p-10 rounded-2xl shadow-md border border-slate-100">
 
-                    <div className="mb-8 border-b border-stone-100 pb-6 text-center lg:text-left">
-                        <h2 className="text-2xl font-bold text-stone-800 tracking-tight">Membership Application</h2>
-                        <p className="text-stone-500 mt-2 text-sm font-medium">Please provide accurate academic and personal details. All applications are subject to admin review.</p>
+                    <div className="mb-8 border-b border-slate-100 pb-6 text-center lg:text-left">
+                        <h2 className="text-2xl font-serif font-bold text-[#222222] tracking-tight">Membership Application</h2>
+                        <p className="text-[#666666] mt-2 text-sm font-medium">Please provide accurate academic and personal details. All applications are subject to admin review.</p>
                     </div>
 
                     <form onSubmit={handleSignup} className="space-y-5">
                         {/* Row 1: Full Name */}
                         <div>
-                            <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Full Name *</label>
-                            <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="John Doe" />
+                            <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Full Name *</label>
+                            <input required type="text" name="fullName" value={formData.fullName} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="John Doe" />
                         </div>
 
                         {/* Row 2: Email & Password */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Email *</label>
-                                <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="you@university.edu" />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Email *</label>
+                                <input required type="email" name="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="you@university.edu" />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Password *</label>
-                                <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="••••••••" minLength={6} />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Password *</label>
+                                <input required type="password" name="password" value={formData.password} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="••••••••" minLength={6} />
                             </div>
                         </div>
 
                         {/* Row 3: University & Department */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">University *</label>
-                                <input required type="text" name="university" value={formData.university} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="E.g. Dhaka University" />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">University *</label>
+                                <input required type="text" name="university" value={formData.university} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="E.g. Dhaka University" />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Department *</label>
-                                <input required type="text" name="department" value={formData.department} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="E.g. Computer Science" />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Department *</label>
+                                <input required type="text" name="department" value={formData.department} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="E.g. Computer Science" />
                             </div>
                         </div>
 
                         {/* Row 4: Session, Student ID & Phone */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Session *</label>
-                                <input required type="text" name="session" value={formData.session} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="2021-2022" />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Session *</label>
+                                <input required type="text" name="session" value={formData.session} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="2021-2022" />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Student ID</label>
-                                <input type="text" name="studentId" value={formData.studentId} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="Optional" />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Student ID</label>
+                                <input type="text" name="studentId" value={formData.studentId} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="Optional" />
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Phone *</label>
-                                <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400" placeholder="01XXX..." />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Phone *</label>
+                                <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400" placeholder="01XXX..." />
                             </div>
                         </div>
 
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="relative overflow-hidden group/btn w-full py-3.5 mt-2 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-70 flex items-center justify-center gap-2"
+                            className="relative overflow-hidden group/btn w-full py-4 mt-2 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 flex items-center justify-center gap-2"
                         >
-                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                             <span className="relative z-10 flex items-center gap-2">
                                 {isLoading ? (
                                     <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> Submitting Request...</>
@@ -149,8 +148,8 @@ export default function Signup() {
                         </button>
                     </form>
 
-                    <div className="mt-8 text-center pt-6 border-t border-stone-100">
-                        <p className="text-stone-500 text-sm font-medium">
+                    <div className="mt-8 text-center pt-6 border-t border-slate-100">
+                        <p className="text-[#666666] text-sm font-medium">
                             Already have an account? <Link to="/login" className="text-[#D64A26] font-bold hover:underline">Sign in here</Link>
                         </p>
                     </div>

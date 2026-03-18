@@ -1,0 +1,23 @@
+# UI Problem Report (ui_prob.txt)
+
+## Layout Components
+1. **Description**: Outdated `stone` color classes used in the mobile dropdown menu instead of the new `slate` or brand color variables.
+   - **Affected Component**: `Navbar.tsx` (Mobile Menu Dropdown, e.g., `bg-stone-100`, `border-stone-200/50`).
+   - **Type of Issue**: UI Design Mismatch.
+   - **Suggested Fix**: Replace `stone` with `slate` or `#FAFAFA` and text with `#222222` / `#666666`.
+
+## Home Page Components
+2. **Description**: The `divide-x` utility applied on a responsive grid (`grid-cols-2 md:grid-cols-4`) creates broken left borders on items wrapping to the second row on mobile devices.
+   - **Affected Component**: `ImpactStats.tsx`
+   - **Type of Issue**: Responsiveness / Alignment Issue.
+   - **Suggested Fix**: Remove `divide-x` and apply appropriate border classes explicitly to elements based on their responsive grid placement, or use absolute dividers.
+
+3. **Description**: The flex container for the section header uses `items-end` globally. On mobile displays where it switches to `flex-col`, this causes the main title ("Ongoing Causes") to align to the far right.
+   - **Affected Component**: `OngoingCauses.tsx`
+   - **Type of Issue**: Responsiveness Bug.
+   - **Suggested Fix**: Update `items-end` to `items-start sm:items-end` to ensure left-alignment on mobile and end-alignment on tablet/desktop.
+
+4. **Description**: Primary buttons use a mix of `rounded` and `rounded-xl`. The established design system primarily uses `rounded-xl`.
+   - **Affected Component**: `FeaturedCause.tsx`, `HeroSlider.tsx`
+   - **Type of Issue**: Design Inconsistency.
+   - **Suggested Fix**: Standardize button border-radius to `rounded-xl`.

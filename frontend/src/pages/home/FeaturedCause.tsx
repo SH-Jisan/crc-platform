@@ -31,7 +31,6 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
                             <div className="w-full lg:w-1/2 overflow-hidden relative group/image">
                                 <div className="w-full h-full relative">
                                     {/* Image Sweep Effect */}
-                                    <div className="absolute inset-0 z-10 w-full h-full -translate-x-full group-hover/image:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/20 to-transparent skew-x-12 pointer-events-none"></div>
                                     <img
                                         src={cause.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"}
                                         alt="Featured Cause"
@@ -58,10 +57,9 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
 
                                 <button
                                     onClick={() => onDonate(cause)}
-                                    className="relative overflow-hidden group/btn w-full sm:w-fit px-8 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest rounded transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1 flex items-center justify-center gap-2"
+                                    className="relative overflow-hidden group/btn w-full sm:w-fit px-8 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1 flex items-center justify-center gap-2"
                                 >
                                     {/* Button Shine Effect */}
-                                    <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                                     
                                     <span className="relative z-10 flex items-center gap-2">
                                         <HeartIcon /> Donate to this cause

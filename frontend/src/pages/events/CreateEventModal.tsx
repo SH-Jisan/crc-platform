@@ -57,28 +57,28 @@ export default function CreateEventModal({ isOpen, onClose }: CreateEventModalPr
             {/* 🌟 max-h-[90vh] এবং overflow-y-auto দেওয়া হয়েছে যাতে ছোট স্ক্রিনে ফর্ম স্ক্রল করা যায় */}
             <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
                 <div className="p-6 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white z-10">
-                    <h2 className="text-xl font-bold text-slate-800">Create New Event</h2>
-                    <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">✕</button>
+                    <h2 className="text-xl font-bold text-[#222222]">Create New Event</h2>
+                    <button onClick={onClose} className="text-[#666666] hover:text-[#222222] transition-colors">✕</button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700">Event Title</label>
+                        <label className="block text-sm font-medium text-[#222222]">Event Title</label>
                         <input
                             required
                             value={formData.title}
-                            className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26]/50 focus:border-[#D64A26] outline-none"
                             placeholder="e.g. Winter Clothing Drive"
                             onChange={(e) => setFormData({...formData, title: e.target.value})}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-slate-700">Description</label>
+                        <label className="block text-sm font-medium text-[#222222]">Description</label>
                         <textarea
                             rows={3}
                             value={formData.description}
-                            className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                            className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26]/50 focus:border-[#D64A26] outline-none"
                             placeholder="Tell us about the event..."
                             onChange={(e) => setFormData({...formData, description: e.target.value})}
                         />
@@ -86,21 +86,21 @@ export default function CreateEventModal({ isOpen, onClose }: CreateEventModalPr
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700">Date</label>
+                            <label className="block text-sm font-medium text-[#222222]">Date</label>
                             <input
                                 type="date"
                                 required
                                 value={formData.event_date}
-                                className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26]/50 focus:border-[#D64A26] outline-none"
                                 onChange={(e) => setFormData({...formData, event_date: e.target.value})}
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700">Location</label>
+                            <label className="block text-sm font-medium text-[#222222]">Location</label>
                             <input
                                 required
                                 value={formData.location}
-                                className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26]/50 focus:border-[#D64A26] outline-none"
                                 placeholder="Campus Area"
                                 onChange={(e) => setFormData({...formData, location: e.target.value})}
                             />
@@ -110,8 +110,8 @@ export default function CreateEventModal({ isOpen, onClose }: CreateEventModalPr
                     {/* 🌟 Request Donation Toggle Switch */}
                     <div className="flex items-center justify-between p-4 bg-slate-50 border border-slate-100 rounded-xl mt-4">
                         <div>
-                            <p className="font-semibold text-slate-800 text-sm">Request Donations</p>
-                            <p className="text-xs text-slate-500">Allow users to donate money for this event.</p>
+                            <p className="font-semibold text-[#222222] text-sm">Request Donations</p>
+                            <p className="text-xs text-[#666666]">Allow users to donate money for this event.</p>
                         </div>
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input
@@ -120,21 +120,21 @@ export default function CreateEventModal({ isOpen, onClose }: CreateEventModalPr
                                 checked={isDonationEnabled}
                                 onChange={() => setIsDonationEnabled(!isDonationEnabled)}
                             />
-                            <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                            <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#D64A26]"></div>
                         </label>
                     </div>
 
                     {/* 🌟 Goal Amount Box (Only shows if toggle is ON) */}
                     {isDonationEnabled && (
                         <div className="animate-fade-in mt-4">
-                            <label className="block text-sm font-medium text-slate-700">Target Amount (৳) *</label>
+                            <label className="block text-sm font-medium text-[#222222]">Target Amount (৳) *</label>
                             <input
                                 type="number"
                                 required
                                 min="1"
                                 value={goalAmount}
                                 onChange={(e) => setGoalAmount(e.target.value)}
-                                className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                className="w-full mt-1 px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26]/50 focus:border-[#D64A26] outline-none transition-all"
                                 placeholder="e.g. 20000"
                             />
                         </div>
@@ -143,7 +143,7 @@ export default function CreateEventModal({ isOpen, onClose }: CreateEventModalPr
                     <button
                         type="submit"
                         disabled={mutation.isPending}
-                        className="w-full py-3 mt-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-all disabled:opacity-70"
+                        className="w-full py-3 mt-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold rounded-xl transition-all disabled:opacity-70"
                     >
                         {mutation.isPending ? 'Publishing Event...' : 'Publish Event'}
                     </button>

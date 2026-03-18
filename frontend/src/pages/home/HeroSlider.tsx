@@ -112,7 +112,7 @@ export default function HeroSlider() {
                                     {slide.subtitle}
                                 </p>
                                 <div className="text-reveal-button">
-                                    <button onClick={() => document.getElementById('causes-section')?.scrollIntoView({ behavior: 'smooth' })} className="px-10 py-4 bg-[#D64A26] text-white font-bold rounded hover:bg-[#b53d1e] transition-colors shadow-lg flex items-center gap-2 mx-auto text-lg uppercase tracking-wider">
+                                    <button onClick={() => document.getElementById('causes-section')?.scrollIntoView({ behavior: 'smooth' })} className="px-10 py-4 bg-[#D64A26] text-white font-bold rounded-xl hover:bg-[#b53d1e] transition-colors shadow-lg flex items-center gap-2 mx-auto text-lg uppercase tracking-wider">
                                         <HeartIcon /> Support Our Cause
                                     </button>
                                 </div>

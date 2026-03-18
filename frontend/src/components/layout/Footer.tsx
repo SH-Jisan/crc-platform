@@ -31,7 +31,7 @@ export default function Footer() {
                                 Come for Road Child
                             </h3>
                         </div>
-                        <p className="text-stone-400/90 text-[15px] leading-relaxed max-w-md mb-8">
+                        <p className="text-slate-300/90 text-[15px] leading-relaxed max-w-md mb-8">
                             A heart-driven university chapter dedicated to uplifting underprivileged children through education, nutrition, and compassionate support. Together, we build a future full of smiles.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
@@ -40,13 +40,13 @@ export default function Footer() {
                                 Volunteer
                             </button>
                             <div className="flex gap-4">
-                                <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-[#D64A26] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_15px_rgb(214,74,38,0.4)]">
+                                <a href="#" className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center text-slate-400 hover:bg-[#D64A26] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_15px_rgb(214,74,38,0.4)]">
                                     <FacebookIcon />
                                 </a>
-                                <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-[#D64A26] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_15px_rgb(214,74,38,0.4)]">
+                                <a href="#" className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center text-slate-400 hover:bg-[#D64A26] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_15px_rgb(214,74,38,0.4)]">
                                     <TwitterIcon />
                                 </a>
-                                <a href="#" className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-400 hover:bg-[#D64A26] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_15px_rgb(214,74,38,0.4)]">
+                                <a href="#" className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center text-slate-400 hover:bg-[#D64A26] hover:text-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_4px_15px_rgb(214,74,38,0.4)]">
                                     <InstagramIcon />
                                 </a>
                             </div>
@@ -59,7 +59,7 @@ export default function Footer() {
                             Platform
                             <span className="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-[#D64A26]"></span>
                         </h4>
-                        <ul className="space-y-3.5 text-stone-400">
+                        <ul className="space-y-3.5 text-slate-300">
                             <li><Link to="/events" className="hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center gap-2"><span className="text-[#D64A26]/80 text-lg leading-none">&#8250;</span> Initiatives & Events</Link></li>
                             <li><Link to="/campaigns" className="hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center gap-2"><span className="text-[#D64A26]/80 text-lg leading-none">&#8250;</span> Active Campaigns</Link></li>
                             <li><Link to="/donations" className="text-[#D64A26] font-bold hover:text-white hover:translate-x-1 transition-all duration-300 flex items-center gap-2"><span className="text-[#D64A26] text-lg leading-none">&#8250;</span> Make a Donation</Link></li>
@@ -73,7 +73,7 @@ export default function Footer() {
                             Get in Touch
                             <span className="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-[#D64A26]"></span>
                         </h4>
-                        <ul className="space-y-4 text-stone-400/90 text-[15px] mb-8">
+                        <ul className="space-y-4 text-slate-300/90 text-[15px] mb-8">
                             <li className="flex items-start gap-4 group">
                                 <span className="text-[#D64A26] text-lg mt-0.5 group-hover:-translate-y-1 transition-transform">📍</span>
                                 <span>Main Campus Building, Student Hub Area, Dhaka</span>
@@ -85,13 +85,13 @@ export default function Footer() {
                         </ul>
 
                         {/* Newsletter Subscription */}
-                        <div className="bg-stone-800/50 backdrop-blur-sm p-1 rounded-xl flex border border-stone-700/50 focus-within:border-[#D64A26]/50 transition-colors">
+                        <div className="bg-[#1A1A1A]/80 backdrop-blur-sm p-1 rounded-xl flex border border-slate-700/50 focus-within:border-[#D64A26]/50 transition-colors">
                             <input 
                                 type="email" 
                                 placeholder="Subscribe to newsletter" 
-                                className="bg-transparent text-sm text-white px-4 py-2 flex-grow focus:outline-none placeholder-stone-500"
+                                className="bg-transparent text-sm text-white px-4 py-2 flex-grow focus:outline-none placeholder-slate-500"
                             />
-                            <button className="bg-[#D64A26] hover:bg-[#b53d1e] text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors">
+                            <button className="bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white px-5 py-2 rounded-lg text-sm font-bold transition-colors">
                                 Subscribe
                             </button>
                         </div>
@@ -100,12 +100,12 @@ export default function Footer() {
 
                 {/* Sub-footer */}
                 <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-stone-500/80 text-[13px] order-2 md:order-1">
+                    <p className="text-slate-400/80 text-[13px] order-2 md:order-1">
                         © {new Date().getFullYear()} Come for Road Child (CRC). Designed with <span className="text-[#D64A26] mx-0.5">❤️</span> for humanity.
                     </p>
-                    <div className="flex gap-6 text-[11px] font-black uppercase tracking-widest text-stone-500 order-1 md:order-2">
+                    <div className="flex gap-6 text-[11px] font-black uppercase tracking-widest text-slate-400 order-1 md:order-2">
                         <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-                        <span className="text-stone-700">|</span>
+                        <span className="text-slate-600">|</span>
                         <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
                     </div>
                 </div>

@@ -1,0 +1,70 @@
+# Frontend UI Design System (theme.txt)
+
+This design system is based exclusively on the Home Page UI for consistency across the platform.
+
+## 1. Color Palette
+- **Primary Brand:** `#D64A26` (Warm Orange/Red)
+- **Primary Light (Gradient):** `#F1795D`
+- **Primary Dark (Hover):** `#b53d1e`, `#c24220`
+- **Backgrounds:**
+  - Page Background: `#F4F4F4` or `#FAFAFA`
+  - Container Backgrounds: `#FFFFFF` (Often with opacity, e.g., `bg-white/95`)
+  - Section Alt Backgrounds: `#F9F9F9`
+  - Dark Mode/Footer Backgrounds: `#222222`, `#1A1A1A`
+- **Text & Typography Colors:**
+  - Headings / Primary Reading: `#222222`
+  - Body Text / Secondary Context: `#666666`, `slate-600`
+  - Muted Text: `slate-400`
+  - Light Text (on dark bg): `#FFFFFF`, `slate-200`
+- **Accents & Utilities:**
+  - Selection Color: `bg-blue-200 text-blue-900`
+  - Borders/Dividers: `slate-100`, `slate-200`
+
+## 2. Typography System
+- **Fonts:**
+  - Headings (H1-H4): `Playfair Display` (`font-serif`)
+  - Body & UI Text: `Inter` (`font-sans`)
+- **Weights:**
+  - Light: `300`
+  - Regular: `400`
+  - Medium: `500`
+  - Semi-Bold: `600`
+  - Bold: `700` (`font-bold`)
+- **Common Classes:**
+  - Large Headings: `text-4xl font-serif font-bold text-[#222222]`
+  - Standard Body: `text-[#666666] leading-relaxed font-normal`
+  - Labels/Badges: `font-bold uppercase tracking-widest text-xs`
+
+## 3. Spacing & Layout Grid
+- **Global Container:** `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- **Section Padding:** Default vertical padding `py-20` for standard sections.
+- **Element Spacing (Gap/Margin):** `gap-8` for grid elements, `mb-4`, `mb-6`, `mb-8` for vertical flow inside cards.
+- **Grids:** Typical desktop grid `grid-cols-3` or `grid-cols-4`, adapting to `grid-cols-1` on mobile.
+
+## 4. Component Styles
+- **Primary Button (Filled):**
+  - Style: `bg-gradient-to-r from-[#D64A26] to-[#F1795D] text-white font-bold uppercase tracking-widest rounded`
+  - Hover: `hover:from-[#c24220] hover:to-[#e36345] hover:-translate-y-1 shadow-md hover:shadow-lg`
+- **Outline Button:**
+  - Style: `border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl uppercase tracking-widest text-xs`
+  - Hover: `hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all`
+- **Cards:**
+  - Container: `bg-white/95 backdrop-blur-sm rounded-xl shadow-md border border-slate-100`
+  - Hover Effect: `hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300`
+  - Image Wrapper: `overflow-hidden` with `group-hover:scale-110` inside.
+- **Badges/Labels:**
+  - Accent Badge: `bg-[#D64A26]/10 text-[#D64A26] border border-[#D64A26]/20 px-4 py-1.5 rounded text-xs font-bold uppercase`
+- **Progress Bars:**
+  - Track: `bg-[#F4F4F4] rounded-full`
+  - Fill: `bg-gradient-to-r from-[#D64A26] to-[#F1795D] shadow-[0_0_8px_rgba(214,74,38,0.4)]`
+
+## 5. Visual Effects & Transitions
+- **Glassmorphism:** `.glass-effect` (`bg-white/70 backdrop-blur-md border border-white/20`) -> widely used for modals, header bars, and overlays.
+- **Button Shine Animation:** Pseudo-element sweep with `animate-[shine_1.5s_ease]` on hover.
+- **Image Hover:** Slower zoom `transition-transform duration-700` and scale to `1.05` or `1.10`.
+- **Soft Shadows:** Clean, expansive drop shadows with low opacity (e.g., `0.08` black).
+
+## 6. Responsive Breakpoints
+- **Mobile (<640px):** Full width components, `px-4`, smaller headings (`text-3xl`).
+- **Tablet (640px - 1024px):** 2-column grids (`sm:grid-cols-2`), moderate padding.
+- **Desktop (>1024px):** Multi-column grids (`lg:grid-cols-3` or `4`), max container width, full animations.

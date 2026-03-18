@@ -92,9 +92,9 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
             <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
 
                 {/* Header */}
-                <div className="p-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
-                    <h2 className="text-xl font-black text-stone-800">Add to Gallery</h2>
-                    <button onClick={() => { onClose(); resetState(); }} className="p-2 bg-stone-200/50 hover:bg-stone-200 text-stone-500 rounded-full transition-colors">
+                <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <h2 className="text-xl font-black text-[#222222]">Add to Gallery</h2>
+                    <button onClick={() => { onClose(); resetState(); }} className="p-2 bg-slate-200/50 hover:bg-slate-200 text-[#666666] hover:text-[#222222] rounded-full transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -106,22 +106,22 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
                     <form id="gallery-form" onSubmit={handleSubmit} className="space-y-6">
 
                         {/* 🌟 Multiple File Input */}
-                        <div className="bg-stone-50 p-5 rounded-2xl border border-stone-200 border-dashed">
-                            <label className="block text-sm font-bold text-stone-700 mb-2">Select Images (Multiple allowed)</label>
+                        <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 border-dashed">
+                            <label className="block text-sm font-bold text-[#222222] mb-2">Select Images (Multiple allowed)</label>
                             <input
                                 type="file"
                                 multiple // 🌟 এই ম্যাজিক অ্যাট্রিবিউটটিই একসাথে অনেক ছবি সিলেক্ট করতে দেবে
                                 accept="image/*"
                                 onChange={handleImageSelection}
-                                className="block w-full text-sm text-stone-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-emerald-100 file:text-emerald-700 hover:file:bg-emerald-200 transition-colors cursor-pointer"
+                                className="block w-full text-sm text-[#666666] file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#D64A26]/10 file:text-[#D64A26] hover:file:bg-[#D64A26]/20 transition-colors cursor-pointer"
                             />
                         </div>
 
                         {/* 🌟 Image Previews Grid */}
                         {selectedImages.length > 0 && (
-                            <div className="flex flex-wrap gap-3 max-h-48 overflow-y-auto p-2 bg-stone-50 rounded-xl border border-stone-100">
+                            <div className="flex flex-wrap gap-3 max-h-48 overflow-y-auto p-2 bg-slate-50 rounded-xl border border-slate-100">
                                 {selectedImages.map((file, index) => (
-                                    <div key={index} className="relative group w-24 h-24 rounded-xl overflow-hidden border border-stone-200 shadow-sm flex-shrink-0">
+                                    <div key={index} className="relative group w-24 h-24 rounded-xl overflow-hidden border border-slate-200 shadow-sm flex-shrink-0">
                                         <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
 
                                         {/* Remove Button */}
@@ -139,12 +139,12 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
 
                         {/* Caption Input */}
                         <div>
-                            <label className="block text-sm font-semibold text-stone-700 mb-2">Caption for these images (Optional)</label>
+                            <label className="block text-sm font-semibold text-[#222222] mb-2">Caption for these images (Optional)</label>
                             <input
                                 type="text"
                                 value={caption}
                                 onChange={(e) => setCaption(e.target.value)}
-                                className="w-full px-4 py-3 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-shadow"
+                                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/50 focus:border-[#D64A26] outline-none transition-shadow"
                                 placeholder="E.g., Winter Clothes Distribution 2026..."
                             />
                         </div>
@@ -152,12 +152,12 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-stone-100 bg-stone-50/50">
+                <div className="p-6 border-t border-slate-100 bg-slate-50/50">
                     <button
                         type="submit"
                         form="gallery-form"
                         disabled={selectedImages.length === 0 || isUploading}
-                        className="w-full py-3.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-[0_4px_15px_rgb(16,185,129,0.3)] hover:shadow-[0_6px_20px_rgb(16,185,129,0.4)] disabled:opacity-50 flex items-center justify-center gap-2"
+                        className="w-full py-3.5 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold rounded-xl transition-all shadow-[0_4px_15px_rgb(214,74,38,0.3)] hover:shadow-[0_6px_20px_rgb(214,74,38,0.4)] disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                         {isUploading ? (
                             <>

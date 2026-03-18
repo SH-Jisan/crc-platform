@@ -98,44 +98,44 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
     return (
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-                <div className="p-6 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
-                    <h2 className="text-xl font-bold text-stone-800">Create New Post</h2>
-                    <button onClick={onClose} className="text-stone-400 hover:text-stone-600 transition-colors">✕</button>
+                <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                    <h2 className="text-xl font-serif font-bold text-[#222222]">Create New Post</h2>
+                    <button onClick={onClose} className="text-slate-400 hover:text-[#666666] transition-colors">✕</button>
                 </div>
 
                 <div className="overflow-y-auto p-6">
                     <form id="post-form" onSubmit={handleSubmit} className="space-y-5">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1">Post Type</label>
-                                <select value={postType} onChange={(e) => setPostType(e.target.value)} className="w-full px-4 py-2 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none bg-white">
+                                <label className="block text-sm font-semibold text-[#666666] mb-1">Post Type</label>
+                                <select value={postType} onChange={(e) => setPostType(e.target.value)} className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none bg-[#F4F4F4]/50 text-[#222222]">
                                     <option value="UPDATE">General Update</option>
                                     <option value="SUCCESS_STORY">Success Story 🌟</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-semibold text-stone-700 mb-1">Title (Optional)</label>
-                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Catchy title..." />
+                                <label className="block text-sm font-semibold text-[#666666] mb-1">Title (Optional)</label>
+                                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none bg-[#F4F4F4]/50 text-[#222222] placeholder:text-slate-400" placeholder="Catchy title..." />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-stone-700 mb-1">Content *</label>
-                            <textarea required rows={4} value={content} onChange={(e) => setContent(e.target.value)} className="w-full px-4 py-2 border border-stone-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none resize-none" placeholder="What's happening in the community?" />
+                            <label className="block text-sm font-semibold text-[#666666] mb-1">Content *</label>
+                            <textarea required rows={4} value={content} onChange={(e) => setContent(e.target.value)} className="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none resize-none bg-[#F4F4F4]/50 text-[#222222] placeholder:text-slate-400" placeholder="What's happening in the community?" />
                         </div>
 
                         {/* 🌟 Multiple Media Section */}
-                        <div className="p-5 bg-stone-50 rounded-xl border border-stone-200/60 space-y-4">
-                            <h3 className="text-sm font-bold text-stone-800">Attach Media</h3>
+                        <div className="p-5 bg-[#FAFAFA] rounded-xl border border-slate-200/60 space-y-4">
+                            <h3 className="text-sm font-bold text-[#222222]">Attach Media</h3>
 
                             <div>
-                                <label className="block text-xs font-semibold text-stone-500 mb-1">YouTube Video Link (Optional)</label>
-                                <input type="url" value={videoLink} onChange={(e) => setVideoLink(e.target.value)} className="w-full px-4 py-2 border border-stone-200 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="https://youtube.com/watch?v=..." />
+                                <label className="block text-xs font-semibold text-[#666666] mb-1">YouTube Video Link (Optional)</label>
+                                <input type="url" value={videoLink} onChange={(e) => setVideoLink(e.target.value)} className="w-full px-4 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none text-sm bg-[#F4F4F4]/50 text-[#222222] placeholder:text-slate-400" placeholder="https://youtube.com/watch?v=..." />
                             </div>
 
                             <div>
-                                <label className="block text-xs font-semibold text-stone-500 mb-1">Upload Images (Multiple allowed)</label>
-                                <input type="file" multiple accept="image/*" onChange={handleImageSelection} className="block w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-colors cursor-pointer" />
+                                <label className="block text-xs font-semibold text-[#666666] mb-1">Upload Images (Multiple allowed)</label>
+                                <input type="file" multiple accept="image/*" onChange={handleImageSelection} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-[#D64A26] hover:file:bg-orange-100 transition-colors cursor-pointer" />
                             </div>
 
                             {selectedImages.length > 0 && (
@@ -150,13 +150,13 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
                             )}
 
                             {selectedImages.length > 0 && (
-                                <div className="flex items-center gap-3 pt-3 border-t border-stone-200/60 mt-4">
+                                <div className="flex items-center gap-3 pt-3 border-t border-slate-200/60 mt-4">
                                     <label className="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" className="sr-only peer" checked={isGallerySynced} onChange={() => setIsGallerySynced(!isGallerySynced)} />
-                                        <div className="w-11 h-6 bg-stone-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-stone-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                                        <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#D64A26]"></div>
                                     </label>
                                     <div>
-                                        <p className="font-bold text-sm text-stone-700">Add to Public Gallery</p>
+                                        <p className="font-bold text-sm text-[#666666]">Add to Public Gallery</p>
                                     </div>
                                 </div>
                             )}
@@ -164,9 +164,9 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
                     </form>
                 </div>
 
-                <div className="p-6 border-t border-stone-100 bg-stone-50/50">
-                    <button type="submit" form="post-form" disabled={isUploading || mutation.isPending} className="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all shadow-md disabled:opacity-70 flex items-center justify-center gap-2">
-                        {isUploading ? 'Uploading Media...' : mutation.isPending ? 'Publishing Post...' : 'Publish Post'}
+                <div className="p-6 border-t border-slate-100 bg-slate-50/50">
+                    <button type="submit" form="post-form" disabled={isUploading || mutation.isPending} className="w-full py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md disabled:opacity-70 flex items-center justify-center gap-2">
+                        <span className="relative z-10">{isUploading ? 'Uploading Media...' : mutation.isPending ? 'Publishing Post...' : 'Publish Post'}</span>
                     </button>
                 </div>
             </div>

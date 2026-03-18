@@ -6,7 +6,7 @@ import React from "react";
 import { getCurrentUser } from '../../api/auth';
 
 const CommunityLogo = () => (
-    <div className="w-16 h-16 bg-stone-100 text-[#D64A26] rounded-xl flex items-center justify-center mb-6 border border-stone-200">
+    <div className="w-16 h-16 bg-slate-100 text-[#D64A26] rounded-xl flex items-center justify-center mb-6 border border-slate-200">
         <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
             <circle cx="9" cy="7" r="4" />
@@ -98,17 +98,17 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-stone-50 flex items-center justify-center p-6 relative font-sans">
+        <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-6 relative font-sans">
             <div className="w-full max-w-md relative z-10">
-                <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-stone-200 flex flex-col items-center">
+                <div className="bg-white/95 backdrop-blur-sm p-8 md:p-10 rounded-2xl shadow-md border border-slate-100 flex flex-col items-center">
                     
                     {/* Branding */}
                     <CommunityLogo />
                     <div className="text-center mb-8">
-                        <h1 className="text-2xl md:text-3xl font-bold text-stone-800 tracking-tight">
+                        <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#222222] tracking-tight">
                             Member Portal
                         </h1>
-                        <p className="mt-2 text-stone-500 font-medium text-sm">
+                        <p className="mt-2 text-[#666666] font-medium text-sm">
                             Come for Road Child (CRC)
                         </p>
                     </div>
@@ -125,12 +125,12 @@ export default function Login() {
 
                     <form className="w-full space-y-5" onSubmit={handleLogin}>
                         <div>
-                            <label className="block text-sm font-semibold text-stone-700 mb-1.5 ml-1">Email Address</label>
+                            <label className="block text-sm font-semibold text-[#666666] mb-1.5 ml-1">Email Address</label>
                             <div className="relative group">
                                 <input
                                     type="email"
                                     required
-                                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400"
+                                    className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400"
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -145,14 +145,14 @@ export default function Login() {
 
                         <div>
                             <div className="flex justify-between items-center mb-1.5 ml-1">
-                                <label className="block text-sm font-semibold text-stone-700">Password</label>
+                                <label className="block text-sm font-semibold text-[#666666]">Password</label>
                                 <button type="button" className="text-sm font-medium text-[#D64A26] hover:text-[#b53d1e] transition-colors">Forgot Password?</button>
                             </div>
                             <div className="relative group">
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     required
-                                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] focus:bg-white outline-none transition-all font-medium text-stone-700 placeholder:text-stone-400"
+                                    className="w-full px-4 py-3 bg-[#F4F4F4]/50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-medium text-[#222222] placeholder:text-slate-400"
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -160,7 +160,7 @@ export default function Login() {
                                 <button 
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute inset-y-0 right-4 flex items-center text-stone-400 hover:text-stone-600 transition-colors"
+                                    className="absolute inset-y-0 right-4 flex items-center text-slate-400 hover:text-[#666666] transition-colors"
                                 >
                                     {showPassword ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -179,9 +179,8 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="relative overflow-hidden group/btn w-full py-3.5 mt-2 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                            className="relative overflow-hidden group/btn w-full py-4 mt-2 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                         >
-                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                             <span className="relative z-10 flex items-center gap-2">
                                 {loading ? (
                                     <>
@@ -195,8 +194,8 @@ export default function Login() {
                         </button>
                     </form>
 
-                    <div className="mt-8 pt-6 border-t border-stone-100 w-full text-center">
-                        <p className="text-stone-500 text-sm font-medium">
+                    <div className="mt-8 pt-6 border-t border-slate-100 w-full text-center">
+                        <p className="text-[#666666] text-sm font-medium">
                             Don't have an account? <Link to="/signup" className="text-[#D64A26] font-bold hover:underline">Apply for Membership</Link>
                         </p>
                     </div>

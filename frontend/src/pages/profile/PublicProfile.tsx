@@ -40,25 +40,25 @@ export default function PublicProfile() {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-stone-50">
-                <div className="w-10 h-10 border-4 border-stone-200 border-t-[#D64A26] rounded-full animate-spin flex items-center justify-center shadow-lg"></div>
+            <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
+                <div className="w-10 h-10 border-4 border-slate-200 border-t-[#D64A26] rounded-full animate-spin flex items-center justify-center shadow-lg"></div>
             </div>
         );
     }
 
     if (isError || !profile) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-stone-50 p-6 relative">
+            <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] p-6 relative">
                 {/* Background Decor */}
                 <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none"></div>
 
-                <div className="bg-white p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-stone-100 text-center max-w-md w-full relative z-10">
-                    <div className="w-20 h-20 bg-stone-50 text-stone-400 rounded-full flex items-center justify-center mx-auto mb-6 border border-stone-200 shadow-sm">
+                <div className="bg-white p-10 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-slate-100 text-center max-w-md w-full relative z-10">
+                    <div className="w-20 h-20 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-6 border border-slate-200 shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
                     </div>
-                    <h2 className="text-2xl font-black text-stone-800 tracking-tight mb-2">Member Not Found</h2>
-                    <p className="text-stone-500 font-medium mb-8">The ID you searched for is invalid or the member's application is pending.</p>
-                    <Link to="/" className="px-6 py-3 bg-stone-900 text-white font-bold rounded-xl hover:bg-stone-800 hover:shadow-lg transition-all inline-block">
+                    <h2 className="text-2xl font-serif font-black text-[#222222] tracking-tight mb-2">Member Not Found</h2>
+                    <p className="text-[#666666] font-medium mb-8">The ID you searched for is invalid or the member's application is pending.</p>
+                    <Link to="/" className="px-6 py-3 bg-[#222222] text-white font-bold rounded-xl hover:bg-[#1A1A1A] hover:shadow-lg transition-all inline-block">
                         Return to Homepage
                     </Link>
                 </div>
@@ -67,7 +67,7 @@ export default function PublicProfile() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] py-12 px-4 relative flex items-center justify-center font-sans overflow-hidden">
+        <div className="min-h-screen bg-[#FAFAFA] py-12 px-4 relative flex items-center justify-center font-sans overflow-hidden">
             {/* Soft Background Elements for Beauty */}
             <div className="absolute top-[0%] left-[-10%] w-[50%] h-[50%] bg-[#D64A26]/10 blur-[130px] rounded-full pointer-events-none"></div>
             <div className="absolute bottom-[0%] right-[-10%] w-[50%] h-[50%] bg-orange-100/40 blur-[130px] rounded-full pointer-events-none"></div>
@@ -75,10 +75,10 @@ export default function PublicProfile() {
             <div className="w-full max-w-[440px] relative z-10 animate-fade-in-up">
                 
                 {/* Premium Card Container */}
-                <div className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.06)] ring-1 ring-stone-900/5 overflow-hidden relative">
+                <div className="bg-white rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.06)] ring-1 ring-[#222222]/5 overflow-hidden relative">
                     
                     {/* Elegant Cover */}
-                    <div className="h-44 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 relative flex items-start justify-between p-6 overflow-hidden">
+                    <div className="h-44 bg-gradient-to-br from-[#1A1A1A] via-[#222222] to-[#1A1A1A] relative flex items-start justify-between p-6 overflow-hidden">
                         {/* Subtle pattern overlay */}
                         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                         
@@ -90,7 +90,7 @@ export default function PublicProfile() {
                             <span className="w-1.5 h-1.5 bg-[#D64A26] rounded-full shadow-[0_0_10px_rgba(214,74,38,0.8)]"></span>
                         </div>
                         
-                        <div className="relative z-10 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-stone-50 text-xs font-bold tracking-widest border border-white/20 shadow-lg">
+                        <div className="relative z-10 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-white text-xs font-bold tracking-widest border border-white/20 shadow-lg">
                             ID: {profile.crc_id}
                         </div>
                     </div>
@@ -98,10 +98,10 @@ export default function PublicProfile() {
                     {/* Avatar Overlap */}
                     <div className="flex justify-center -mt-20 relative z-20">
                         <div className="w-36 h-36 bg-white rounded-full p-1.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
-                            <div className="w-full h-full bg-stone-100 rounded-full flex items-center justify-center text-5xl font-extrabold text-stone-300 overflow-hidden border border-stone-100 relative group">
+                            <div className="w-full h-full bg-slate-100 rounded-full flex items-center justify-center text-5xl font-extrabold text-slate-300 overflow-hidden border border-slate-100 relative group">
                                 {profile.avatar_url ? (
                                     <>
-                                        <div className="absolute inset-0 bg-stone-900/10 group-hover:opacity-0 transition-opacity z-10"></div>
+                                        <div className="absolute inset-0 bg-[#222222]/10 group-hover:opacity-0 transition-opacity z-10"></div>
                                         <img src={profile.avatar_url} alt={profile.full_name} className="w-full h-full object-cover relative z-0" />
                                     </>
                                 ) : (
@@ -115,7 +115,7 @@ export default function PublicProfile() {
                     <div className="px-8 pt-5 pb-10 text-center">
                         {/* Name & Badge */}
                         <div className="flex items-center justify-center gap-2 mb-2">
-                            <h1 className="text-3xl font-extrabold text-stone-800 tracking-tight">{profile.full_name}</h1>
+                            <h1 className="text-3xl font-serif font-extrabold text-[#222222] tracking-tight">{profile.full_name}</h1>
                             <VerifiedIcon />
                         </div>
 
@@ -123,18 +123,18 @@ export default function PublicProfile() {
                         <div className="flex flex-wrap items-center justify-center gap-2 mt-2 mb-8">
                             {profile.roles && profile.roles.length > 0 ? (
                                 profile.roles.map((role: string) => (
-                                    <span key={role} className="px-5 py-2 bg-stone-900 text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-md">
+                                    <span key={role} className="px-5 py-2 bg-gradient-to-r from-[#D64A26] to-[#F1795D] text-white text-[10px] font-black rounded-full uppercase tracking-widest shadow-md">
                                         {role.replace('_', ' ')}
                                     </span>
                                 ))
                             ) : (
-                                <span className="px-5 py-2 bg-stone-100 text-stone-600 text-[10px] font-black rounded-full uppercase tracking-widest shadow-sm">MEMBER</span>
+                                <span className="px-5 py-2 bg-slate-100 text-[#666666] text-[10px] font-black rounded-full uppercase tracking-widest shadow-sm">MEMBER</span>
                             )}
                         </div>
 
                         {/* Bio / Quote (Optional) */}
                         {profile.bio && (
-                            <div className="mb-8 p-5 bg-stone-50/80 rounded-2xl border border-stone-100 text-sm text-stone-600 font-semibold italic relative shadow-inner">
+                            <div className="mb-8 p-5 bg-[#FAFAFA] rounded-2xl border border-slate-100 text-sm text-[#666666] font-semibold italic relative shadow-inner">
                                 <svg className="absolute top-2.5 left-3 w-5 h-5 text-[#D64A26]/20" fill="currentColor" viewBox="0 0 32 32"><path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z"/></svg>
                                 <span className="relative z-10 px-6 block tracking-wide">{profile.bio}</span>
                             </div>
@@ -142,34 +142,34 @@ export default function PublicProfile() {
 
                         {/* Info Grid */}
                         <div className="space-y-4 text-left">
-                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-100 transition-all duration-300 group">
-                                <div className="w-12 h-12 rounded-full bg-stone-50 flex items-center justify-center group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors shrink-0">
+                            <div className="flex items-center gap-4 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-[#D64A26]/20 transition-all duration-300 group">
+                                <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors shrink-0">
                                     <UnivIcon />
                                 </div>
                                 <div className="flex-1">
-                                    <span className="block text-[10px] font-black uppercase tracking-widest text-stone-400 mb-1">University</span>
-                                    <span className="font-extrabold text-stone-800 text-sm">{profile.university || 'N/A'}</span>
+                                    <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">University</span>
+                                    <span className="font-extrabold text-[#222222] text-sm">{profile.university || 'N/A'}</span>
                                 </div>
                             </div>
                             
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-100 transition-all duration-300 group">
-                                    <div className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors">
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-[#D64A26]/20 transition-all duration-300 group">
+                                    <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center shrink-0 group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors">
                                         <DeptIcon />
                                     </div>
                                     <div>
-                                        <span className="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Department</span>
-                                        <span className="font-extrabold text-stone-800 text-sm leading-tight inline-block">{profile.department || 'N/A'}</span>
+                                        <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Department</span>
+                                        <span className="font-extrabold text-[#222222] text-sm leading-tight inline-block">{profile.department || 'N/A'}</span>
                                     </div>
                                 </div>
                                 
-                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-orange-100 transition-all duration-300 group">
-                                    <div className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center shrink-0 group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors">
+                                <div className="flex flex-col gap-3 p-4 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:border-[#D64A26]/20 transition-all duration-300 group">
+                                    <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center shrink-0 group-hover:bg-orange-50 group-hover:text-[#D64A26] transition-colors">
                                         <SessionIcon />
                                     </div>
                                     <div>
-                                        <span className="block text-[9px] font-black uppercase tracking-widest text-stone-400 mb-1">Session</span>
-                                        <span className="font-extrabold text-stone-800 text-sm leading-tight inline-block">{profile.session || 'N/A'}</span>
+                                        <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Session</span>
+                                        <span className="font-extrabold text-[#222222] text-sm leading-tight inline-block">{profile.session || 'N/A'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +180,7 @@ export default function PublicProfile() {
 
                 {/* Footer Link */}
                 <div className="mt-8 flex justify-center pb-8">
-                    <Link to="/" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm text-stone-400 hover:text-[#D64A26] hover:bg-white hover:shadow-md transition-all font-bold text-[10px] tracking-widest uppercase">
+                    <Link to="/" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm text-slate-400 hover:text-[#D64A26] hover:bg-white hover:shadow-md transition-all font-bold text-[10px] tracking-widest uppercase">
                         University Volunteer Network
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />

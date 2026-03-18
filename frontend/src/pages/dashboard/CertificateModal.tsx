@@ -49,24 +49,24 @@ export default function CertificateModal({ isOpen, onClose, user }: Props) {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-900/80 backdrop-blur-sm p-4 sm:p-8 overflow-y-auto">
-            <div className="bg-white rounded-3xl w-full max-w-5xl shadow-2xl flex flex-col my-auto">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4 sm:p-8 overflow-y-auto">
+            <div className="bg-white rounded-[2.5rem] w-full max-w-5xl shadow-2xl flex flex-col my-auto overflow-hidden">
 
                 {/* Modal Header */}
-                <div className="flex justify-between items-center p-6 border-b border-stone-100 bg-stone-50/50 rounded-t-3xl">
+                <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50/50">
                     <div>
-                        <h2 className="text-xl font-bold text-stone-800">Certificate Preview</h2>
-                        <p className="text-sm text-stone-500 font-medium">Download or print your official club certificate.</p>
+                        <h2 className="text-xl font-serif font-bold text-[#222222]">Certificate Preview</h2>
+                        <p className="text-sm text-[#666666] font-medium">Download or print your official club certificate.</p>
                     </div>
-                    <button onClick={onClose} className="w-10 h-10 bg-white border border-stone-200 rounded-full flex items-center justify-center text-stone-400 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-all shadow-sm">✕</button>
+                    <button onClick={onClose} className="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-all shadow-sm">✕</button>
                 </div>
 
                 {/* Certificate Area */}
-                <div className="p-8 overflow-x-auto flex justify-center bg-stone-200/50">
+                <div className="p-8 overflow-x-auto flex justify-center bg-[#FAFAFA]">
                     {isLoading ? (
                         <div className="py-32 flex flex-col items-center gap-4">
                             <div className="w-12 h-12 border-4 border-[#D64A26]/20 border-t-[#D64A26] rounded-full animate-spin"></div>
-                            <span className="text-stone-500 font-bold tracking-widest uppercase text-sm animate-pulse">Generating Certificate...</span>
+                            <span className="text-[#666666] font-bold tracking-widest uppercase text-sm animate-pulse">Generating Certificate...</span>
                         </div>
                     ) : !profile ? (
                         <div className="py-32 text-center text-rose-500 font-bold">Could not load profile data. Make sure you have a valid CRC-ID.</div>
@@ -140,14 +140,13 @@ export default function CertificateModal({ isOpen, onClose, user }: Props) {
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-6 border-t border-stone-100 bg-stone-50/50 rounded-b-3xl flex justify-end gap-4">
-                    <button onClick={onClose} className="px-6 py-3 font-bold text-stone-500 hover:text-stone-700 hover:bg-stone-200/50 rounded-xl transition-all">Cancel</button>
+                <div className="p-6 border-t border-slate-100 bg-slate-50/50 flex justify-end gap-4">
+                    <button onClick={onClose} className="px-6 py-3 font-bold text-slate-500 hover:text-[#666666] hover:bg-slate-200/50 rounded-xl transition-all">Cancel</button>
                     <button
                         onClick={handleDownloadPDF}
                         disabled={isDownloading || isLoading || !profile}
-                        className="relative overflow-hidden group/btn px-8 py-3 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="relative overflow-hidden group/btn px-8 py-3 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold tracking-widest uppercase text-xs rounded-xl shadow-md transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                         <span className="relative z-10 flex items-center gap-2">
                             {isDownloading ? (
                                 <><div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> Generating PDF...</>

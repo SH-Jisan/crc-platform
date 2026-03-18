@@ -56,7 +56,7 @@ export default function Gallery() {
     if (isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+                <div className="w-12 h-12 border-4 border-[#D64A26]/20 border-t-[#D64A26] rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -68,10 +68,10 @@ export default function Gallery() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 px-2">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-black text-stone-800 tracking-tight mb-2">
-                            Club <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Gallery</span>
+                        <h1 className="text-4xl md:text-5xl font-serif font-black text-[#222222] tracking-tight mb-2">
+                            Club <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Gallery</span>
                         </h1>
-                        <p className="text-sm sm:text-base text-stone-500 font-medium max-w-2xl">
+                        <p className="text-sm sm:text-base text-[#666666] font-medium max-w-2xl">
                             A collection of memories, events, and the smiles we've shared together.
                         </p>
                     </div>
@@ -79,10 +79,10 @@ export default function Gallery() {
                     {/* Upload Button */}
                     {user && (
                         <button
-                            className="px-6 py-3 bg-stone-800 text-white font-bold rounded-xl shadow-lg hover:bg-emerald-600 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 w-full md:w-auto"
+                            className="px-6 py-3 bg-[#222222] text-white font-bold rounded-xl shadow-lg hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 w-full md:w-auto overflow-hidden group"
                             onClick={() => setIsUploadModalOpen(true)}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                             </svg>
                             Add Photos
@@ -95,7 +95,7 @@ export default function Gallery() {
                     {allImages.map((item: any, index: number) => (
                         <div
                             key={item.id}
-                            className="relative group aspect-square cursor-pointer overflow-hidden bg-stone-100"
+                            className="relative group aspect-square cursor-pointer overflow-hidden bg-slate-100"
                             onClick={() => setLightboxIndex(index)}
                         >
                             <img
@@ -117,8 +117,8 @@ export default function Gallery() {
 
                 {/* Empty State */}
                 {allImages.length === 0 && (
-                    <div className="text-center py-20 bg-stone-50 rounded-3xl border border-dashed border-stone-200 mt-10 mx-2">
-                        <p className="text-stone-500 font-medium">No images have been uploaded yet.</p>
+                    <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200 mt-10 mx-2">
+                        <p className="text-slate-500 font-medium">No images have been uploaded yet.</p>
                     </div>
                 )}
 
@@ -128,7 +128,7 @@ export default function Gallery() {
                         <button
                             onClick={() => fetchNextPage()}
                             disabled={isFetchingNextPage}
-                            className="px-8 py-3 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl transition-colors disabled:opacity-50 flex items-center gap-2"
+                            className="px-8 py-3 bg-slate-100 hover:bg-[#FAFAFA] text-[#666666] font-bold rounded-xl transition-colors disabled:opacity-50 flex items-center gap-2"
                         >
                             {isFetchingNextPage ? 'Loading more...' : 'Load More Photos'}
                         </button>

@@ -78,7 +78,7 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                         <span className="text-xs font-bold text-[#D64A26] uppercase tracking-widest mb-1 block">
                             {donationType === 'CLUB' ? 'Support Our Club' : 'You are supporting'}
                         </span>
-                        <h2 className="text-xl font-bold text-slate-800 leading-tight line-clamp-2">{getTitle()}</h2>
+                        <h2 className="text-xl font-serif font-bold text-[#222222] leading-tight line-clamp-2">{getTitle()}</h2>
                     </div>
                     <button onClick={onClose} className="p-2 text-slate-400 hover:bg-orange-50 hover:text-[#D64A26] rounded-full transition-colors shrink-0">
                         ✕
@@ -87,7 +87,7 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
 
                 <form onSubmit={handleSubmit} className="p-6 space-y-6">
                     <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-3">Select or Enter Amount (৳)</label>
+                        <label className="block text-sm font-bold text-[#666666] mb-3">Select or Enter Amount (৳)</label>
                         <div className="grid grid-cols-4 gap-2 mb-3">
                             {presetAmounts.map((preset) => (
                                 <button
@@ -112,14 +112,14 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                                 min="10"
                                 value={amount}
                                 onChange={(e) => setAmount(e.target.value === '' ? '' : Number(e.target.value))}
-                                className="w-full pl-8 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26] outline-none transition-all font-bold text-slate-800 text-lg"
+                                className="w-full pl-8 pr-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#D64A26]/20 focus:border-[#D64A26] outline-none transition-all font-bold text-[#222222] text-lg bg-[#F4F4F4]/50 placeholder:text-slate-400"
                                 placeholder="Custom Amount"
                             />
                         </div>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-bold text-slate-700 mb-2">Payment Method</label>
+                        <label className="block text-sm font-bold text-[#666666] mb-2">Payment Method</label>
                         <div className="grid grid-cols-3 gap-2">
                             {['bKash', 'Nagad', 'Cash'].map((m) => (
                                 <button
@@ -128,7 +128,7 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                                     onClick={() => setMethod(m)}
                                     className={`py-2.5 rounded-xl text-sm font-bold border transition-all ${
                                         method === m
-                                            ? 'bg-slate-800 border-slate-800 text-white'
+                                            ? 'bg-[#222222] border-[#222222] text-white'
                                             : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
                                     }`}
                                 >
@@ -158,9 +158,8 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                         <button
                             type="submit"
                             disabled={mutation.isPending}
-                            className="relative overflow-hidden group/btn w-full py-4 bg-[#D64A26] hover:bg-[#b53d1e] text-white font-bold rounded-xl shadow-[0_4px_15px_rgba(214,74,38,0.3)] hover:shadow-[0_6px_20px_rgba(214,74,38,0.45)] transition-all flex justify-center items-center gap-2 disabled:opacity-70 text-lg"
+                            className="relative overflow-hidden group/btn w-full py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex justify-center items-center gap-2 disabled:opacity-70"
                         >
-                            <span className="absolute inset-0 w-full h-full -translate-x-full group-hover/btn:animate-[shine_1.5s_ease] bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"></span>
                             <span className="relative z-10 flex items-center justify-center gap-2">
                                 {mutation.isPending ? 'Processing...' : `Donate ৳${amount || '0'} Now`}
                             </span>

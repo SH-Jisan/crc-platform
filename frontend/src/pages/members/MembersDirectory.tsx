@@ -27,8 +27,8 @@ export default function MembersDirectory() {
     if (isLoading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-                <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
-                <p className="text-stone-500 font-bold animate-pulse">Loading amazing members...</p>
+                <div className="w-12 h-12 border-4 border-[#D64A26]/20 border-t-[#D64A26] rounded-full animate-spin"></div>
+                <p className="text-slate-500 font-bold animate-pulse">Loading amazing members...</p>
             </div>
         );
     }
@@ -59,15 +59,15 @@ export default function MembersDirectory() {
         ];
     }
     return (
-        <div className="min-h-screen bg-stone-50 pt-24 pb-20">
+        <div className="min-h-screen bg-[#FAFAFA] pt-24 pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header Section */}
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h1 className="text-4xl md:text-5xl font-black text-stone-800 tracking-tight mb-4">
-                        Meet Our <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-600">Dedicated Team</span>
+                    <h1 className="text-4xl md:text-5xl font-serif font-black text-[#222222] tracking-tight mb-4">
+                        Meet Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Dedicated Team</span>
                     </h1>
-                    <p className="text-lg text-stone-500 font-medium">
+                    <p className="text-lg text-[#666666] font-medium">
                         The passionate individuals working tirelessly behind the scenes to make a difference in the lives of street children.
                     </p>
                 </div>
@@ -78,10 +78,10 @@ export default function MembersDirectory() {
                         <div key={role} className="animate-fade-in-up">
                             {/* Role Title */}
                             <div className="flex items-center gap-4 mb-8">
-                                <h2 className="text-2xl font-black text-stone-800 uppercase tracking-widest">
+                                <h2 className="text-2xl font-serif font-black text-[#222222] uppercase tracking-widest">
                                     {formatRoleName(role)}
                                 </h2>
-                                <div className="h-px bg-stone-200 flex-1"></div>
+                                <div className="h-px bg-slate-200 flex-1"></div>
                             </div>
 
                             {/* Member Cards Grid */}
@@ -90,13 +90,13 @@ export default function MembersDirectory() {
                                     <Link
                                         to={`/member/${member.crc_id}`}
                                         key={member.id}
-                                        className="bg-white rounded-2xl p-6 shadow-sm border border-stone-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col items-center text-center"
+                                        className="bg-white rounded-2xl p-6 shadow-[0_2px_15px_rgba(0,0,0,0.02)] border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col items-center text-center"
                                     >
                                         {/* Avatar */}
-                                        <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-emerald-500 to-teal-500 mb-4 group-hover:scale-105 transition-transform duration-300">
+                                        <div className="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-[#D64A26] to-[#F1795D] mb-4 group-hover:scale-105 transition-transform duration-300">
                                             <div className="w-full h-full bg-white rounded-full p-1">
                                                 <img
-                                                    src={member.avatar_url || `https://ui-avatars.com/api/?name=${member.full_name}&background=10b981&color=fff`}
+                                                    src={member.avatar_url || `https://ui-avatars.com/api/?name=${member.full_name}&background=D64A26&color=fff`}
                                                     alt={member.full_name}
                                                     className="w-full h-full rounded-full object-cover"
                                                 />
@@ -104,14 +104,14 @@ export default function MembersDirectory() {
                                         </div>
 
                                         {/* Info */}
-                                        <h3 className="text-lg font-bold text-stone-800 group-hover:text-emerald-600 transition-colors line-clamp-1">
+                                        <h3 className="text-lg font-serif font-bold text-[#222222] group-hover:text-[#D64A26] transition-colors line-clamp-1">
                                             {member.full_name}
                                         </h3>
-                                        <p className="text-sm font-bold text-emerald-600/80 mb-2">{member.crc_id}</p>
+                                        <p className="text-sm font-bold text-[#D64A26]/80 mb-2">{member.crc_id}</p>
 
-                                        <div className="mt-auto w-full pt-4 border-t border-stone-100 space-y-1">
-                                            <p className="text-xs font-medium text-stone-500 line-clamp-1">{member.department || 'N/A'}</p>
-                                            <p className="text-xs font-medium text-stone-400">{member.session || 'Session: N/A'}</p>
+                                        <div className="mt-auto w-full pt-4 border-t border-slate-100 space-y-1">
+                                            <p className="text-xs font-medium text-[#666666] line-clamp-1">{member.department || 'N/A'}</p>
+                                            <p className="text-xs font-medium text-slate-400">{member.session || 'Session: N/A'}</p>
                                         </div>
                                     </Link>
                                 ))}
@@ -121,8 +121,8 @@ export default function MembersDirectory() {
 
                     {/* Empty State */}
                     {Object.keys(groupedMembers).length === 0 && (
-                        <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-stone-200">
-                            <p className="text-stone-500 font-medium">No active members found at the moment.</p>
+                        <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+                            <p className="text-[#666666] font-medium">No active members found at the moment.</p>
                         </div>
                     )}
                 </div>
