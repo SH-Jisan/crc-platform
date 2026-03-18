@@ -97,7 +97,7 @@ export default function SinglePost() {
                     </div>
 
                     <div className="px-6 md:px-8 pb-5">
-                        {post.title && <h2 className="text-3xl font-serif font-bold text-[#222222] mb-3 leading-snug">{post.title}</h2>}
+                        {post.title && <h2 className="text-3xl  font-bold text-[#222222] mb-3 leading-snug">{post.title}</h2>}
                         <p className="text-[#666666] leading-relaxed whitespace-pre-wrap text-[1.1rem]">{post.content}</p>
                     </div>
 

@@ -68,7 +68,7 @@ export default function Gallery() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 px-2">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-serif font-black text-[#222222] tracking-tight mb-2">
+                        <h1 className="text-4xl md:text-5xl  font-black text-[#222222] tracking-tight mb-2">
                             Club <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Gallery</span>
                         </h1>
                         <p className="text-sm sm:text-base text-[#666666] font-medium max-w-2xl">

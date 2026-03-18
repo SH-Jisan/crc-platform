@@ -105,7 +105,7 @@ export default function Login() {
                     {/* Branding */}
                     <CommunityLogo />
                     <div className="text-center mb-8">
-                        <h1 className="text-2xl md:text-3xl font-serif font-bold text-[#222222] tracking-tight">
+                        <h1 className="text-2xl md:text-3xl  font-bold text-[#222222] tracking-tight">
                             Member Portal
                         </h1>
                         <p className="mt-2 text-[#666666] font-medium text-sm">

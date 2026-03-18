@@ -19,7 +19,7 @@ export default function RecentActivities() {
         <div className="py-24 bg-[#F9F9F9] border-t border-slate-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col sm:flex-row justify-between items-end mb-12 border-b border-slate-200 pb-4">
-                    <h2 className="text-4xl font-serif font-bold text-[#222222]">Our Recent Activities</h2>
+                    <h2 className="text-4xl  font-bold text-[#222222]">Our Recent Activities</h2>
                     <Link to="/posts" className="text-[#D64A26] font-bold uppercase tracking-widest hover:text-[#b53d1e] text-sm mt-4 sm:mt-0">View Community &rarr;</Link>
                 </div>
 
@@ -34,14 +34,14 @@ export default function RecentActivities() {
                                     {firstImage ? (
                                         <img src={firstImage} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                     ) : (
-                                        <span className="text-white/20 font-serif text-5xl">CRC</span>
+                                        <span className="text-white/20  text-5xl">CRC</span>
                                     )}
                                 </div>
                                 <div className="p-6 flex-1 flex flex-col">
                                     <div className="text-xs font-bold text-[#D64A26] uppercase tracking-widest mb-3">
                                         {post.post_type.replace('_', ' ')}
                                     </div>
-                                    <h3 className="text-xl font-serif font-bold text-[#222222] mb-3 group-hover:text-[#D64A26] transition-colors line-clamp-2">
+                                    <h3 className="text-xl  font-bold text-[#222222] mb-3 group-hover:text-[#D64A26] transition-colors line-clamp-2">
                                         {post.title || 'Community Update'}
                                     </h3>
                                     <p className="text-[#666666] text-sm line-clamp-3 leading-relaxed flex-1">

@@ -78,7 +78,7 @@ export default function DonationModal({ isOpen, onClose, item, donationType }: D
                         <span className="text-xs font-bold text-[#D64A26] uppercase tracking-widest mb-1 block">
                             {donationType === 'CLUB' ? 'Support Our Club' : 'You are supporting'}
                         </span>
-                        <h2 className="text-xl font-serif font-bold text-[#222222] leading-tight line-clamp-2">{getTitle()}</h2>
+                        <h2 className="text-xl  font-bold text-[#222222] leading-tight line-clamp-2">{getTitle()}</h2>
                     </div>
                     <button onClick={onClose} className="p-2 text-slate-400 hover:bg-orange-50 hover:text-[#D64A26] rounded-full transition-colors shrink-0">
                         ✕

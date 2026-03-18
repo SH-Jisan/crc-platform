@@ -52,7 +52,7 @@ export default function CustomCauseDonation() {
                         <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-red-50 opacity-50"></div>
                         <div className="relative z-10 flex flex-col items-center h-full w-full">
                             <div className="w-20 h-20 bg-orange-100 text-[#D64A26] rounded-full flex items-center justify-center text-3xl mb-6 shadow-sm">🌱</div>
-                            <h2 className="text-2xl font-serif font-bold text-[#222222] mb-3">General Fund</h2>
+                            <h2 className="text-2xl  font-bold text-[#222222] mb-3">General Fund</h2>
                             <p className="text-[#666666] mb-8 flex-1">Support the day-to-day operations and ongoing long-term projects of Come for Road Child.</p>
                             <button onClick={handleClubDonation} className="relative overflow-hidden group/btn w-full py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center">
                                 <span className="relative z-10">Donate to Club</span>
@@ -75,7 +75,7 @@ export default function CustomCauseDonation() {
                                     <div className="absolute top-4 right-4 px-3 py-1 bg-red-100 text-[#D64A26] text-xs font-bold uppercase rounded-full tracking-wider animate-pulse">Emergency</div>
 
                                     <div className="relative z-10 flex flex-col h-full">
-                                        <h2 className="text-2xl font-serif font-bold text-[#222222] mb-3 pr-16">{cause.title}</h2>
+                                        <h2 className="text-2xl  font-bold text-[#222222] mb-3 pr-16">{cause.title}</h2>
                                         <p className="text-[#666666] mb-6 flex-1 line-clamp-3 leading-relaxed">{cause.description}</p>
 
                                         <div className="mt-auto">

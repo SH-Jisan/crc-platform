@@ -42,7 +42,7 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
                                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded bg-[#D64A26]/10 text-[#D64A26] text-xs font-bold uppercase tracking-widest mb-6 border border-[#D64A26]/20 w-fit">
                                     <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span> Urgent Appeal
                                 </div>
-                                <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#222222] mb-4 leading-tight">{cause.title}</h2>
+                                <h2 className="text-3xl md:text-4xl  font-bold text-[#222222] mb-4 leading-tight">{cause.title}</h2>
                                 <p className="text-[#666666] mb-8 leading-relaxed">{cause.description}</p>
 
                                 <div className="mb-8">

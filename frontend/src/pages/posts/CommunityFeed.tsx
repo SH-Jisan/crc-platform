@@ -92,7 +92,7 @@ export default function CommunityFeed() {
                             <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span>
                             Community Feed
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-[#222222] tracking-tight mb-4 md:mb-0">
+                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight mb-4 md:mb-0">
                             Stories & Updates
                         </h1>
                     </div>
@@ -141,7 +141,7 @@ export default function CommunityFeed() {
                                     </div>
 
                                     <div className="px-6 md:px-8 pb-5">
-                                        {post.title && <h2 className="text-xl font-serif font-bold text-[#222222] mb-2 leading-snug">{post.title}</h2>}
+                                        {post.title && <h2 className="text-xl  font-bold text-[#222222] mb-2 leading-snug">{post.title}</h2>}
                                         <p className="text-[#666666] leading-relaxed whitespace-pre-wrap text-[1rem]">{post.content}</p>
                                     </div>
 

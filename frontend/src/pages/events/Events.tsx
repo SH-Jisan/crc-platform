@@ -84,7 +84,7 @@ export default function Events() {
                             <HeartIcon />
                             <span>Make a Difference Today</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-[#222222] tracking-tight leading-[1.15]">
+                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight leading-[1.15]">
                             Community <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Initiatives</span>
                         </h1>
                         <p className="mt-5 text-lg text-[#666666]/90 leading-relaxed max-w-xl font-medium">
@@ -158,7 +158,7 @@ export default function Events() {
 
                                     {/* Event Details */}
                                     <div className="p-7 flex-1 flex flex-col z-10 bg-white">
-                                        <h2 className="text-xl font-serif font-bold text-[#222222] line-clamp-1 mb-3 group-hover:text-[#D64A26] transition-colors">{event.title}</h2>
+                                        <h2 className="text-xl  font-bold text-[#222222] line-clamp-1 mb-3 group-hover:text-[#D64A26] transition-colors">{event.title}</h2>
 
                                         <p className="text-[#666666]/90 text-sm leading-relaxed line-clamp-2 flex-1 mb-6">
                                             {event.description || "No description provided. Please join to learn more about this community event."}

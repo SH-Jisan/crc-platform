@@ -99,7 +99,7 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
         <div className="fixed inset-0 z-60 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
                 <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h2 className="text-xl font-serif font-bold text-[#222222]">Create New Post</h2>
+                    <h2 className="text-xl  font-bold text-[#222222]">Create New Post</h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-[#666666] transition-colors">✕</button>
                 </div>
 

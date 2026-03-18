@@ -105,7 +105,7 @@ export default function HeroSlider() {
                     <div className="absolute inset-0 flex items-center justify-center z-20 px-6 text-center">
                         {index === currentSlideIndex && (
                             <div key={`text-${currentSlideIndex}`} className="max-w-4xl">
-                                <h1 className="text-reveal-h1 text-5xl md:text-7xl font-serif text-white mb-6 leading-tight tracking-wide drop-shadow-lg">
+                                <h1 className="text-reveal-h1 text-5xl md:text-7xl font-normal text-white mb-6 leading-tight tracking-wide drop-shadow-lg">
                                     {slide.title}
                                 </h1>
                                 <p className="text-reveal-p text-xl md:text-2xl text-slate-200 mb-10 font-normal leading-relaxed max-w-2xl mx-auto drop-shadow-md">

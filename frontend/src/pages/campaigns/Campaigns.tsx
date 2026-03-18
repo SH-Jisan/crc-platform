@@ -33,7 +33,7 @@ export default function Campaigns() {
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative">
                     <div className="relative z-10 max-w-2xl">
-                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-[#222222] tracking-tight leading-[1.15]">
+                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight leading-[1.15]">
                             Active <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D64A26] to-[#F1795D]">Campaigns</span>
                         </h1>
                         <p className="mt-5 text-lg text-[#666666] leading-relaxed max-w-xl font-medium">Your small contribution can bring a big smile.</p>
@@ -91,7 +91,7 @@ export default function Campaigns() {
                                     </div>
 
                                     <div className="p-7 flex-1 flex flex-col bg-white">
-                                        <h2 className="text-xl font-serif font-bold text-[#222222] line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
+                                        <h2 className="text-xl  font-bold text-[#222222] line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
                                         <p className="text-[#666666] text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
                                             {campaign.description}
                                         </p>

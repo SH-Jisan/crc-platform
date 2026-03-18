@@ -84,7 +84,7 @@ export default function Signup() {
                 <div className="w-full max-w-2xl bg-white/95 backdrop-blur-sm p-8 sm:p-10 rounded-2xl shadow-md border border-slate-100">
 
                     <div className="mb-8 border-b border-slate-100 pb-6 text-center lg:text-left">
-                        <h2 className="text-2xl font-serif font-bold text-[#222222] tracking-tight">Membership Application</h2>
+                        <h2 className="text-2xl  font-bold text-[#222222] tracking-tight">Membership Application</h2>
                         <p className="text-[#666666] mt-2 text-sm font-medium">Please provide accurate academic and personal details. All applications are subject to admin review.</p>
                     </div>
 

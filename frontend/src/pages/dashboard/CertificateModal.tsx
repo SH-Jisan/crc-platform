@@ -55,7 +55,7 @@ export default function CertificateModal({ isOpen, onClose, user }: Props) {
                 {/* Modal Header */}
                 <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50/50">
                     <div>
-                        <h2 className="text-xl font-serif font-bold text-[#222222]">Certificate Preview</h2>
+                        <h2 className="text-xl  font-bold text-[#222222]">Certificate Preview</h2>
                         <p className="text-sm text-[#666666] font-medium">Download or print your official club certificate.</p>
                     </div>
                     <button onClick={onClose} className="w-10 h-10 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-all shadow-sm">✕</button>

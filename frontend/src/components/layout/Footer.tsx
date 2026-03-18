@@ -27,7 +27,7 @@ export default function Footer() {
                             <div className="w-10 h-10 bg-[#D64A26] rounded-sm flex items-center justify-center text-white font-bold text-sm">
                                 CR
                             </div>
-                            <h3 className="text-2xl font-serif font-bold text-white tracking-wide">
+                            <h3 className="text-2xl  font-bold text-white tracking-wide">
                                 Come for Road Child
                             </h3>
                         </div>
@@ -55,7 +55,7 @@ export default function Footer() {
 
                     {/* Quick Links */}
                     <div className="md:col-span-3 lg:pl-8">
-                        <h4 className="text-white font-bold font-serif text-2xl mb-6 relative inline-block">
+                        <h4 className="text-white font-bold  text-2xl mb-6 relative inline-block">
                             Platform
                             <span className="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-[#D64A26]"></span>
                         </h4>
@@ -69,7 +69,7 @@ export default function Footer() {
 
                     {/* Contact Info */}
                     <div className="md:col-span-4 lg:pl-4">
-                        <h4 className="text-white font-bold font-serif text-2xl mb-6 relative inline-block">
+                        <h4 className="text-white font-bold  text-2xl mb-6 relative inline-block">
                             Get in Touch
                             <span className="absolute -bottom-2 left-0 w-1/2 h-0.5 bg-[#D64A26]"></span>
                         </h4>

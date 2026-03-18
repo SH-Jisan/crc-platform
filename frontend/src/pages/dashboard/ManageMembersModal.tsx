@@ -86,7 +86,7 @@ export default function ManageMembersModal({ isOpen, onClose }: Props) {
                 <div className="p-6 border-b border-slate-100 bg-slate-50/50">
                     <div className="flex justify-between items-start mb-6">
                         <div>
-                            <h2 className="text-2xl font-serif font-extrabold text-[#222222] tracking-tight">User Management</h2>
+                            <h2 className="text-2xl  font-extrabold text-[#222222] tracking-tight">User Management</h2>
                             <p className="text-sm text-[#666666] font-medium mt-1">Manage pending requests and update existing members.</p>
                         </div>
                         <button onClick={onClose} className="text-slate-400 hover:text-[#666666] bg-white shadow-sm border border-slate-100 w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-50 transition-all">✕</button>

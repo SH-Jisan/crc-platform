@@ -50,7 +50,7 @@ export default function CreateCampaignModal({ isOpen, onClose }: CreateCampaignM
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl w-full max-w-lg shadow-xl overflow-hidden">
                 <div className="flex justify-between items-center p-6 border-b border-slate-100">
-                    <h2 className="text-xl font-serif font-bold text-[#222222]">Create New Campaign</h2>
+                    <h2 className="text-xl  font-bold text-[#222222]">Create New Campaign</h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-rose-500 transition-colors">✕</button>
                 </div>
 

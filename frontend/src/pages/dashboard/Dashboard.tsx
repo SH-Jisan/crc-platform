@@ -68,7 +68,7 @@ export default function Dashboard() {
                             <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span>
                             <span>Dashboard Overview</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-serif font-extrabold text-[#222222] tracking-tight leading-[1.15]">
+                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight leading-[1.15]">
                             Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">{user?.full_name?.split(' ')[0] || 'Member'}</span>
                         </h1>
                         <p className="mt-4 text-lg text-[#666666] font-medium">
@@ -98,7 +98,7 @@ export default function Dashboard() {
                             </div>
 
                             <div className="text-center sm:text-left flex flex-col justify-center h-full">
-                                <h2 className="text-3xl font-serif font-extrabold text-[#222222] mb-1">
+                                <h2 className="text-3xl  font-extrabold text-[#222222] mb-1">
                                     {user?.full_name || 'Anonymous User'}
                                 </h2>
                                 <p className="text-[#666666] text-lg font-medium mb-6">{user?.email}</p>
@@ -164,7 +164,7 @@ export default function Dashboard() {
                                     <div className="p-2.5 bg-white/10 rounded-xl text-amber-400 shadow-[0_4px_15px_rgb(0,0,0,0.2)]">
                                         <CrownIcon />
                                     </div>
-                                    <h3 className="text-2xl font-serif font-bold text-white tracking-tight">Admin Privileges</h3>
+                                    <h3 className="text-2xl  font-bold text-white tracking-tight">Admin Privileges</h3>
                                 </div>
                                 <p className="text-white/70 text-[1.05rem] font-medium leading-relaxed">
                                     Since you have ADMIN privileges, you have complete access to specialized management tools for users and platform logs.

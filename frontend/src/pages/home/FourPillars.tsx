@@ -14,26 +14,26 @@ export default function FourPillars() {
                     {/* 🌟 Added hover:-translate-y-1 hover:shadow-xl for a floating effect */}
                     <div className="flex flex-col p-8 rounded-2xl border border-slate-100 bg-white transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#D64A26]/40 group">
                         <div className="w-14 h-14 bg-[#F9F9F9] text-[#D64A26] group-hover:bg-[#D64A26] group-hover:text-white rounded-xl flex items-center justify-center mb-6 transition-colors duration-300"><MissionIcon /></div>
-                        <h3 className="text-xl font-serif font-bold text-[#222222] mb-3">Our Mission</h3>
+                        <h3 className="text-xl  font-bold text-[#222222] mb-3">Our Mission</h3>
                         <p className="text-[#666666] text-sm mb-6 leading-relaxed flex-1">Dedicated to rescuing, rehabilitating, and educating street children for a better tomorrow.</p>
                         <Link to="/about" className="text-[#D64A26] font-bold text-sm uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">Learn more &rarr;</Link>
                     </div>
                     {/* Repeat similar classes for other pillars */}
                     <div className="flex flex-col p-8 rounded-2xl border border-slate-100 bg-white transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#D64A26]/40 group">
                         <div className="w-14 h-14 bg-[#F9F9F9] text-[#D64A26] group-hover:bg-[#D64A26] group-hover:text-white rounded-xl flex items-center justify-center mb-6 transition-colors duration-300"><EventsIcon /></div>
-                        <h3 className="text-xl font-serif font-bold text-[#222222] mb-3">Events</h3>
+                        <h3 className="text-xl  font-bold text-[#222222] mb-3">Events</h3>
                         <p className="text-[#666666] text-sm mb-6 leading-relaxed flex-1">Join our upcoming campaigns, charity dinners, and volunteer briefings to make an impact.</p>
                         <Link to="/events" className="text-[#D64A26] font-bold text-sm uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">View events &rarr;</Link>
                     </div>
                     <div className="flex flex-col p-8 rounded-2xl border border-slate-100 bg-white transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#D64A26]/40 group">
                         <div className="w-14 h-14 bg-[#F9F9F9] text-[#D64A26] group-hover:bg-[#D64A26] group-hover:text-white rounded-xl flex items-center justify-center mb-6 transition-colors duration-300"><SupportIcon /></div>
-                        <h3 className="text-xl font-serif font-bold text-[#222222] mb-3">Support</h3>
+                        <h3 className="text-xl  font-bold text-[#222222] mb-3">Support</h3>
                         <p className="text-[#666666] text-sm mb-6 leading-relaxed flex-1">Your generous donations provide food, shelter, and educational materials for the underprivileged.</p>
                         <button onClick={() => document.getElementById('causes-section')?.scrollIntoView()} className="text-[#D64A26] font-bold text-sm uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all text-left">Donate now &rarr;</button>
                     </div>
                     <div className="flex flex-col p-8 rounded-2xl border border-slate-100 bg-white transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-[#D64A26]/40 group">
                         <div className="w-14 h-14 bg-[#F9F9F9] text-[#D64A26] group-hover:bg-[#D64A26] group-hover:text-white rounded-xl flex items-center justify-center mb-6 transition-colors duration-300"><VolunteerIcon /></div>
-                        <h3 className="text-xl font-serif font-bold text-[#222222] mb-3">Volunteer</h3>
+                        <h3 className="text-xl  font-bold text-[#222222] mb-3">Volunteer</h3>
                         <p className="text-[#666666] text-sm mb-6 leading-relaxed flex-1">Become a part of our university chapter and actively participate in field work.</p>
                         <Link to="/login" className="text-[#D64A26] font-bold text-sm uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">Join us &rarr;</Link>
                     </div>

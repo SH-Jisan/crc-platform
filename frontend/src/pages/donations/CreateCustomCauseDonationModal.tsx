@@ -44,7 +44,7 @@ export default function CreateCustomCauseDonationModal({ isOpen, onClose }: Prop
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
             <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
                 <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-                    <h2 className="text-xl font-serif font-bold text-[#222222]">Create Emergency Fund</h2>
+                    <h2 className="text-xl  font-bold text-[#222222]">Create Emergency Fund</h2>
                     <button onClick={onClose} className="text-slate-400 hover:text-slate-600 transition-colors">✕</button>
                 </div>
 

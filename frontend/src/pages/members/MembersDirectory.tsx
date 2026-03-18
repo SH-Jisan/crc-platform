@@ -64,7 +64,7 @@ export default function MembersDirectory() {
 
                 {/* Header Section */}
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h1 className="text-4xl md:text-5xl font-serif font-black text-[#222222] tracking-tight mb-4">
+                    <h1 className="text-4xl md:text-5xl  font-black text-[#222222] tracking-tight mb-4">
                         Meet Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Dedicated Team</span>
                     </h1>
                     <p className="text-lg text-[#666666] font-medium">
@@ -78,7 +78,7 @@ export default function MembersDirectory() {
                         <div key={role} className="animate-fade-in-up">
                             {/* Role Title */}
                             <div className="flex items-center gap-4 mb-8">
-                                <h2 className="text-2xl font-serif font-black text-[#222222] uppercase tracking-widest">
+                                <h2 className="text-2xl  font-black text-[#222222] uppercase tracking-widest">
                                     {formatRoleName(role)}
                                 </h2>
                                 <div className="h-px bg-slate-200 flex-1"></div>
@@ -104,7 +104,7 @@ export default function MembersDirectory() {
                                         </div>
 
                                         {/* Info */}
-                                        <h3 className="text-lg font-serif font-bold text-[#222222] group-hover:text-[#D64A26] transition-colors line-clamp-1">
+                                        <h3 className="text-lg  font-bold text-[#222222] group-hover:text-[#D64A26] transition-colors line-clamp-1">
                                             {member.full_name}
                                         </h3>
                                         <p className="text-sm font-bold text-[#D64A26]/80 mb-2">{member.crc_id}</p>
