@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, UseGuards, Query, NotFoundException, Header } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, UseGuards, Query, NotFoundException, Header, Req } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -6,12 +6,19 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { GetUser } from '../common/decorators/get-user.decorator';
 import { Public } from '../common/decorators/public.decorator';
-
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
 @Controller('posts')
 export class PostsController {
     constructor(private readonly postsService: PostsService) {}
+
+    private getClientIp(req: any): string {
+        const forwarded = req.headers['x-forwarded-for'];
+        if (typeof forwarded === 'string' && forwarded.length > 0) {
+            return forwarded.split(',')[0].trim();
+        }
+        return req.ip || req.socket?.remoteAddress || '127.0.0.1';
+    }
 
     @Post()
     @UseGuards(AuthGuard, RolesGuard)
@@ -22,15 +29,16 @@ export class PostsController {
 
     @Public()
     @Get()
-    findAll(@Query() paginationQuery: PaginationQueryDto) {
+    findAll(@Query() paginationQuery: PaginationQueryDto, @Req() req: any) {
         const { page, limit } = paginationQuery;
-        return this.postsService.findAll(page, limit);
+        const clientIp = this.getClientIp(req);
+        return this.postsService.findAll(page, limit, clientIp);
     }
 
     // 🌟 MAGIC SHARE LINK API (Pure NestJS Way - Crash Free)
     @Public()
     @Get(':id/share')
-    @Header('Content-Type', 'text/html') // 🌟 NestJS কে বলে দিচ্ছি যে আমরা HTML পাঠাবো
+    @Header('Content-Type', 'text/html')
     async getShareableLink(@Param('id') id: string, @Query('redirect') redirectUrl: string) {
         try {
             const post = await this.postsService.findOne(id);
@@ -42,7 +50,6 @@ export class PostsController {
             const title = post.title || 'CRC Community Update';
             const description = post.content.substring(0, 150) + '...';
 
-            // 🌟 সরাসরি HTML স্ট্রিং রিটার্ন করছি
             return `
             <!DOCTYPE html>
             <html lang="en">
@@ -73,20 +80,21 @@ export class PostsController {
             </html>
             `;
         } catch (error) {
-            // 🌟 পোস্ট না পেলে 404 এরর থ্রো করবে
             throw new NotFoundException('Post not found');
         }
     }
 
     @Public()
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.postsService.findOne(id);
+    findOne(@Param('id') id: string, @Req() req: any) {
+        const clientIp = this.getClientIp(req);
+        return this.postsService.findOne(id, clientIp);
     }
 
     @Public()
     @Patch(':id/like')
-    likePost(@Param('id') id: string) {
-        return this.postsService.incrementLike(id);
+    likePost(@Param('id') id: string, @Req() req: any) {
+        const clientIp = this.getClientIp(req);
+        return this.postsService.toggleLike(id, clientIp);
     }
 }

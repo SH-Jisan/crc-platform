@@ -27,43 +27,48 @@ export default function FeaturedCause({ onDonate }: { onDonate: (cause: any) => 
                     const progressPercentage = goal > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
                     return (
-                        <div key={cause.id} className="flex flex-col lg:flex-row bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-100 overflow-hidden transform transition-all duration-300 hover:shadow-2xl group">
+                        <div key={cause.id} className="flex flex-col lg:flex-row bg-white rounded-[2.5rem] shadow-xl border border-slate-100/80 overflow-hidden transform transition-all duration-300 hover:shadow-2xl hover:border-orange-200/80 group">
                             <div className="w-full lg:w-1/2 overflow-hidden relative group/image">
                                 <div className="w-full h-full relative">
-                                    {/* Image Sweep Effect */}
                                     <img
                                         src={cause.image_url || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop"}
                                         alt="Featured Cause"
-                                        className="w-full h-full min-h-87.5 object-cover transform transition-transform duration-700 group-hover/image:scale-105"
+                                        className="w-full h-full min-h-[22rem] object-cover transform transition-transform duration-700 group-hover/image:scale-105"
                                     />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
                                 </div>
                             </div>
                             <div className="w-full lg:w-1/2 p-10 md:p-14 flex flex-col justify-center">
-                                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-[#D64A26]/10 text-[#D64A26] text-xs font-bold uppercase tracking-widest mb-6 border border-[#D64A26]/20 w-fit">
-                                    <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span> Urgent Appeal
+                                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-[#D64A26] text-xs font-extrabold uppercase tracking-widest mb-6 border border-orange-200/60 w-fit shadow-sm">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-[#D64A26] animate-ping"></span> Urgent Appeal
                                 </div>
-                                <h2 className="text-3xl md:text-4xl  font-bold text-[#222222] mb-4 leading-tight">{cause.title}</h2>
-                                <p className="text-[#666666] mb-8 leading-relaxed">{cause.description}</p>
+                                <h2 className="text-3xl md:text-4xl font-extrabold text-[#0F172A] mb-4 leading-tight tracking-tight group-hover:text-[#D64A26] transition-colors">{cause.title}</h2>
+                                <p className="text-slate-600 mb-8 leading-relaxed font-medium">{cause.description}</p>
 
-                                <div className="mb-8">
+                                <div className="mb-8 p-6 bg-slate-50/80 rounded-2xl border border-slate-100">
                                     <div className="flex justify-between items-end mb-3">
-                                        <span className="text-3xl font-bold text-[#222222]">৳{raised.toLocaleString()}</span>
-                                        <span className="text-sm font-bold text-[#666666] uppercase tracking-wider">raised of ৳{goal.toLocaleString()}</span>
+                                        <div>
+                                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Total Raised</span>
+                                            <span className="text-3xl font-extrabold text-[#D64A26]">৳{raised.toLocaleString()}</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Target Goal</span>
+                                            <span className="text-base font-extrabold text-slate-700">৳{goal.toLocaleString()}</span>
+                                        </div>
                                     </div>
-                                    <div className="w-full bg-[#F4F4F4] rounded-full h-2 overflow-hidden">
-                                        <div className="bg-gradient-to-r from-[#D64A26] to-[#F1795D] h-2 rounded-full transition-all duration-1000 shadow-[0_0_10px_rgba(214,74,38,0.5)]" style={{ width: `${progressPercentage}%` }}></div>
+                                    <div className="w-full bg-slate-200/80 rounded-full h-3 overflow-hidden p-0.5">
+                                        <div className="bg-gradient-to-r from-[#D64A26] via-[#F1633E] to-[#FA8C6E] h-2 rounded-full transition-all duration-1000 shadow-md shadow-orange-500/50 relative" style={{ width: `${progressPercentage}%` }}></div>
+                                    </div>
+                                    <div className="mt-2 text-right">
+                                        <span className="text-xs font-black text-[#D64A26]">{progressPercentage}% Funded</span>
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={() => onDonate(cause)}
-                                    className="relative overflow-hidden group/btn w-full sm:w-fit px-8 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-1 flex items-center justify-center gap-2"
+                                    className="relative overflow-hidden group/btn w-full sm:w-fit px-8 py-4 bg-gradient-to-r from-[#D64A26] via-[#F1633E] to-[#FA8C6E] hover:shadow-xl hover:shadow-orange-500/30 text-white font-extrabold uppercase tracking-widest rounded-2xl transition-all duration-300 shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2.5 cursor-pointer text-sm"
                                 >
-                                    {/* Button Shine Effect */}
-                                    
-                                    <span className="relative z-10 flex items-center gap-2">
-                                        <HeartIcon /> Donate to this cause
-                                    </span>
+                                    <HeartIcon /> Donate to this cause
                                 </button>
                             </div>
                         </div>

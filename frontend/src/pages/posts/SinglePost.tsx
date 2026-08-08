@@ -113,9 +113,14 @@ export default function SinglePost() {
                     <div className="px-4 md:px-6 py-4 border-t border-slate-50 flex items-center justify-between">
                         <button
                             onClick={() => likeMutation.mutate(post.id)}
-                            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[#666666] hover:text-[#D64A26] hover:bg-orange-50 font-semibold transition-all group lg:text-lg"
+                            disabled={likeMutation.isPending}
+                            className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold transition-all group cursor-pointer lg:text-lg ${
+                                post.has_liked
+                                    ? 'bg-orange-100 text-[#D64A26] border border-orange-200/80 shadow-sm'
+                                    : 'text-[#666666] hover:text-[#D64A26] hover:bg-orange-50'
+                            }`}
                         >
-                            <div className="transition-transform group-hover:-translate-y-0.5"><ClapIcon /></div>
+                            <div className={`transition-transform group-hover:-translate-y-0.5 ${post.has_liked ? 'scale-110' : ''}`}><ClapIcon /></div>
                             <span>{post.likes_count || 0} Applauds</span>
                         </button>
 

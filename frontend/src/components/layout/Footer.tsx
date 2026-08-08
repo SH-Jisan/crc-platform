@@ -13,21 +13,21 @@ const InstagramIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" width="20" 
 
 export default function Footer() {
     return (
-        <footer className="bg-[#222222] text-[#F9F9F9] py-20 relative overflow-hidden">
+        <footer className="bg-[#0B0F17] text-[#F9F9F9] py-20 relative overflow-hidden border-t border-slate-800/80">
             {/* Background Blob Elements for premium feel */}
-            <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#D64A26]/5 rounded-full blur-[100px] pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
-            <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-[#D64A26]/5 rounded-full blur-[80px] pointer-events-none translate-y-1/2 -translate-x-1/3"></div>
+            <div className="absolute top-0 right-0 w-[40rem] h-[40rem] bg-[#D64A26]/10 rounded-full blur-[120px] pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+            <div className="absolute bottom-0 left-0 w-[30rem] h-[30rem] bg-[#F1633E]/10 rounded-full blur-[100px] pointer-events-none translate-y-1/2 -translate-x-1/3"></div>
 
             <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 border-b border-white/10 pb-16">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 border-b border-slate-800/80 pb-16">
 
                     {/* About Section */}
                     <div className="md:col-span-5">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-10 bg-[#D64A26] rounded-sm flex items-center justify-center text-white font-bold text-sm">
-                                CR
+                        <div className="flex items-center gap-3.5 mb-6">
+                            <div className="w-10 h-10 bg-gradient-to-r from-[#D64A26] to-[#F1795D] rounded-xl flex items-center justify-center text-white font-extrabold text-sm shadow-md shadow-orange-500/20">
+                                CRC
                             </div>
-                            <h3 className="text-2xl  font-bold text-white tracking-wide">
+                            <h3 className="text-2xl font-extrabold text-white tracking-tight">
                                 Come for Road Child
                             </h3>
                         </div>

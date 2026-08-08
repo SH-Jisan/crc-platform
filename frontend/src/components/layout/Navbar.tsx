@@ -56,8 +56,8 @@ export default function Navbar() {
         <nav
             className={`sticky top-0 z-50 w-full transition-all duration-300 ${
                 isScrolled
-                    ? 'bg-white/95 backdrop-blur-md border-b border-slate-100 py-2 shadow-md'
-                    : 'bg-transparent py-3'
+                    ? 'bg-white/85 backdrop-blur-xl border-b border-slate-200/60 py-2.5 shadow-sm'
+                    : 'bg-white/60 backdrop-blur-md py-3.5 border-b border-slate-100/50'
             }`}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -65,50 +65,52 @@ export default function Navbar() {
 
                     {/* Logo / Brand Name */}
                     <div
-                        className="flex-shrink-0 flex items-center gap-3 cursor-pointer group"
+                        className="flex-shrink-0 flex items-center gap-3.5 cursor-pointer group"
                         onClick={() => navigate('/')}
                     >
-                        <img 
-                            src={crcLogo} 
-                            alt="CRC Logo" 
-                            className="w-10 h-10 md:w-11 md:h-11 object-contain group-hover:scale-105 transition-transform duration-300"
-                        />
+                        <div className="relative">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#D64A26] to-[#F1795D] rounded-full blur opacity-0 group-hover:opacity-40 transition duration-500"></div>
+                            <img 
+                                src={crcLogo} 
+                                alt="CRC Logo" 
+                                className="relative w-10 h-10 md:w-11 md:h-11 object-contain group-hover:scale-105 transition-transform duration-300"
+                            />
+                        </div>
                         <div className="hidden sm:flex flex-col">
-                            <span className="font-black text-lg md:text-xl text-[#222222] tracking-tight leading-tight">
+                            <span className="font-extrabold text-lg md:text-xl text-[#0F172A] tracking-tight leading-tight group-hover:text-[#D64A26] transition-colors">
                                 Come for Road Child
                             </span>
+                            <span className="text-[10px] font-bold tracking-widest text-[#D64A26] uppercase">University Chapter</span>
                         </div>
                     </div>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden lg:flex items-center bg-slate-50/50 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-slate-200/30">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`relative px-4 py-2 text-[15px] font-bold transition-all duration-300 group overflow-hidden rounded-xl ${
-                                    isActive(link.path)
-                                        ? 'bg-white text-[#D64A26] shadow-sm border border-slate-100'
-                                        : 'text-[#666666] hover:text-[#D64A26] hover:bg-white/40'
-                                }`}
-                            >
-                                {link.name}
-                                {/* Animated underline effect */}
-                                {!isActive(link.path) && (
-                                    <span className="absolute bottom-1.5 left-4 right-4 h-0.5 bg-[#D64A26] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full opacity-50"></span>
-                                )}
-                            </Link>
-                        ))}
+                    <div className="hidden lg:flex items-center bg-slate-100/80 backdrop-blur-md px-2 py-1.5 rounded-2xl border border-slate-200/50 shadow-inner">
+                        {navLinks.map((link) => {
+                            const active = isActive(link.path);
+                            return (
+                                <Link
+                                    key={link.name}
+                                    to={link.path}
+                                    className={`relative px-4 py-2 text-[14px] font-bold transition-all duration-300 rounded-xl flex items-center gap-1.5 ${
+                                        active
+                                            ? 'bg-white text-[#D64A26] shadow-sm border border-slate-200/60'
+                                            : 'text-slate-600 hover:text-[#D64A26] hover:bg-white/50'
+                                    }`}
+                                >
+                                    {active && <span className="w-1.5 h-1.5 rounded-full bg-[#D64A26] animate-pulse"></span>}
+                                    {link.name}
+                                </Link>
+                            );
+                        })}
                     </div>
 
                     {/* Right Side Actions */}
-                    <div className="hidden lg:flex items-center gap-5">
+                    <div className="hidden lg:flex items-center gap-4">
                         <Link
                             to="/donations"
-                            className="relative overflow-hidden group px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="relative overflow-hidden group px-6 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white bg-gradient-to-r from-[#D64A26] via-[#F1633E] to-[#FA8C6E] hover:shadow-lg hover:shadow-orange-500/25 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 rounded-xl"
                         >
-                            {/* Button Shine Effect */}
-                            
                             <HeartIcon />
                             <span className="relative z-10">Support a Cause</span>
                         </Link>
@@ -119,8 +121,8 @@ export default function Navbar() {
                             <div className="flex items-center gap-2">
                                 <Link
                                     to="/dashboard"
-                                    className={`p-2 rounded-xl border border-slate-200/60 hover:bg-slate-50 transition-all ${
-                                        isActive('/dashboard') ? 'bg-slate-100 text-[#D64A26]' : 'text-[#666666]'
+                                    className={`p-2.5 rounded-xl border border-slate-200/60 hover:bg-slate-50 transition-all ${
+                                        isActive('/dashboard') ? 'bg-orange-50 text-[#D64A26] border-orange-200/60' : 'text-slate-600'
                                     }`}
                                     title="Dashboard"
                                 >
@@ -128,7 +130,7 @@ export default function Navbar() {
                                 </Link>
                                 <button
                                     onClick={handleLogout}
-                                    className="px-4 py-2 text-xs font-bold text-red-500 bg-red-50 hover:bg-red-500 hover:text-white rounded-xl border border-red-100/50 transition-all duration-300"
+                                    className="px-4 py-2 text-xs font-bold text-red-500 bg-red-50 hover:bg-red-500 hover:text-white rounded-xl border border-red-100/60 transition-all duration-300"
                                 >
                                     LOGOUT
                                 </button>
@@ -136,7 +138,7 @@ export default function Navbar() {
                         ) : (
                             <Link
                                 to="/login"
-                                className="px-6 py-2.5 text-xs font-black uppercase tracking-widest text-[#D64A26] bg-orange-50 hover:bg-[#D64A26] hover:text-white rounded-xl border border-orange-100/50 transition-all duration-300"
+                                className="px-6 py-2.5 text-xs font-extrabold uppercase tracking-widest text-[#D64A26] bg-orange-50/80 hover:bg-[#D64A26] hover:text-white rounded-xl border border-orange-200/60 transition-all duration-300"
                             >
                                 SIGN IN
                             </Link>

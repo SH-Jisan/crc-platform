@@ -43,12 +43,12 @@ export class PostsService {
     });
   }
 
-  async findAll(page: number = 1, limit: number = 10) {
+  async findAll(page: number = 1, limit: number = 10, clientIp?: string) {
     const safeLimit = Math.min(Math.max(1, Number(limit) || 10), 100);
     const safePage = Math.max(1, Number(page) || 1);
     const skip = (safePage - 1) * safeLimit;
 
-    const [data, total] = await Promise.all([
+    const [posts, total] = await Promise.all([
       this.prisma.post.findMany({
         skip,
         take: safeLimit,
@@ -59,14 +59,25 @@ export class PostsService {
               full_name: true,
               avatar_url: true,
             }
-          }
+          },
+          likes: clientIp ? {
+            where: { ip_address: clientIp }
+          } : false
         }
       }),
       this.prisma.post.count(),
     ]);
 
+    const formattedData = posts.map(post => {
+      const { likes, ...rest } = post as any;
+      return {
+        ...rest,
+        has_liked: Array.isArray(likes) && likes.length > 0,
+      };
+    });
+
     return {
-      data,
+      data: formattedData,
       meta: {
         total,
         page: safePage,
@@ -75,8 +86,9 @@ export class PostsService {
       }
     };
   }
+
   // 🌟 সিঙ্গেল পোস্ট খোঁজার ফাংশন
-  async findOne(id: string) {
+  async findOne(id: string, clientIp?: string) {
     const post = await this.prisma.post.findUnique({
       where: { id },
       include: {
@@ -85,21 +97,75 @@ export class PostsService {
             full_name: true,
             avatar_url: true,
           }
-        }
+        },
+        likes: clientIp ? {
+          where: { ip_address: clientIp }
+        } : false
       }
     });
 
     if (!post) throw new NotFoundException('Post not found');
-    return post;
+
+    const { likes, ...rest } = post as any;
+    return {
+      ...rest,
+      has_liked: Array.isArray(likes) && likes.length > 0,
+    };
   }
 
-  async incrementLike(id: string) {
+  // 🌟 IP-based Toggle Like Logic (1 IP can only like once until unliked/disliked)
+  async toggleLike(id: string, ipAddress: string) {
     const post = await this.prisma.post.findUnique({ where: { id } });
     if (!post) throw new NotFoundException('Post not found');
 
-    return this.prisma.post.update({
-      where: { id },
-      data: { likes_count: { increment: 1 } }
+    const existingLike = await this.prisma.postLike.findUnique({
+      where: {
+        post_id_ip_address: {
+          post_id: id,
+          ip_address: ipAddress,
+        },
+      },
     });
+
+    if (existingLike) {
+      // 🌟 Already liked by this IP -> Dislike (Unlike)
+      await this.prisma.$transaction([
+        this.prisma.postLike.delete({
+          where: { id: existingLike.id },
+        }),
+        this.prisma.post.update({
+          where: { id },
+          data: { likes_count: { decrement: 1 } },
+        }),
+      ]);
+
+      const updatedPost = await this.prisma.post.findUnique({ where: { id } });
+      const currentLikes = Math.max(0, updatedPost?.likes_count || 0);
+
+      return {
+        liked: false,
+        likes_count: currentLikes,
+      };
+    } else {
+      // 🌟 Not liked by this IP -> Like
+      await this.prisma.$transaction([
+        this.prisma.postLike.create({
+          data: {
+            post_id: id,
+            ip_address: ipAddress,
+          },
+        }),
+        this.prisma.post.update({
+          where: { id },
+          data: { likes_count: { increment: 1 } },
+        }),
+      ]);
+
+      const updatedPost = await this.prisma.post.findUnique({ where: { id } });
+      return {
+        liked: true,
+        likes_count: updatedPost?.likes_count || 0,
+      };
+    }
   }
 }

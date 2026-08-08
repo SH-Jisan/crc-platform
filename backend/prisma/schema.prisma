@@ -218,6 +218,21 @@ model Post {
 
   author_id String  @db.Uuid
   author    Profile @relation(fields: [author_id], references: [id])
+
+  likes PostLike[]
+}
+
+model PostLike {
+  id         String   @id @default(uuid()) @db.Uuid
+  post_id    String   @db.Uuid
+  ip_address String
+  created_at DateTime @default(now())
+
+  post Post @relation(fields: [post_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, ip_address])
+  @@index([post_id])
+  @@index([ip_address])
 }
 
 model Announcement {
