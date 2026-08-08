@@ -54,8 +54,9 @@ export default function CommunityFeed() {
         // ফ্রন্টএন্ডের আসল লিংক
         const frontendPostUrl = `${window.location.origin}/post/${post.id}`;
 
-        // ব্যাকএন্ডের API Base URL বের করা
-        const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+        const rawApiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        const cleanApiBase = rawApiBase.replace(/\/+$/, '');
+        const apiBase = cleanApiBase.endsWith('/api/v1') ? cleanApiBase : `${cleanApiBase}/api/v1`;
 
         // 🌟 ম্যাজিক লিংক: এটি ব্যাকএন্ডে হিট করবে এবং রিডাইরেক্ট করে ফ্রন্টএন্ডে পাঠাবে
         const shareUrl = `${apiBase}/posts/${post.id}/share?redirect=${encodeURIComponent(frontendPostUrl)}`;

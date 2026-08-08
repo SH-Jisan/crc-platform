@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSuccessStoryDto } from './dto/create-success-story.dto';
 import { UpdateSuccessStoryDto } from './dto/update-success-story.dto';
@@ -14,8 +14,9 @@ export class SuccessStoriesService {
     }
 
     async findAll(limit: number = 10, cursor?: string) {
+        const safeLimit = Math.min(Math.max(1, Number(limit) || 10), 100);
         const data = await this.prisma.successStory.findMany({
-            take: limit + 1,
+            take: safeLimit + 1,
             cursor: cursor ? { id: cursor } : undefined,
             orderBy: { created_at: 'desc' },
             include: {
@@ -25,7 +26,7 @@ export class SuccessStoriesService {
 
         let nextCursor: string | null = null;
 
-        if (data.length > limit) {
+        if (data.length > safeLimit) {
             const nextItem = data.pop();
             if (nextItem) {
                 nextCursor = nextItem.id;
@@ -36,23 +37,31 @@ export class SuccessStoriesService {
             data,
             meta: {
                 nextCursor,
-                limit,
+                limit: safeLimit,
             },
         };
     }
 
     async findOne(id: string) {
-        return this.prisma.successStory.findUnique({
+        const story = await this.prisma.successStory.findUnique({
             where: { id },
             include: {
-                author: {
-                    select: { full_name: true, avatar_url: true }
-                }
+                author: { select: { full_name: true, avatar_url: true } }
             }
         });
+        if (!story) throw new NotFoundException('Success story not found');
+        return story;
     }
 
-    async update(id: string, data: UpdateSuccessStoryDto) {
+    async update(id: string, data: UpdateSuccessStoryDto, userId: string, roles: string[] = []) {
+        const story = await this.prisma.successStory.findUnique({ where: { id } });
+        if (!story) throw new NotFoundException('Success story not found');
+
+        const isAdmin = roles.includes('ADMIN');
+        if (!isAdmin && story.author_id !== userId) {
+            throw new ForbiddenException('You can only update your own success stories');
+        }
+
         return this.prisma.successStory.update({
             where: { id },
             data,

@@ -35,8 +35,10 @@ export class EventsController {
 
   @Patch(':id')
   @Roles('ADMIN', 'MEMBER')
-  updateEvent(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventsService.updateEvent(id, updateEventDto);
+  updateEvent(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto, @GetUser() user: any) {
+    const userId = user?.id || user?.sub;
+    const roles = user?.roles || [];
+    return this.eventsService.updateEvent(id, updateEventDto, userId, roles);
   }
 
   @Delete(':id')

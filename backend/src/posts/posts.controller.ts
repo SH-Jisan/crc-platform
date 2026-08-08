@@ -7,6 +7,8 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { GetUser } from '../common/decorators/get-user.decorator';
 import { Public } from '../common/decorators/public.decorator';
 
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
+
 @Controller('posts')
 export class PostsController {
     constructor(private readonly postsService: PostsService) {}
@@ -20,8 +22,9 @@ export class PostsController {
 
     @Public()
     @Get()
-    findAll() {
-        return this.postsService.findAll();
+    findAll(@Query() paginationQuery: PaginationQueryDto) {
+        const { page, limit } = paginationQuery;
+        return this.postsService.findAll(page, limit);
     }
 
     // 🌟 MAGIC SHARE LINK API (Pure NestJS Way - Crash Free)

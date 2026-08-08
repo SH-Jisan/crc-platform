@@ -4,6 +4,7 @@ import { Public } from "../common/decorators/public.decorator"; // 🌟 Public D
 import { AuthGuard } from "../auth/auth.guard";
 import { plainToInstance } from "class-transformer";
 import { UserResponseDto } from "./dto/user-response.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 import { GetUser } from "../common/decorators/get-user.decorator";
 
 @Controller("users")
@@ -34,7 +35,7 @@ export class UsersController {
 
   // 🌟 সাইনআপের পর ইউজারের ডিটেইলস সেভ করার রাউট
   @Patch("profile")
-  async completeProfile(@GetUser() user: any, @Body() body: any) {
+  async completeProfile(@GetUser() user: any, @Body() body: UpdateProfileDto) {
     const userId = user?.id || user?.sub;
     return this.usersService.upsertProfile(userId, body);
   }

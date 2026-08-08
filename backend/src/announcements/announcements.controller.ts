@@ -8,6 +8,8 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Public } from '../common/decorators/public.decorator';
 
+import { GetUser } from '../common/decorators/get-user.decorator';
+
 @Controller('announcements')
 @UseGuards(AuthGuard, RolesGuard)
 export class AnnouncementsController {
@@ -38,8 +40,10 @@ export class AnnouncementsController {
 
     @Patch(':id')
     @Roles('ADMIN', 'MEMBER')
-    update(@Param('id') id: string, @Body() updateAnnouncementDto: UpdateAnnouncementDto) {
-        return this.announcementsService.update(id, updateAnnouncementDto);
+    update(@Param('id') id: string, @Body() updateAnnouncementDto: UpdateAnnouncementDto, @GetUser() user: any) {
+        const userId = user?.id || user?.sub;
+        const roles = user?.roles || [];
+        return this.announcementsService.update(id, updateAnnouncementDto, userId, roles);
     }
 
     @Delete(':id')

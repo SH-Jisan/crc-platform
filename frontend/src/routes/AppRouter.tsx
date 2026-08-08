@@ -28,15 +28,15 @@ export default function AppRouter() {
                     {/* Vobishhote aaro private route ekhane asbe jemon /events/create */}
                 </Route>
                 <Route path="/posts" element={<CommunityFeed/>}/>
+                <Route path="/post/:id" element={<SinglePost />} />
                 <Route path="/campaigns" element={<Campaigns/>} />
                 <Route path="/donations" element={<CustomCauseDonation/>}/>
                 <Route path="/members" element={<MembersDirectory />} />
-                <Route path="/gallery" element={<Gallery />} /> {/* 🌟 গ্যালারি রাউট */}
+                <Route path="/member/:crcId" element={<PublicProfile />} />
+                <Route path="/gallery" element={<Gallery />} />
             </Route>
             <Route path="/login" element={<Login />} />
-            <Route path="/post/:id" element={<SinglePost />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/member/:crcId" element={<PublicProfile />} />
         </Routes>
     );
 }

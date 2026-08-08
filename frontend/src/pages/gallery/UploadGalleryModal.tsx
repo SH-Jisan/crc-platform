@@ -24,6 +24,18 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
         setIsUploading(false);
     };
 
+    // 🌟 Image Previews with Object URL memory management
+    const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+    React.useEffect(() => {
+        const urls = selectedImages.map((file) => URL.createObjectURL(file));
+        setPreviewUrls(urls);
+
+        return () => {
+            urls.forEach((url) => URL.revokeObjectURL(url));
+        };
+    }, [selectedImages]);
+
     // 🌟 একাধিক ছবি সিলেক্ট করার ফাংশন
     const handleImageSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -45,10 +57,7 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
         setIsUploading(true);
 
         try {
-            // Promise.all ব্যবহার করে সবগুলো ছবি প্যারালালি (একসাথে) আপলোড করছি
             const uploadPromises = selectedImages.map(async (file) => {
-
-                // ১. Supabase-এ ছবি আপলোড
                 const fileExt = file.name.split('.').pop();
                 const fileName = `gallery-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
@@ -58,30 +67,26 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
 
                 if (error) throw error;
 
-                // ২. পাবলিক লিংক জেনারেট
                 const { data: publicUrlData } = supabase.storage
                     .from('post-media')
                     .getPublicUrl(fileName);
 
-                // ৩. ব্যাকএন্ডে সেভ করা (প্রতিটি ছবির জন্য আলাদা কল)
                 return uploadGalleryImage({
                     image_url: publicUrlData.publicUrl,
                     caption: caption.trim() === '' ? undefined : caption
                 });
             });
 
-            // সবগুলোর আপলোড শেষ হওয়া পর্যন্ত অপেক্ষা করবে
             await Promise.all(uploadPromises);
 
-            // সফল হলে গ্যালারি রিফ্রেশ এবং মডাল বন্ধ
             queryClient.invalidateQueries({ queryKey: ['gallery'] });
             onClose();
             resetState();
             alert(`Successfully added ${selectedImages.length} image(s) to the gallery! 🖼️`);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("Error uploading images to Supabase!");
+            alert(error?.message || "Error uploading images to Supabase!");
         } finally {
             setIsUploading(false);
         }
@@ -110,7 +115,7 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
                             <label className="block text-sm font-bold text-[#222222] mb-2">Select Images (Multiple allowed)</label>
                             <input
                                 type="file"
-                                multiple // 🌟 এই ম্যাজিক অ্যাট্রিবিউটটিই একসাথে অনেক ছবি সিলেক্ট করতে দেবে
+                                multiple
                                 accept="image/*"
                                 onChange={handleImageSelection}
                                 className="block w-full text-sm text-[#666666] file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-[#D64A26]/10 file:text-[#D64A26] hover:file:bg-[#D64A26]/20 transition-colors cursor-pointer"
@@ -118,11 +123,11 @@ export default function UploadGalleryModal({ isOpen, onClose }: Props) {
                         </div>
 
                         {/* 🌟 Image Previews Grid */}
-                        {selectedImages.length > 0 && (
+                        {previewUrls.length > 0 && (
                             <div className="flex flex-wrap gap-3 max-h-48 overflow-y-auto p-2 bg-slate-50 rounded-xl border border-slate-100">
-                                {selectedImages.map((file, index) => (
+                                {previewUrls.map((url, index) => (
                                     <div key={index} className="relative group w-24 h-24 rounded-xl overflow-hidden border border-slate-200 shadow-sm flex-shrink-0">
-                                        <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                                        <img src={url} alt="preview" className="w-full h-full object-cover" />
 
                                         {/* Remove Button */}
                                         <button

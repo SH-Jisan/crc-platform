@@ -1,23 +1,21 @@
 import { apiClient } from './axios';
 
 export const getPendingMembers = async () => {
-    const response = await apiClient.get('/api/v1/admin/pending-members');
+    const response = await apiClient.get('/admin/pending-members');
     return response.data;
 };
 
 export const updateMemberStatus = async ({ id, status, role, crc_id }: { id: string, status: 'APPROVED' | 'REJECTED', role: string, crc_id?: string }) => {
-    const response = await apiClient.patch(`/api/v1/admin/members/${id}/status`, { status, role, crc_id });
+    const response = await apiClient.patch(`/admin/members/${id}/status`, { status, role, crc_id });
     return response.data;
 };
 
-// ... ager code ...
-
 export const getApprovedMembers = async () => {
-    const response = await apiClient.get('/api/v1/admin/members');
+    const response = await apiClient.get('/admin/members');
     return response.data;
 };
 
 export const updateMemberInfo = async ({ id, data }: { id: string, data: any }) => {
-    const response = await apiClient.patch(`/api/v1/admin/members/${id}`, data);
+    const response = await apiClient.patch(`/admin/members/${id}`, data);
     return response.data;
 };

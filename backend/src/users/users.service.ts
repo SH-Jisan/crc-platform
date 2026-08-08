@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from "@nestjs/common"; // 🌟 NotFoundException ইমপোর্ট করতে ভুলবে না
-
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
@@ -16,8 +17,8 @@ export class UsersService {
     });
   }
 
-// 🌟 PRO-LEVEL: Update or Insert (Upsert) Profile
-  async upsertProfile(userId: string, data: any) {
+  // 🌟 PRO-LEVEL: Update or Insert (Upsert) Profile
+  async upsertProfile(userId: string, data: UpdateProfileDto) {
     return this.prisma.profile.upsert({
       where: { id: userId },
       update: {
@@ -27,7 +28,8 @@ export class UsersService {
         department: data.department,
         session: data.session,
         student_id: data.student_id,
-        // Status PENDING ই থাকবে বাই ডিফল্ট
+        bio: data.bio,
+        avatar_url: data.avatar_url,
       },
       create: {
         id: userId,
@@ -37,7 +39,9 @@ export class UsersService {
         department: data.department,
         session: data.session,
         student_id: data.student_id,
-        status: 'PENDING', // নতুন সাইনআপ সবসময় PENDING
+        bio: data.bio,
+        avatar_url: data.avatar_url,
+        status: 'PENDING',
       },
     });
   }

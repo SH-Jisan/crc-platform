@@ -8,6 +8,8 @@ import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Public } from '../common/decorators/public.decorator';
 
+import { GetUser } from '../common/decorators/get-user.decorator';
+
 @Controller('success-stories')
 @UseGuards(AuthGuard, RolesGuard)
 export class SuccessStoriesController {
@@ -41,8 +43,10 @@ export class SuccessStoriesController {
 
     @Patch(':id')
     @Roles('ADMIN', 'MEMBER')
-    update(@Param('id') id: string, @Body() updateSuccessStoryDto: UpdateSuccessStoryDto) {
-        return this.successStoriesService.update(id, updateSuccessStoryDto);
+    update(@Param('id') id: string, @Body() updateSuccessStoryDto: UpdateSuccessStoryDto, @GetUser() user: any) {
+        const userId = user?.id || user?.sub;
+        const roles = user?.roles || [];
+        return this.successStoriesService.update(id, updateSuccessStoryDto, userId, roles);
     }
 
     @Delete(':id')

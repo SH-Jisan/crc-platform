@@ -21,6 +21,17 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
     const [videoLink, setVideoLink] = useState('');
     const [isUploading, setIsUploading] = useState(false);
 
+    const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+    React.useEffect(() => {
+        const urls = selectedImages.map((file) => URL.createObjectURL(file));
+        setPreviewUrls(urls);
+
+        return () => {
+            urls.forEach((url) => URL.revokeObjectURL(url));
+        };
+    }, [selectedImages]);
+
     const mutation = useMutation({
         mutationFn: createPost,
         onSuccess: () => {
@@ -30,8 +41,8 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
             setTitle(''); setContent(''); setSelectedImages([]); setVideoLink(''); setIsGallerySynced(false);
             alert("Post published successfully! 🎉");
         },
-        onError: () => {
-            alert("Failed to publish post.");
+        onError: (error: any) => {
+            alert(error?.response?.data?.message || error?.message || "Failed to publish post.");
         }
     });
 
@@ -53,10 +64,7 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
         setIsUploading(true);
 
         try {
-            const uploadedMedia = [];
-
-            // 🌟 ১. Supabase Storage-এ একাধিক ছবি আপলোড
-            for (const file of selectedImages) {
+            const uploadPromises = selectedImages.map(async (file) => {
                 const fileExt = file.name.split('.').pop();
                 const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
 
@@ -70,15 +78,15 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
                     .from('post-media')
                     .getPublicUrl(fileName);
 
-                uploadedMedia.push({ type: 'IMAGE', url: publicUrlData.publicUrl });
-            }
+                return { type: 'IMAGE', url: publicUrlData.publicUrl };
+            });
 
-            // 🌟 ২. ইউটিউব ভিডিও লিংক যুক্ত করা
+            const uploadedMedia = await Promise.all(uploadPromises);
+
             if (videoLink.trim() !== '') {
                 uploadedMedia.push({ type: 'VIDEO', url: videoLink });
             }
 
-            // 🌟 ৩. ব্যাকএন্ডে ডেটা পাঠানো
             mutation.mutate({
                 post_type: postType,
                 title,
@@ -87,8 +95,8 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
                 is_gallery_synced: isGallerySynced
             });
 
-        } catch (error) {
-            alert("Error uploading images to Supabase! Check console.");
+        } catch (error: any) {
+            alert(error?.message || "Error uploading images to Supabase!");
             console.error(error);
         } finally {
             setIsUploading(false);
@@ -138,11 +146,11 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
                                 <input type="file" multiple accept="image/*" onChange={handleImageSelection} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-[#D64A26] hover:file:bg-orange-100 transition-colors cursor-pointer" />
                             </div>
 
-                            {selectedImages.length > 0 && (
+                            {previewUrls.length > 0 && (
                                 <div className="flex flex-wrap gap-3 mt-3">
-                                    {selectedImages.map((file, index) => (
-                                        <div key={index} className="relative group w-20 h-20 rounded-xl overflow-hidden border border-stone-200 shadow-sm">
-                                            <img src={URL.createObjectURL(file)} alt="preview" className="w-full h-full object-cover" />
+                                    {previewUrls.map((url, index) => (
+                                        <div key={index} className="relative group w-20 h-20 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                                            <img src={url} alt="preview" className="w-full h-full object-cover" />
                                             <button type="button" onClick={() => removeImage(index)} className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">✕</button>
                                         </div>
                                     ))}

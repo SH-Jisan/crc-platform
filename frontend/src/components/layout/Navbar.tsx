@@ -113,7 +113,7 @@ export default function Navbar() {
                             <span className="relative z-10">Support a Cause</span>
                         </Link>
 
-                        <div className="w-px h-6 bg-stone-200/80"></div>
+                        <div className="w-px h-6 bg-slate-200/80"></div>
 
                         {user ? (
                             <div className="flex items-center gap-2">

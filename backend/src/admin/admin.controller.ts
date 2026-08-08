@@ -4,7 +4,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { RolesGuard } from "../auth/roles.guard";
 import { Roles } from "../common/decorators/roles.decorator";
 
-@Controller("api/v1/admin")
+@Controller("admin")
 export class AdminController {
   constructor(private adminService: AdminService) {}
 

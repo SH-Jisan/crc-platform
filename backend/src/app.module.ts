@@ -18,12 +18,14 @@ import { AnnouncementsModule } from './announcements/announcements.module';
 import { SearchModule } from './search/search.module';
 import { HealthModule } from './health/health.module';
 import { CustomCausesDonationModule } from './custom-causes-donation/custom-causes-donation.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    AuthModule,
     SupabaseModule,
     PrismaModule,
     UsersModule,

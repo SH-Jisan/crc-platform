@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
@@ -14,8 +14,9 @@ export class AnnouncementsService {
     }
 
     async findAll(limit: number = 10, cursor?: string) {
+        const safeLimit = Math.min(Math.max(1, Number(limit) || 10), 100);
         const data = await this.prisma.announcement.findMany({
-            take: limit + 1,
+            take: safeLimit + 1,
             cursor: cursor ? { id: cursor } : undefined,
             orderBy: { created_at: 'desc' },
             include: {
@@ -25,7 +26,7 @@ export class AnnouncementsService {
 
         let nextCursor: string | null = null;
 
-        if (data.length > limit) {
+        if (data.length > safeLimit) {
             const nextItem = data.pop();
             if (nextItem) {
                 nextCursor = nextItem.id;
@@ -36,13 +37,13 @@ export class AnnouncementsService {
             data,
             meta: {
                 nextCursor,
-                limit,
+                limit: safeLimit,
             },
         };
     }
 
     async findOne(id: string) {
-        return this.prisma.announcement.findUnique({
+        const announcement = await this.prisma.announcement.findUnique({
             where: { id },
             include: {
                 creator: {
@@ -50,9 +51,19 @@ export class AnnouncementsService {
                 },
             },
         });
+        if (!announcement) throw new NotFoundException('Announcement not found');
+        return announcement;
     }
 
-    async update(id: string, data: UpdateAnnouncementDto) {
+    async update(id: string, data: UpdateAnnouncementDto, userId: string, roles: string[] = []) {
+        const announcement = await this.prisma.announcement.findUnique({ where: { id } });
+        if (!announcement) throw new NotFoundException('Announcement not found');
+
+        const isAdmin = roles.includes('ADMIN');
+        if (!isAdmin && announcement.created_by !== userId) {
+            throw new ForbiddenException('You can only update announcements you created');
+        }
+
         return this.prisma.announcement.update({
             where: { id },
             data,

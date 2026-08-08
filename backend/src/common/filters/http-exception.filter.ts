@@ -18,11 +18,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
             ? exception.getResponse()
             : 'Internal server error';
 
+    const errorDetails = typeof message === 'string' ? message : (message as any).message || message;
+    const errorMessage = Array.isArray(errorDetails) ? errorDetails.join(', ') : typeof errorDetails === 'string' ? errorDetails : JSON.stringify(errorDetails);
+
     response.status(status).json({
       success: false,
       timestamp: new Date().toISOString(),
       path: request.url,
-      error: typeof message === 'string' ? message : (message as any).message || message,
+      message: errorMessage,
+      error: errorDetails,
     });
   }
 }

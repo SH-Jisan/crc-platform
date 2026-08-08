@@ -11,28 +11,26 @@ export class SearchService {
         }
 
         const searchQuery = query.trim();
-        // Format query for Postgres Full Text Search (e.g. "foo bar" -> "foo | bar")
-        const formattedQuery = searchQuery.split(/\s+/).join(' | ');
 
         // 1. Search in Events
         const events = await this.prisma.event.findMany({
             where: {
                 OR: [
-                    { title: { search: formattedQuery } },
-                    { description: { search: formattedQuery } },
-                    { location: { search: formattedQuery } },
+                    { title: { contains: searchQuery, mode: 'insensitive' } },
+                    { description: { contains: searchQuery, mode: 'insensitive' } },
+                    { location: { contains: searchQuery, mode: 'insensitive' } },
                 ],
             },
             orderBy: { event_date: 'desc' },
-            take: 5, // Return only the top 5 relevant matches
+            take: 5,
         });
 
         // 2. Search in Campaigns
         const campaigns = await this.prisma.campaign.findMany({
             where: {
                 OR: [
-                    { title: { search: formattedQuery } },
-                    { description: { search: formattedQuery } },
+                    { title: { contains: searchQuery, mode: 'insensitive' } },
+                    { description: { contains: searchQuery, mode: 'insensitive' } },
                 ],
             },
             orderBy: { start_date: 'desc' },
@@ -43,8 +41,8 @@ export class SearchService {
         const posts = await this.prisma.post.findMany({
             where: {
                 OR: [
-                    { title: { search: formattedQuery } },
-                    { content: { search: formattedQuery } },
+                    { title: { contains: searchQuery, mode: 'insensitive' } },
+                    { content: { contains: searchQuery, mode: 'insensitive' } },
                 ],
             },
             orderBy: { created_at: 'desc' },

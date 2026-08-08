@@ -43,18 +43,37 @@ export class PostsService {
     });
   }
 
-  async findAll() {
-    return this.prisma.post.findMany({
-      orderBy: { created_at: 'desc' },
-      include: {
-        author: {
-          select: {
-            full_name: true,
-            avatar_url: true,
+  async findAll(page: number = 1, limit: number = 10) {
+    const safeLimit = Math.min(Math.max(1, Number(limit) || 10), 100);
+    const safePage = Math.max(1, Number(page) || 1);
+    const skip = (safePage - 1) * safeLimit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.post.findMany({
+        skip,
+        take: safeLimit,
+        orderBy: { created_at: 'desc' },
+        include: {
+          author: {
+            select: {
+              full_name: true,
+              avatar_url: true,
+            }
           }
         }
+      }),
+      this.prisma.post.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        totalPages: Math.ceil(total / safeLimit),
       }
-    });
+    };
   }
   // 🌟 সিঙ্গেল পোস্ট খোঁজার ফাংশন
   async findOne(id: string) {

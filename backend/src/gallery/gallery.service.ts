@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class GalleryService {
@@ -21,8 +21,9 @@ export class GalleryService {
     }
 
     async findAll(limit: number = 10, cursor?: string) {
+        const safeLimit = Math.min(Math.max(1, Number(limit) || 10), 100);
         const data = await this.prisma.gallery.findMany({
-            take: limit + 1, // Fetch an extra item to determine if a next cursor exists
+            take: safeLimit + 1,
             cursor: cursor ? { id: cursor } : undefined,
             orderBy: { created_at: 'desc' },
             include: {
@@ -33,10 +34,9 @@ export class GalleryService {
         let nextCursor: string | null = null;
 
         // If the array length exceeds the limit, there are more records available
-        if (data.length > limit) {
-            const nextItem = data.pop(); // Remove the extra inspection element
+        if (data.length > safeLimit) {
+            const nextItem = data.pop();
 
-            // Safely assign the next cursor ID
             if (nextItem) {
                 nextCursor = nextItem.id;
             }
@@ -45,8 +45,8 @@ export class GalleryService {
         return {
             data,
             meta: {
-                nextCursor, // Frontend uses this token for subsequent paginated requests
-                limit,
+                nextCursor,
+                limit: safeLimit,
             },
         };
     }

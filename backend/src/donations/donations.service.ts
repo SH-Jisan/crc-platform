@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateDonationDto } from './dto/create-donation.dto';
 
@@ -7,11 +7,7 @@ export class DonationsService {
     constructor(private prisma: PrismaService) {}
 
     async create(data: CreateDonationDto, userId?: string) {
-
-        // 🌟 ডাটাবেস ট্রানজেকশন শুরু (যাতে অর্ধেক ডাটা সেভ হয়ে ক্র্যাশ না করে)
         return this.prisma.$transaction(async (prisma) => {
-
-            // ১. বেসিক ডোনেশন অবজেক্ট তৈরি
             const donationData: any = {
                 donation_type: data.donation_type,
                 amount: data.amount,
@@ -24,18 +20,15 @@ export class DonationsService {
                 donor_phone: data.donor_phone,
             };
 
-            // ২. Donation Type অনুযায়ী আলাদা আলাদা টেবিলের ফান্ড আপডেট করা
-
             if (data.donation_type === 'CAMPAIGN') {
                 if (!data.campaign_id) throw new BadRequestException('Campaign ID is required!');
 
                 const campaign = await prisma.campaign.findUnique({ where: { id: data.campaign_id } });
                 if (!campaign) throw new NotFoundException('Campaign not found');
-                if (!campaign.is_donation_enabled) throw new BadRequestException('CustomCauseDonation are currently disabled for this campaign');
+                if (!campaign.is_donation_enabled) throw new BadRequestException('Donations are currently disabled for this campaign');
 
                 donationData.campaign_id = data.campaign_id;
 
-                // 🌟 ফান্ড আপডেট
                 await prisma.campaign.update({
                     where: { id: data.campaign_id },
                     data: { raised_amount: { increment: data.amount } }
@@ -46,11 +39,10 @@ export class DonationsService {
 
                 const event = await prisma.event.findUnique({ where: { id: data.event_id } });
                 if (!event) throw new NotFoundException('Event not found');
-                if (!event.is_donation_enabled) throw new BadRequestException('CustomCauseDonation are currently disabled for this event');
+                if (!event.is_donation_enabled) throw new BadRequestException('Donations are currently disabled for this event');
 
-                donationData.eventId = data.event_id; // 🌟 স্কিমায় eventId থাকলে eventId লিখবে
+                donationData.eventId = data.event_id;
 
-                // 🌟 ফান্ড আপডেট
                 await prisma.event.update({
                     where: { id: data.event_id },
                     data: { raised_amount: { increment: data.amount } }
@@ -65,20 +57,24 @@ export class DonationsService {
 
                 donationData.custom_cause_id = data.custom_cause_id;
 
-                // 🌟 ফান্ড আপডেট
                 await prisma.customCause.update({
                     where: { id: data.custom_cause_id },
                     data: { raised_amount: { increment: data.amount } }
                 });
             }
-            // 💡 Note: 'CLUB' ডোনেশনের জন্য আলাদা কোনো টেবিল আপডেট করার দরকার নেই, এটা সরাসরি ক্লাবের ফান্ডে যাবে।
 
-            // ৩. সবশেষে ডোনেশন রেকর্ডটি সেভ করা
-            const donation = await prisma.donation.create({
-                data: donationData
-            });
+            try {
+                const donation = await prisma.donation.create({
+                    data: donationData
+                });
 
-            return donation;
+                return donation;
+            } catch (error: any) {
+                if (error?.code === 'P2002') {
+                    throw new ConflictException('A donation with this transaction ID already exists');
+                }
+                throw error;
+            }
         });
     }
 }

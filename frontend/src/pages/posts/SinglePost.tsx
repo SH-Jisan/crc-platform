@@ -41,9 +41,11 @@ export default function SinglePost() {
         }
     });
     const handleShare = async () => {
-        if(!post) return;
+        if (!post) return;
         const frontendPostUrl = window.location.href;
-        const apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
+        const rawApiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+        const cleanApiBase = rawApiBase.replace(/\/+$/, '');
+        const apiBase = cleanApiBase.endsWith('/api/v1') ? cleanApiBase : `${cleanApiBase}/api/v1`;
         const shareUrl = `${apiBase}/posts/${post.id}/share?redirect=${encodeURIComponent(frontendPostUrl)}`;
 
         if (navigator.share) {

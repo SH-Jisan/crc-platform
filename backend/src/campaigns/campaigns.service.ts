@@ -32,19 +32,20 @@ export class CampaignsService {
     }
 
     async getCampaigns(page: number = 1, limit: number = 10){
-        const skip = (page - 1) * limit;
+        const safeLimit = Math.min(Math.max(1, Number(limit) || 10), 100);
+        const safePage = Math.max(1, Number(page) || 1);
+        const skip = (safePage - 1) * safeLimit;
 
         const [rawData, total] = await Promise.all([
             this.prisma.campaign.findMany({
                 skip,
-                take: limit,
-                include: { donations: true },
+                take: safeLimit,
+                include: { _count: { select: { donations: true } } },
                 orderBy: { start_date: 'desc' },
             }),
             this.prisma.campaign.count(),
         ]);
 
-        // 🌟 FIX: লিস্টের সবগুলোর Decimal-কে Number-এ কনভার্ট করা হলো
         const data = rawData.map(c => ({
             ...c,
             goal_amount: Number(c.goal_amount),
@@ -55,9 +56,9 @@ export class CampaignsService {
             data,
             meta: {
                 total,
-                page,
-                limit,
-                totalPages: Math.ceil(total/limit),
+                page: safePage,
+                limit: safeLimit,
+                totalPages: Math.ceil(total / safeLimit),
             },
         };
     }

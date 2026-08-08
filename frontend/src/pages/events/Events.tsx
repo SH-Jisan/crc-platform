@@ -40,7 +40,7 @@ export default function Events() {
             queryClient.invalidateQueries({ queryKey: ['events'] });
         },
         onError: (error: any) => {
-            alert(error?.response?.data?.error || "Failed to join event");
+            alert(error?.response?.data?.message || error?.response?.data?.error || "Failed to join event");
         }
     });
 

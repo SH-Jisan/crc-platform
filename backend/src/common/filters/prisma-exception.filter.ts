@@ -34,6 +34,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       success: false,
       timestamp: new Date().toISOString(),
       path: request.url,
+      message: message,
       error: message,
     });
   }
