@@ -13,11 +13,16 @@ export class PostsController {
     constructor(private readonly postsService: PostsService) {}
 
     private getClientIp(req: any): string {
-        const forwarded = req.headers['x-forwarded-for'];
-        if (typeof forwarded === 'string' && forwarded.length > 0) {
-            return forwarded.split(',')[0].trim();
+        let ip = req.headers['x-forwarded-for'];
+        if (typeof ip === 'string' && ip.length > 0) {
+            ip = ip.split(',')[0].trim();
+        } else {
+            ip = req.ip || req.socket?.remoteAddress || '127.0.0.1';
         }
-        return req.ip || req.socket?.remoteAddress || '127.0.0.1';
+        if (typeof ip === 'string' && ip.startsWith('::ffff:')) {
+            ip = ip.replace('::ffff:', '');
+        }
+        return ip || '127.0.0.1';
     }
 
     @Post()
