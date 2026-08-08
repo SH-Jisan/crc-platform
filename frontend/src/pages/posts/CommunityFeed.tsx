@@ -36,10 +36,12 @@ export default function CommunityFeed() {
 
     const { data, isLoading } = useQuery({
         queryKey: ['posts'],
-        queryFn: getPosts,
+        queryFn: () => getPosts(1, 10),
     });
 
-    const posts = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+    const posts = Array.isArray(data)
+        ? data
+        : (Array.isArray(data?.data) ? data.data : (Array.isArray(data?.data?.data) ? data.data.data : []));
 
     const likeMutation = useMutation({
         mutationFn: likePost,

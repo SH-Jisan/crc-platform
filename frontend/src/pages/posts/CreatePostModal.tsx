@@ -50,7 +50,10 @@ export default function CreatePostModal({ isOpen, onClose }: Props) {
 
     const handleImageSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            const filesArray = Array.from(e.target.files);
+            const filesArray = Array.from(e.target.files).filter((file) => file.type.startsWith('image/'));
+            if (filesArray.length < e.target.files.length) {
+                alert("Only image files are allowed. Non-image files were removed.");
+            }
             setSelectedImages((prev) => [...prev, ...filesArray]);
         }
     };

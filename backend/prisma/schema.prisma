@@ -182,7 +182,7 @@ model Donation {
   donor_phone  String?
 
   user_id         String? @db.Uuid
-  eventId         String? @db.Uuid
+  eventId         String? @map("event_id") @db.Uuid
   campaign_id     String? @db.Uuid
   custom_cause_id String? @db.Uuid
 

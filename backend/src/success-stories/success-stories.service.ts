@@ -69,6 +69,8 @@ export class SuccessStoriesService {
     }
 
     async remove(id: string) {
+        const story = await this.prisma.successStory.findUnique({ where: { id } });
+        if (!story) throw new NotFoundException('Success story not found');
         return this.prisma.successStory.delete({
             where: { id },
         });

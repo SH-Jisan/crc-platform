@@ -71,6 +71,8 @@ export class AnnouncementsService {
     }
 
     async remove(id: string) {
+        const item = await this.prisma.announcement.findUnique({ where: { id } });
+        if (!item) throw new NotFoundException('Announcement not found');
         return this.prisma.announcement.delete({
             where: { id },
         });

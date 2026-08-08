@@ -96,6 +96,8 @@ export class CampaignsService {
     }
 
     async deleteCampaign(id: string) {
+        const campaign = await this.prisma.campaign.findUnique({ where: { id } });
+        if (!campaign) throw new NotFoundException('Campaign not found');
         return this.prisma.campaign.delete({
             where: { id }
         });
