@@ -3,7 +3,8 @@ import { getEvents, joinEvent } from '../../api/events';
 import { useAuthStore } from '../../store/authStore';
 import { useState } from 'react';
 import CreateEventModal from './CreateEventModal';
-import DonationModal from '../donations/DonationModal.tsx'; // 🌟 Universal Donate Modal Import
+import DonationModal from '../donations/DonationModal.tsx';
+import ShareModal from '../../components/common/ShareModal.tsx';
 
 // SVG Icons
 const LocationIcon = () => (
@@ -21,8 +22,8 @@ const HeartIcon = () => (
 
 export default function Events() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    // 🌟 ডোনেশনের জন্য State
     const [selectedEventForDonation, setSelectedEventForDonation] = useState<any>(null);
+    const [shareData, setShareData] = useState<any>(null);
 
     const { user } = useAuthStore();
     const queryClient = useQueryClient();
@@ -77,14 +78,13 @@ export default function Events() {
                     onClose={() => setIsModalOpen(false)}
                 />
 
-                {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative">
                     <div className="relative z-10 max-w-2xl">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 text-[#D64A26] text-sm font-semibold mb-6 border border-orange-100/50 shadow-sm">
                             <HeartIcon />
                             <span>Make a Difference Today</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight leading-[1.15]">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-[#222222] tracking-tight leading-[1.15]">
                             Community <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Initiatives</span>
                         </h1>
                         <p className="mt-5 text-lg text-[#666666]/90 leading-relaxed max-w-xl font-medium">
@@ -95,7 +95,7 @@ export default function Events() {
                     {isAdmin && (
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] text-white font-bold tracking-widest uppercase rounded-xl hover:from-[#c24220] hover:to-[#e36345] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] text-white font-bold tracking-widest uppercase rounded-xl hover:from-[#c24220] hover:to-[#e36345] shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 cursor-pointer"
                         >
                             <span className="relative z-10 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -108,7 +108,6 @@ export default function Events() {
                     )}
                 </div>
 
-                {/* Events Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {events.length === 0 ? (
                         <div className="col-span-full py-24 px-8 text-center bg-white rounded-[2.5rem] border border-slate-100 shadow-[0_2px_20px_rgb(0,0,0,0.02)] flex flex-col items-center justify-center">
@@ -129,7 +128,6 @@ export default function Events() {
                             const day = eventDate.getDate();
                             const month = eventDate.toLocaleString('default', { month: 'short' });
 
-                            // 🌟 Donation Progress Calculation
                             const goal = Number(event.goal_amount) || 1;
                             const raised = Number(event.raised_amount) || 0;
                             const progressPercentage = Math.min(Math.round((raised / goal) * 100), 100);
@@ -137,13 +135,10 @@ export default function Events() {
                             return (
                                 <div key={event.id} className="bg-white/95 backdrop-blur-sm rounded-xl border border-slate-100 overflow-hidden shadow-md hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col group relative">
 
-                                    {/* Event Top Banner */}
                                     <div className="h-48 bg-slate-50 relative overflow-hidden flex items-center justify-center rounded-t-xl group/image">
                                         <div className="absolute inset-0 bg-gradient-to-br from-[#D64A26]/10 via-orange-50/50 to-white/50 group-hover/image:scale-105 transition-transform duration-700"></div>
                                         <div className="absolute top-0 right-0 w-40 h-40 bg-white/60 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                                         <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-200/40 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4"></div>
-
-                                        {/* Image Sweep Effect */}
 
                                         <div className="absolute top-5 left-5 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-xl text-center shadow-lg border border-white/60 z-20">
                                             <p className="text-xs font-bold text-[#D64A26] uppercase tracking-widest mb-0.5">{month}</p>
@@ -156,9 +151,8 @@ export default function Events() {
                                         </span>
                                     </div>
 
-                                    {/* Event Details */}
                                     <div className="p-7 flex-1 flex flex-col z-10 bg-white">
-                                        <h2 className="text-xl  font-bold text-[#222222] line-clamp-1 mb-3 group-hover:text-[#D64A26] transition-colors">{event.title}</h2>
+                                        <h2 className="text-xl font-bold text-[#222222] line-clamp-1 mb-3 group-hover:text-[#D64A26] transition-colors">{event.title}</h2>
 
                                         <p className="text-[#666666]/90 text-sm leading-relaxed line-clamp-2 flex-1 mb-6">
                                             {event.description || "No description provided. Please join to learn more about this community event."}
@@ -171,10 +165,8 @@ export default function Events() {
                                             </div>
                                         </div>
 
-                                        {/* Action Buttons Container */}
                                         <div className="flex flex-col gap-3 mt-auto">
 
-                                            {/* 🌟 Donation Progress Bar (যদি টগল ON থাকে) */}
                                             {event.is_donation_enabled && (
                                                 <div className="mb-2">
                                                     <div className="flex justify-between text-[11px] font-black uppercase tracking-widest mb-1.5">
@@ -190,27 +182,56 @@ export default function Events() {
                                                 </div>
                                             )}
 
-                                            {/* Join Button */}
-                                            <button
-                                                onClick={() => joinMutation.mutate(event.id)}
-                                                disabled={joinMutation.isPending}
-                                                className="relative overflow-hidden group/btn w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-60 disabled:pointer-events-none mt-2"
-                                            >
-                                                <span className="relative z-10">{joinMutation.isPending ? 'Processing...' : '🙋‍♂️ Join Event'}</span>
-                                            </button>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={() => joinMutation.mutate(event.id)}
+                                                    disabled={joinMutation.isPending}
+                                                    className="flex-1 py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all uppercase tracking-widest text-xs shadow-sm hover:shadow-lg flex items-center justify-center cursor-pointer disabled:opacity-60"
+                                                >
+                                                    {joinMutation.isPending ? 'Processing...' : '🙋‍♂️ Join Event'}
+                                                </button>
 
-                                            {/* THE DONATION BUTTON */}
+                                                <button
+                                                    onClick={() => {
+                                                        const rawApiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+                                                        const cleanApiBase = rawApiBase.replace(/\/+$/, '');
+                                                        const apiBase = cleanApiBase.endsWith('/api/v1') ? cleanApiBase : `${cleanApiBase}/api/v1`;
+                                                        const frontendUrl = `${window.location.origin}/events`;
+                                                        const shareUrl = `${apiBase}/events/${event.id}/share?redirect=${encodeURIComponent(frontendUrl)}`;
+
+                                                        setShareData({
+                                                            title: event.title,
+                                                            description: event.description,
+                                                            image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop',
+                                                            shareUrl,
+                                                            type: 'EVENT',
+                                                            stats: {
+                                                                label1: 'Date',
+                                                                value1: `${month} ${day}`,
+                                                                label2: 'Location',
+                                                                value2: event.location || 'Dhaka',
+                                                                progress: event.is_donation_enabled ? progressPercentage : undefined
+                                                            }
+                                                        });
+                                                    }}
+                                                    className="p-3 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#D64A26] rounded-xl font-bold transition-all shadow-sm flex items-center justify-center cursor-pointer"
+                                                    title="Share Event"
+                                                >
+                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+
                                             {event.is_donation_enabled && (
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         setSelectedEventForDonation(event);
                                                     }}
-                                                    className="relative overflow-hidden group/btn w-full py-3 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold rounded-xl transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                                                    className="w-full py-3 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold rounded-xl transition-all uppercase tracking-widest text-xs shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer"
                                                 >
-                                                    <span className="relative z-10 flex items-center gap-2">
-                                                        <HeartIcon /> Donate to Event
-                                                    </span>
+                                                    <HeartIcon /> Donate to Event
                                                 </button>
                                             )}
 
@@ -222,13 +243,20 @@ export default function Events() {
                     )}
                 </div>
 
-                {/* 🌟 Universal Donation Modal for EVENTS */}
                 <DonationModal
                     isOpen={!!selectedEventForDonation}
                     onClose={() => setSelectedEventForDonation(null)}
                     item={selectedEventForDonation}
                     donationType="EVENT"
                 />
+
+                {shareData && (
+                    <ShareModal
+                        isOpen={!!shareData}
+                        onClose={() => setShareData(null)}
+                        {...shareData}
+                    />
+                )}
 
             </div>
         </div>

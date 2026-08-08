@@ -4,6 +4,7 @@ import { getCampaigns } from '../../api/campaigns';
 import { useAuthStore } from '../../store/authStore';
 import CreateCampaignModal from './CreateCampaignModal';
 import DonationModal from '../donations/DonationModal.tsx';
+import ShareModal from '../../components/common/ShareModal.tsx';
 
 export default function Campaigns() {
     const { user } = useAuthStore();
@@ -11,7 +12,8 @@ export default function Campaigns() {
 
     // 🌟 Modals States
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedCampaign, setSelectedCampaign] = useState<any>(null); // ডোনেশনের জন্য
+    const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
+    const [shareData, setShareData] = useState<any>(null);
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['campaigns'],
@@ -33,8 +35,8 @@ export default function Campaigns() {
 
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 relative">
                     <div className="relative z-10 max-w-2xl">
-                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight leading-[1.15]">
-                            Active <span className="text-transparent bg-clip-text bg-linear-to-r from-[#D64A26] to-[#F1795D]">Campaigns</span>
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-[#222222] tracking-tight leading-[1.15]">
+                            Active <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D64A26] to-[#F1795D]">Campaigns</span>
                         </h1>
                         <p className="mt-5 text-lg text-[#666666] leading-relaxed max-w-xl font-medium">Your small contribution can bring a big smile.</p>
                     </div>
@@ -42,7 +44,7 @@ export default function Campaigns() {
                     {isAdmin && (
                         <button
                             onClick={() => setIsModalOpen(true)}
-                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold tracking-widest uppercase rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2"
+                            className="shrink-0 relative overflow-hidden group/btn px-7 py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold tracking-widest uppercase rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 cursor-pointer"
                         >
                             <span className="relative z-10 flex items-center gap-2">
                                 <span>+</span> Create Campaign
@@ -72,8 +74,6 @@ export default function Campaigns() {
                                 <div key={campaign.id} className="bg-white/95 backdrop-blur-sm rounded-xl border border-slate-100 overflow-hidden shadow-md hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col group relative">
 
                                     <div className="h-48 relative overflow-hidden flex items-center justify-center bg-slate-100 rounded-t-xl group/image">
-                                        {/* Image Sweep Effect */}
-
                                         <img
                                             src={validImageUrl}
                                             alt={campaign.title}
@@ -91,7 +91,7 @@ export default function Campaigns() {
                                     </div>
 
                                     <div className="p-7 flex-1 flex flex-col bg-white">
-                                        <h2 className="text-xl  font-bold text-[#222222] line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
+                                        <h2 className="text-xl font-bold text-[#222222] line-clamp-2 mb-3 group-hover:text-[#D64A26] transition-colors">{campaign.title}</h2>
                                         <p className="text-[#666666] text-sm leading-relaxed line-clamp-3 mb-6 flex-1">
                                             {campaign.description}
                                         </p>
@@ -113,26 +113,58 @@ export default function Campaigns() {
                                             </p>
                                         </div>
 
-                                        {campaign.is_donation_enabled? (
+                                        <div className="flex items-center gap-2 mt-6">
+                                            {campaign.is_donation_enabled ? (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setSelectedCampaign(campaign);
+                                                    }}
+                                                    className="flex-1 py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 cursor-pointer"
+                                                >
+                                                    ❤️ Donate
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    disabled
+                                                    className="flex-1 py-3 bg-slate-100 text-slate-400 font-bold uppercase tracking-widest text-xs rounded-xl cursor-not-allowed border border-slate-200"
+                                                >
+                                                    Donation Disabled
+                                                </button>
+                                            )}
+
                                             <button
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    setSelectedCampaign(campaign);
+                                                    const rawApiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+                                                    const cleanApiBase = rawApiBase.replace(/\/+$/, '');
+                                                    const apiBase = cleanApiBase.endsWith('/api/v1') ? cleanApiBase : `${cleanApiBase}/api/v1`;
+                                                    const frontendUrl = `${window.location.origin}/campaigns`;
+                                                    const shareUrl = `${apiBase}/campaigns/${campaign.id}/share?redirect=${encodeURIComponent(frontendUrl)}`;
+
+                                                    setShareData({
+                                                        title: campaign.title,
+                                                        description: campaign.description,
+                                                        image: validImageUrl,
+                                                        shareUrl,
+                                                        type: 'CAMPAIGN',
+                                                        stats: {
+                                                            label1: 'Raised',
+                                                            value1: `৳${raised.toLocaleString()}`,
+                                                            label2: 'Goal',
+                                                            value2: `৳${goal.toLocaleString()}`,
+                                                            progress: progressPercentage
+                                                        }
+                                                    });
                                                 }}
-                                                className="relative overflow-hidden group/btn mt-6 w-full py-3 border-2 border-[#D64A26] text-[#D64A26] font-bold rounded-xl hover:bg-gradient-to-r hover:from-[#D64A26] hover:to-[#F1795D] hover:border-transparent hover:text-white transition-all duration-300 uppercase tracking-widest text-xs hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                                                className="p-3 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#D64A26] rounded-xl font-bold transition-all shadow-sm flex items-center justify-center cursor-pointer"
+                                                title="Share Campaign"
                                             >
-                                                <span className="relative z-10 flex items-center gap-2">
-                                                    ❤️ Donate to this Cause
-                                                </span>
+                                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                                </svg>
                                             </button>
-                                        ):(
-                                            <button
-                                                disabled
-                                                className="mt-6 w-full py-3 bg-slate-100 text-slate-400 font-bold uppercase tracking-widest text-xs rounded-xl cursor-not-allowed border border-slate-200"
-                                            >
-                                                Donation Disabled
-                                            </button>
-                                        )}
+                                        </div>
                                     </div>
 
                                 </div>
@@ -150,9 +182,17 @@ export default function Campaigns() {
                 <DonationModal
                     isOpen={!!selectedCampaign}
                     onClose={() => setSelectedCampaign(null)}
-                    item={selectedCampaign}             // 🌟 campaign এর বদলে item
-                    donationType="CAMPAIGN"             // 🌟 বলে দিচ্ছি এটি ক্যাম্পেইনের ডোনেশন
+                    item={selectedCampaign}
+                    donationType="CAMPAIGN"
                 />
+
+                {shareData && (
+                    <ShareModal
+                        isOpen={!!shareData}
+                        onClose={() => setShareData(null)}
+                        {...shareData}
+                    />
+                )}
 
             </div>
         </div>

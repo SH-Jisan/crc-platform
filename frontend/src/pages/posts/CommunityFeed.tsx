@@ -5,7 +5,8 @@ import MediaCollage from '../../components/media_layouts/MediaCollage.tsx';
 import LightboxGallery from '../../components/media_layouts/LightboxGallery.tsx';
 import CreatePostModal from './CreatePostModal.tsx';
 import { useAuthStore } from '../../store/authStore.ts';
-
+import { isPostLikedLocally, toggleLocalPostLike, setLocalPostLike } from '../../utils/likeTracker.ts';
+import ShareModal from '../../components/common/ShareModal.tsx';
 
 // SVG Icons
 const ClapIcon = () => (
@@ -21,64 +22,102 @@ const ShareIcon = () => (
     </svg>
 );
 
-
-
 export default function CommunityFeed() {
-    const queryClient = useQueryClient();
     const { user } = useAuthStore();
+    const queryClient = useQueryClient();
     const isAdmin = user?.roles?.includes('ADMIN');
 
-    // 🌟 Create Post State
     const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-
-    // 🌟 Lightbox (Zoom) State
     const [activeGallery, setActiveGallery] = useState<{ media: any[], initialIndex: number } | null>(null);
+    const [shareData, setShareData] = useState<any>(null);
 
     const { data, isLoading } = useQuery({
         queryKey: ['posts'],
         queryFn: () => getPosts(1, 10),
     });
 
-    const posts = Array.isArray(data)
-        ? data
-        : (Array.isArray(data?.data) ? data.data : (Array.isArray(data?.data?.data) ? data.data.data : []));
+    const rawPosts = data?.data?.data || data?.data || (Array.isArray(data) ? data : []);
+
+    const posts = rawPosts.map((p: any) => ({
+        ...p,
+        has_liked: isPostLikedLocally(p.id) || Boolean(p.has_liked)
+    }));
 
     const likeMutation = useMutation({
         mutationFn: likePost,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['posts'] });
+        onSuccess: (responseData: any, postId: string) => {
+            if (responseData && typeof responseData.likes_count === 'number') {
+                const isLiked = typeof responseData.liked === 'boolean' ? responseData.liked : false;
+                setLocalPostLike(postId, isLiked);
+                queryClient.setQueryData(['posts'], (old: any) => {
+                    if (!old) return old;
+                    const updatePostList = (postsList: any[]) =>
+                        postsList.map((p: any) => {
+                            if (p.id === postId) {
+                                return {
+                                    ...p,
+                                    has_liked: isLiked,
+                                    likes_count: responseData.likes_count
+                                };
+                            }
+                            return p;
+                        });
+                    if (Array.isArray(old)) return updatePostList(old);
+                    if (Array.isArray(old?.data)) return { ...old, data: updatePostList(old.data) };
+                    if (Array.isArray(old?.data?.data)) return { ...old, data: { ...old.data, data: updatePostList(old.data.data) } };
+                    return old;
+                });
+            }
         }
     });
 
-    // 🌟 Specific Post Share Logic
-// 🌟 Specific Post Share Logic (Updated for OG Tags)
-    const handleShare = async (post: any) => {
-        // ফ্রন্টএন্ডের আসল লিংক
-        const frontendPostUrl = `${window.location.origin}/post/${post.id}`;
+    const handleToggleLike = (post: any) => {
+        const { isNowLiked, delta } = toggleLocalPostLike(post.id, Boolean(post.has_liked));
 
+        queryClient.setQueryData(['posts'], (old: any) => {
+            if (!old) return old;
+            const updatePostList = (postsList: any[]) =>
+                postsList.map((p: any) => {
+                    if (p.id === post.id) {
+                        const newCount = Math.max(0, (p.likes_count || 0) + delta);
+                        return { ...p, has_liked: isNowLiked, likes_count: newCount };
+                    }
+                    return p;
+                });
+
+            if (Array.isArray(old)) return updatePostList(old);
+            if (Array.isArray(old?.data)) return { ...old, data: updatePostList(old.data) };
+            if (Array.isArray(old?.data?.data)) return { ...old, data: { ...old.data, data: updatePostList(old.data.data) } };
+            return old;
+        });
+
+        likeMutation.mutate(post.id);
+    };
+
+    const handleShare = (post: any) => {
+        const frontendPostUrl = `${window.location.origin}/post/${post.id}`;
         const rawApiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
         const cleanApiBase = rawApiBase.replace(/\/+$/, '');
         const apiBase = cleanApiBase.endsWith('/api/v1') ? cleanApiBase : `${cleanApiBase}/api/v1`;
-
-        // 🌟 ম্যাজিক লিংক: এটি ব্যাকএন্ডে হিট করবে এবং রিডাইরেক্ট করে ফ্রন্টএন্ডে পাঠাবে
         const shareUrl = `${apiBase}/posts/${post.id}/share?redirect=${encodeURIComponent(frontendPostUrl)}`;
 
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: post.title || 'CRC Community Post',
-                    text: `Check out this update from CRC: ${post.content.substring(0, 50)}...`,
-                    url: shareUrl, // 🌟 এখন ব্যাকএন্ডের লিংক শেয়ার হবে
-                });
-            } catch (error) {
-                console.log('Error sharing:', error);
+        const mediaArr = Array.isArray(post.media) ? post.media : [];
+        const firstMedia = mediaArr.length > 0 ? (mediaArr[0].file_url || mediaArr[0].url) : undefined;
+
+        setShareData({
+            title: post.title || 'CRC Community Story',
+            description: post.content || 'Check out this update from Come for Road Child!',
+            image: firstMedia,
+            shareUrl,
+            type: 'POST',
+            stats: {
+                label1: 'Applauds',
+                value1: `${post.likes_count || 0}`,
+                label2: 'Author',
+                value2: post.author?.full_name || 'CRC Member'
             }
-        } else {
-            navigator.clipboard.writeText(shareUrl);
-            alert('Post link copied to clipboard! 📋');
-        }
+        });
     };
-    // 🌟 Smart Image Grid Renderer (Removed in favor of Carousel)
 
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
@@ -95,7 +134,7 @@ export default function CommunityFeed() {
                             <span className="w-2 h-2 rounded-full bg-[#D64A26] animate-pulse"></span>
                             Community Feed
                         </div>
-                        <h1 className="text-4xl md:text-5xl  font-extrabold text-[#222222] tracking-tight mb-4 md:mb-0">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-[#222222] tracking-tight mb-4 md:mb-0">
                             Stories & Updates
                         </h1>
                     </div>
@@ -124,13 +163,11 @@ export default function CommunityFeed() {
                     ) : (
                         posts.map((post: any) => {
                             const date = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
                             const mediaArr = Array.isArray(post.media) ? post.media : [];
+                            const isLiked = post.has_liked;
 
                             return (
-                                // 🌟 ID যুক্ত করা হয়েছে যাতে লিংকে ক্লিক করলে এখানে স্ক্রল করে চলে আসে
                                 <div id={post.id} key={post.id} className="bg-white/95 backdrop-blur-sm rounded-2xl border border-slate-100 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 scroll-mt-24">
-
                                     <div className="px-6 md:px-8 pt-6 pb-4 flex items-start justify-between gap-4">
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-full bg-slate-100 text-[#D64A26] flex items-center justify-center font-bold text-xl ring-1 ring-slate-200/60">
@@ -144,33 +181,29 @@ export default function CommunityFeed() {
                                     </div>
 
                                     <div className="px-6 md:px-8 pb-5">
-                                        {post.title && <h2 className="text-xl  font-bold text-[#222222] mb-2 leading-snug">{post.title}</h2>}
+                                        {post.title && <h2 className="text-xl font-bold text-[#222222] mb-2 leading-snug">{post.title}</h2>}
                                         <p className="text-[#666666] leading-relaxed whitespace-pre-wrap text-[1rem]">{post.content}</p>
                                     </div>
 
-                                    {/* 🌟 Media Collage (+N Style) */}
                                     {mediaArr.length > 0 && (
                                         <div className="px-6 md:px-8 pb-6">
                                             <MediaCollage media={mediaArr} onImageClick={(index) => setActiveGallery({ media: mediaArr, initialIndex: index })} />
                                         </div>
                                     )}
 
-                                    {/* Action Footer */}
                                     <div className="px-4 md:px-6 py-3 border-t border-slate-50 flex items-center justify-between">
                                         <button
-                                            onClick={() => likeMutation.mutate(post.id)}
-                                            disabled={likeMutation.isPending}
+                                            onClick={() => handleToggleLike(post)}
                                             className={`flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all group cursor-pointer ${
-                                                post.has_liked
+                                                isLiked
                                                     ? 'bg-orange-100 text-[#D64A26] border border-orange-200/80 shadow-sm'
                                                     : 'text-[#666666] hover:text-[#D64A26] hover:bg-orange-50'
                                             }`}
                                         >
-                                            <div className={`transition-transform group-hover:-translate-y-0.5 ${post.has_liked ? 'scale-110' : ''}`}><ClapIcon /></div>
+                                            <div className={`transition-transform group-hover:-translate-y-0.5 ${isLiked ? 'scale-110' : ''}`}><ClapIcon /></div>
                                             <span>{post.likes_count || 0} Applauds</span>
                                         </button>
 
-                                        {/* 🌟 Specific Post Share Button */}
                                         <button
                                             onClick={() => handleShare(post)}
                                             className="flex items-center gap-2 px-4 py-2 rounded-full text-slate-400 hover:text-[#666666] hover:bg-slate-50 font-medium text-[0.9rem] transition-all"
@@ -179,7 +212,6 @@ export default function CommunityFeed() {
                                             Share
                                         </button>
                                     </div>
-
                                 </div>
                             );
                         })
@@ -187,7 +219,6 @@ export default function CommunityFeed() {
                 </div>
             </div>
 
-            {/* 🌟 Universal Lightbox Gallery */}
             {activeGallery && (
                 <LightboxGallery 
                     media={activeGallery.media} 
@@ -196,9 +227,15 @@ export default function CommunityFeed() {
                 />
             )}
 
-            {/* 🌟 Create Post Modal */}
             <CreatePostModal isOpen={isPostModalOpen} onClose={() => setIsPostModalOpen(false)} />
 
+            {shareData && (
+                <ShareModal
+                    isOpen={!!shareData}
+                    onClose={() => setShareData(null)}
+                    {...shareData}
+                />
+            )}
         </div>
     );
 }

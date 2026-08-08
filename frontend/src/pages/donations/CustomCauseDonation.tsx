@@ -4,16 +4,16 @@ import { getCustomCauses } from '../../api/customCausesDonations.ts';
 import { useAuthStore } from '../../store/authStore';
 import DonationModal from './DonationModal.tsx';
 import CreateCustomCauseDonationModal from './CreateCustomCauseDonationModal.tsx';
+import ShareModal from '../../components/common/ShareModal.tsx';
 
 export default function CustomCauseDonation() {
     const { user } = useAuthStore();
     const isAdmin = user?.roles?.includes('ADMIN');
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-
-    // 🌟 ডোনেশনের জন্য States
     const [donationType, setDonationType] = useState<'CLUB' | 'CUSTOM' | null>(null);
     const [selectedCause, setSelectedCause] = useState<any>(null);
+    const [shareData, setShareData] = useState<any>(null);
 
     const { data: causes = [], isLoading } = useQuery({
         queryKey: ['custom-causes'],
@@ -22,7 +22,7 @@ export default function CustomCauseDonation() {
 
     const handleClubDonation = () => {
         setDonationType('CLUB');
-        setSelectedCause(null); // ক্লাবের জন্য কোনো স্পেসিফিক আইটেম লাগবে না
+        setSelectedCause(null);
     };
 
     const handleCustomDonation = (cause: any) => {
@@ -40,27 +40,48 @@ export default function CustomCauseDonation() {
                         <p className="text-lg text-[#666666] max-w-2xl">Your generous contributions help us run the organization and respond to emergencies quickly.</p>
                     </div>
                     {isAdmin && (
-                        <button onClick={() => setIsCreateModalOpen(true)} className="px-6 py-3 bg-[#222222] text-white font-bold rounded-xl hover:bg-[#1A1A1A] shadow-md transition-all">
+                        <button onClick={() => setIsCreateModalOpen(true)} className="px-6 py-3 bg-[#222222] text-white font-bold rounded-xl hover:bg-[#1A1A1A] shadow-md transition-all cursor-pointer">
                             + Emergency Fund
                         </button>
                     )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {/* 🌟 General Club Fund Card (Always Visible) */}
+                    {/* General Club Fund Card */}
                     <div className="bg-white/95 backdrop-blur-sm rounded-[2rem] p-8 border border-slate-100 shadow-md hover:shadow-[0_20px_40px_rgba(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-red-50 opacity-50"></div>
                         <div className="relative z-10 flex flex-col items-center h-full w-full">
                             <div className="w-20 h-20 bg-orange-100 text-[#D64A26] rounded-full flex items-center justify-center text-3xl mb-6 shadow-sm">🌱</div>
-                            <h2 className="text-2xl  font-bold text-[#222222] mb-3">General Fund</h2>
+                            <h2 className="text-2xl font-bold text-[#222222] mb-3">General Fund</h2>
                             <p className="text-[#666666] mb-8 flex-1">Support the day-to-day operations and ongoing long-term projects of Come for Road Child.</p>
-                            <button onClick={handleClubDonation} className="relative overflow-hidden group/btn w-full py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center">
-                                <span className="relative z-10">Donate to Club</span>
-                            </button>
+                            
+                            <div className="flex items-center gap-2 w-full">
+                                <button onClick={handleClubDonation} className="flex-1 py-3.5 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center cursor-pointer">
+                                    Donate to Club
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        const shareUrl = `${window.location.origin}/donations`;
+                                        setShareData({
+                                            title: 'CRC General Club Fund',
+                                            description: 'Support the day-to-day operations and ongoing long-term projects of Come for Road Child.',
+                                            image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop',
+                                            shareUrl,
+                                            type: 'CAUSE'
+                                        });
+                                    }}
+                                    className="p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#D64A26] rounded-xl font-bold transition-all shadow-sm flex items-center justify-center cursor-pointer"
+                                    title="Share Fund"
+                                >
+                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    {/* 🌟 Dynamic Emergency Funds */}
+                    {/* Emergency Funds */}
                     {isLoading ? (
                         <div className="col-span-2 flex items-center justify-center text-slate-500">Loading causes...</div>
                     ) : (
@@ -75,7 +96,7 @@ export default function CustomCauseDonation() {
                                     <div className="absolute top-4 right-4 px-3 py-1 bg-red-100 text-[#D64A26] text-xs font-bold uppercase rounded-full tracking-wider animate-pulse">Emergency</div>
 
                                     <div className="relative z-10 flex flex-col h-full">
-                                        <h2 className="text-2xl  font-bold text-[#222222] mb-3 pr-16">{cause.title}</h2>
+                                        <h2 className="text-2xl font-bold text-[#222222] mb-3 pr-16">{cause.title}</h2>
                                         <p className="text-[#666666] mb-6 flex-1 line-clamp-3 leading-relaxed">{cause.description}</p>
 
                                         <div className="mt-auto">
@@ -91,9 +112,37 @@ export default function CustomCauseDonation() {
                                                 )}
                                             </div>
 
-                                            <button onClick={() => handleCustomDonation(cause)} className="relative overflow-hidden group/btn w-full py-4 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center">
-                                                <span className="relative z-10">Support This Cause</span>
-                                            </button>
+                                            <div className="flex items-center gap-2 w-full">
+                                                <button onClick={() => handleCustomDonation(cause)} className="flex-1 py-3.5 bg-gradient-to-r from-[#D64A26] to-[#F1795D] hover:from-[#c24220] hover:to-[#e36345] text-white font-bold uppercase tracking-widest text-xs rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center cursor-pointer">
+                                                    Support Cause
+                                                </button>
+
+                                                <button
+                                                    onClick={() => {
+                                                        const shareUrl = `${window.location.origin}/donations`;
+                                                        setShareData({
+                                                            title: cause.title,
+                                                            description: cause.description,
+                                                            image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop',
+                                                            shareUrl,
+                                                            type: 'CAUSE',
+                                                            stats: {
+                                                                label1: 'Raised',
+                                                                value1: `৳${raised.toLocaleString()}`,
+                                                                label2: goal > 0 ? 'Goal' : undefined,
+                                                                value2: goal > 0 ? `৳${goal.toLocaleString()}` : undefined,
+                                                                progress: goal > 0 ? progressPercentage : undefined
+                                                            }
+                                                        });
+                                                    }}
+                                                    className="p-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-[#D64A26] rounded-xl font-bold transition-all shadow-sm flex items-center justify-center cursor-pointer"
+                                                    title="Share Cause"
+                                                >
+                                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -102,7 +151,6 @@ export default function CustomCauseDonation() {
                     )}
                 </div>
 
-                {/* Modals */}
                 <CreateCustomCauseDonationModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
 
                 <DonationModal
@@ -111,6 +159,14 @@ export default function CustomCauseDonation() {
                     item={selectedCause}
                     donationType={donationType || 'CLUB'}
                 />
+
+                {shareData && (
+                    <ShareModal
+                        isOpen={!!shareData}
+                        onClose={() => setShareData(null)}
+                        {...shareData}
+                    />
+                )}
             </div>
         </div>
     );

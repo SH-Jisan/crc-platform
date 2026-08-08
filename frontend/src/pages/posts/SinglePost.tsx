@@ -4,8 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getPostById, likePost } from '../../api/posts';
 import MediaCollage from '../../components/media_layouts/MediaCollage.tsx';
 import LightboxGallery from '../../components/media_layouts/LightboxGallery.tsx';
-
-
+import ShareModal from '../../components/common/ShareModal.tsx';
+import { isPostLikedLocally, toggleLocalPostLike, setLocalPostLike } from '../../utils/likeTracker.ts';
 
 const ClapIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -19,28 +19,60 @@ const ShareIcon = () => (
     </svg>
 );
 
-
-
 export default function SinglePost() {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [activeGallery, setActiveGallery] = useState<{ media: any[], initialIndex: number } | null>(null);
+    const [shareData, setShareData] = useState<any>(null);
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['post', id],
         queryFn: () => getPostById(id as string),
     });
 
-    const post = data?.data || data;
+    const rawPost = data?.data || data;
+    const post = rawPost ? {
+        ...rawPost,
+        has_liked: isPostLikedLocally(rawPost.id) || Boolean(rawPost.has_liked)
+    } : null;
 
     const likeMutation = useMutation({
         mutationFn: likePost,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['post', id] });
+        onSuccess: (responseData: any) => {
+            if (responseData && typeof responseData.likes_count === 'number') {
+                const isLiked = typeof responseData.liked === 'boolean' ? responseData.liked : false;
+                if (post?.id) setLocalPostLike(post.id, isLiked);
+                queryClient.setQueryData(['post', id], (old: any) => {
+                    if (!old) return old;
+                    const p = old.data || old;
+                    const updatedPost = {
+                        ...p,
+                        has_liked: isLiked,
+                        likes_count: responseData.likes_count
+                    };
+                    return old.data ? { ...old, data: updatedPost } : updatedPost;
+                });
+            }
         }
     });
-    const handleShare = async () => {
+
+    const handleToggleLike = () => {
+        if (!post) return;
+        const { isNowLiked, delta } = toggleLocalPostLike(post.id, Boolean(post.has_liked));
+
+        queryClient.setQueryData(['post', id], (old: any) => {
+            if (!old) return old;
+            const p = old.data || old;
+            const newCount = Math.max(0, (p.likes_count || 0) + delta);
+            const updatedPost = { ...p, has_liked: isNowLiked, likes_count: newCount };
+            return old.data ? { ...old, data: updatedPost } : updatedPost;
+        });
+
+        likeMutation.mutate(post.id);
+    };
+
+    const handleShare = () => {
         if (!post) return;
         const frontendPostUrl = window.location.href;
         const rawApiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
@@ -48,17 +80,22 @@ export default function SinglePost() {
         const apiBase = cleanApiBase.endsWith('/api/v1') ? cleanApiBase : `${cleanApiBase}/api/v1`;
         const shareUrl = `${apiBase}/posts/${post.id}/share?redirect=${encodeURIComponent(frontendPostUrl)}`;
 
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: post.title || 'CRC Community Post',
-                    url: shareUrl,
-                });
-            } catch (error) {}
-        } else {
-            navigator.clipboard.writeText(shareUrl);
-            alert('Post link copied! 📋');
-        }
+        const mediaArr = Array.isArray(post.media) ? post.media : [];
+        const firstMedia = mediaArr.length > 0 ? (mediaArr[0].file_url || mediaArr[0].url) : undefined;
+
+        setShareData({
+            title: post.title || 'CRC Community Story',
+            description: post.content || 'Check out this update from Come for Road Child!',
+            image: firstMedia,
+            shareUrl,
+            type: 'POST',
+            stats: {
+                label1: 'Applauds',
+                value1: `${post.likes_count || 0}`,
+                label2: 'Author',
+                value2: post.author?.full_name || 'CRC Member'
+            }
+        });
     };
 
     if (isLoading) return (
@@ -76,11 +113,11 @@ export default function SinglePost() {
 
     const date = new Date(post.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const mediaArr = Array.isArray(post.media) ? post.media : [];
+    const isLiked = post.has_liked;
 
     return (
         <div className="min-h-screen py-16 px-4 sm:px-6 bg-[#FAFAFA] font-sans">
             <div className="max-w-3xl mx-auto">
-                {/* Back Button */}
                 <button onClick={() => navigate('/posts')} className="mb-6 flex items-center gap-2 text-slate-400 hover:text-[#D64A26] font-bold transition-colors">
                     <span>←</span> Back to Community Feed
                 </button>
@@ -99,11 +136,10 @@ export default function SinglePost() {
                     </div>
 
                     <div className="px-6 md:px-8 pb-5">
-                        {post.title && <h2 className="text-3xl  font-bold text-[#222222] mb-3 leading-snug">{post.title}</h2>}
+                        {post.title && <h2 className="text-3xl font-bold text-[#222222] mb-3 leading-snug">{post.title}</h2>}
                         <p className="text-[#666666] leading-relaxed whitespace-pre-wrap text-[1.1rem]">{post.content}</p>
                     </div>
 
-                    {/* Media Collage (+N Style) */}
                     {mediaArr.length > 0 && (
                         <div className="px-6 md:px-8 pb-6">
                             <MediaCollage media={mediaArr} onImageClick={(index) => setActiveGallery({ media: mediaArr, initialIndex: index })} />
@@ -112,15 +148,14 @@ export default function SinglePost() {
 
                     <div className="px-4 md:px-6 py-4 border-t border-slate-50 flex items-center justify-between">
                         <button
-                            onClick={() => likeMutation.mutate(post.id)}
-                            disabled={likeMutation.isPending}
+                            onClick={handleToggleLike}
                             className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-semibold transition-all group cursor-pointer lg:text-lg ${
-                                post.has_liked
+                                isLiked
                                     ? 'bg-orange-100 text-[#D64A26] border border-orange-200/80 shadow-sm'
                                     : 'text-[#666666] hover:text-[#D64A26] hover:bg-orange-50'
                             }`}
                         >
-                            <div className={`transition-transform group-hover:-translate-y-0.5 ${post.has_liked ? 'scale-110' : ''}`}><ClapIcon /></div>
+                            <div className={`transition-transform group-hover:-translate-y-0.5 ${isLiked ? 'scale-110' : ''}`}><ClapIcon /></div>
                             <span>{post.likes_count || 0} Applauds</span>
                         </button>
 
@@ -135,12 +170,19 @@ export default function SinglePost() {
                 </div>
             </div>
 
-            {/* Universal Lightbox Gallery */}
             {activeGallery && (
                 <LightboxGallery 
                     media={activeGallery.media} 
                     initialIndex={activeGallery.initialIndex} 
                     onClose={() => setActiveGallery(null)} 
+                />
+            )}
+
+            {shareData && (
+                <ShareModal
+                    isOpen={!!shareData}
+                    onClose={() => setShareData(null)}
+                    {...shareData}
                 />
             )}
         </div>
