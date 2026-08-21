@@ -54,11 +54,10 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-                isScrolled
-                    ? 'bg-white/85 backdrop-blur-xl border-b border-slate-200/60 py-2.5 shadow-sm'
-                    : 'bg-white/60 backdrop-blur-md py-3.5 border-b border-slate-100/50'
-            }`}
+            className={`sticky top-0 z-50 w-full transition-all duration-300 ${isScrolled
+                ? 'bg-white/85 backdrop-blur-xl border-b border-slate-200/60 py-2.5 shadow-sm'
+                : 'bg-white/60 backdrop-blur-md py-3.5 border-b border-slate-100/50'
+                }`}
         >
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
                 <div className="flex justify-between items-center">
@@ -70,9 +69,9 @@ export default function Navbar() {
                     >
                         <div className="relative">
                             <div className="absolute -inset-1 bg-gradient-to-r from-[#D64A26] to-[#F1795D] rounded-full blur opacity-0 group-hover:opacity-40 transition duration-500"></div>
-                            <img 
-                                src={crcLogo} 
-                                alt="CRC Logo" 
+                            <img
+                                src={crcLogo}
+                                alt="CRC Logo"
                                 className="relative w-10 h-10 md:w-11 md:h-11 object-contain group-hover:scale-105 transition-transform duration-300"
                             />
                         </div>
@@ -92,11 +91,10 @@ export default function Navbar() {
                                 <Link
                                     key={link.name}
                                     to={link.path}
-                                    className={`relative px-4 py-2 text-[14px] font-bold transition-all duration-300 rounded-xl flex items-center gap-1.5 ${
-                                        active
-                                            ? 'bg-white text-[#D64A26] shadow-sm border border-slate-200/60'
-                                            : 'text-slate-600 hover:text-[#D64A26] hover:bg-white/50'
-                                    }`}
+                                    className={`relative px-4 py-2 text-[14px] font-bold transition-all duration-300 rounded-xl flex items-center gap-1.5 ${active
+                                        ? 'bg-white text-[#D64A26] shadow-sm border border-slate-200/60'
+                                        : 'text-slate-600 hover:text-[#D64A26] hover:bg-white/50'
+                                        }`}
                                 >
                                     {active && <span className="w-1.5 h-1.5 rounded-full bg-[#D64A26] animate-pulse"></span>}
                                     {link.name}
@@ -112,7 +110,7 @@ export default function Navbar() {
                             className="relative overflow-hidden group px-6 py-2.5 text-xs font-extrabold uppercase tracking-widest text-white bg-gradient-to-r from-[#D64A26] via-[#F1633E] to-[#FA8C6E] hover:shadow-lg hover:shadow-orange-500/25 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2 rounded-xl"
                         >
                             <HeartIcon />
-                            <span className="relative z-10">Support a Cause</span>
+                            <span className="relative z-10">Donate</span>
                         </Link>
 
                         <div className="w-px h-6 bg-slate-200/80"></div>
@@ -121,9 +119,8 @@ export default function Navbar() {
                             <div className="flex items-center gap-2">
                                 <Link
                                     to="/dashboard"
-                                    className={`p-2.5 rounded-xl border border-slate-200/60 hover:bg-slate-50 transition-all ${
-                                        isActive('/dashboard') ? 'bg-orange-50 text-[#D64A26] border-orange-200/60' : 'text-slate-600'
-                                    }`}
+                                    className={`p-2.5 rounded-xl border border-slate-200/60 hover:bg-slate-50 transition-all ${isActive('/dashboard') ? 'bg-orange-50 text-[#D64A26] border-orange-200/60' : 'text-slate-600'
+                                        }`}
                                     title="Dashboard"
                                 >
                                     <UserIcon />
@@ -167,9 +164,8 @@ export default function Navbar() {
 
             {/* Mobile Menu Dropdown */}
             <div
-                className={`lg:hidden fixed inset-x-4 top-24 bg-white/95 backdrop-blur-2xl rounded-[2rem] border border-slate-200/50 shadow-[0_20px_50px_rgb(0,0,0,0.15)] overflow-hidden transition-all duration-500 origin-top ${
-                    isMobileMenuOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none'
-                }`}
+                className={`lg:hidden fixed inset-x-4 top-24 bg-white/95 backdrop-blur-2xl rounded-[2rem] border border-slate-200/50 shadow-[0_20px_50px_rgb(0,0,0,0.15)] overflow-hidden transition-all duration-500 origin-top ${isMobileMenuOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none'
+                    }`}
             >
                 <div className="p-6 flex flex-col gap-3">
                     {navLinks.map((link) => (
@@ -177,11 +173,10 @@ export default function Navbar() {
                             key={link.name}
                             to={link.path}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`px-5 py-3.5 rounded-2xl text-[1.05rem] font-bold transition-all ${
-                                isActive(link.path)
-                                    ? 'bg-orange-50 text-[#D64A26] border border-orange-100/50'
-                                    : 'text-[#666666] hover:bg-slate-50 hover:text-[#D64A26]'
-                            }`}
+                            className={`px-5 py-3.5 rounded-2xl text-[1.05rem] font-bold transition-all ${isActive(link.path)
+                                ? 'bg-orange-50 text-[#D64A26] border border-orange-100/50'
+                                : 'text-[#666666] hover:bg-slate-50 hover:text-[#D64A26]'
+                                }`}
                         >
                             {link.name}
                         </Link>
@@ -195,7 +190,7 @@ export default function Navbar() {
                         className="py-4 rounded-2xl text-center text-[1.1rem] font-black text-white bg-[#D64A26] shadow-lg flex items-center justify-center gap-2"
                     >
                         <HeartIcon />
-                        SUPPORT A CAUSE
+                        Donate
                     </Link>
 
                     {user ? (

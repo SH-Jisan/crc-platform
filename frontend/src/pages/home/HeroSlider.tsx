@@ -166,7 +166,7 @@ export default function HeroSlider() {
                                 </p>
                                 <div className="text-reveal-button">
                                     <button onClick={() => document.getElementById('causes-section')?.scrollIntoView({ behavior: 'smooth' })} className="px-9 py-4 bg-gradient-to-r from-[#D64A26] via-[#F1633E] to-[#FA8C6E] text-white font-extrabold rounded-2xl hover:shadow-2xl hover:shadow-orange-500/40 hover:-translate-y-0.5 transition-all duration-300 flex items-center gap-2.5 mx-auto text-base uppercase tracking-wider cursor-pointer">
-                                        <HeartIcon /> Support Our Cause
+                                        <HeartIcon /> Donate to a Cause
                                     </button>
                                 </div>
                             </div>
